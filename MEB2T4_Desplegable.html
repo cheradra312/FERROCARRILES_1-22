@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: El transporte ferroviario en la Ley 38/2015</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-train"></i> MEB2T4. El transporte ferroviario en la Ley 38/2015 <i class="fas fa-gavel"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: El transporte ferroviario -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-train-tram"></i></div>
+                <h2>1. El transporte ferroviario</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Se entiende por <span class="definition-pill"><strong>transporte ferroviario</strong></span>, a los efectos de la <span class="law-pill"><strong>Ley 38/2015 del sector ferroviario (LSF)</strong></span>, el realizado por <span class="actor-pill">empresas ferroviarias</span> empleando <u>vehículos adecuados</u> que circulen por la <span class="definition-pill">RFIG</span>.</p></li>
+                    <li><p><i class="fas fa-star icon text-yellow-500"></i>El transporte ferroviario es un <strong><u>servicio de interés general</u></strong> y <strong><u>esencial para la comunidad</u></strong>.</p></li>
+                    <li><p><i class="fas fa-users icon text-purple-600"></i>Puede ser de <strong><u>viajeros</u></strong> y de <strong><u>mercancías</u></strong>.</p></li>
+                    <li><p><i class="fas fa-balance-scale icon text-green-600"></i>Que se prestará en <strong><u>libre competencia</u></strong>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Actores del sistema ferroviario -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-users-cog"></i></div>
+                <h2>2. Actores del sistema ferroviario nacional y europeo</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-calendar-alt icon text-orange-600"></i>Tras la entrada en vigor de la <span class="law-pill">LSF</span>, el <span class="pill-blue"><strong>1-1-2005</strong></span> se <strong><u>separaron</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>La <strong><u>administración de la infraestructura</u></strong>.</p></li>
+                                <li><p><i class="fas fa-concierge-bell icon text-gray-500"></i>Y los <strong><u>servicios de transporte ferroviario</u></strong>, que comenzaron a prestarse en <u>régimen de libre competencia</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-green-600"></i><strong><u>Únicamente podrían prestar servicios</u></strong> de transporte ferroviario, las empresas con:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-id-card icon text-blue-500"></i><strong><u>Licencia</u></strong> de <span class="actor-pill">empresa ferroviaria</span>.</p></li>
+                                <li><p><i class="fas fa-user-shield icon text-purple-500"></i><strong><u>Certificado de seguridad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-handshake icon text-green-500"></i>Y <strong><u>adjudicación de la capacidad</u></strong> de infraestructura necesaria para ello.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-door-open icon text-cyan-600"></i>Por tanto, se <strong><u>sentaron unas bases</u></strong> que permitían la <strong><u>entrada de nuevos actores</u></strong>, abriendo a la competencia la prestación del servicio de transporte ferroviario de mercancías.</p></li>
+                    <li><p><i class="fas fa-balance-scale-right icon text-red-600"></i>La existencia de <strong><u>varios actores</u></strong> en el mercado ferroviario hace necesario un <strong><u>ente para resolver los conflictos</u></strong> y garantizar un <u>correcto funcionamiento del sistema</u>, siendo la encargada la <span class="actor-pill"><strong>Comisión Nacional de los Mercados y la Competencia</strong></span>.</p></li>
+                </ul>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-building icon text-indigo-700"></i>ADIF y ADIF-AV</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La Ley encomendó a <span class="actor-pill">RENFE</span>, que pasó a denominarse <span class="actor-pill"><strong>ADIF</strong></span>, integrando al <span class="actor-pill">Gestor de Infraestructuras Ferroviarias (GIF)</span>, la <strong><u>administración de la infraestructura ferroviaria</u></strong>.</p></li>
+                        <li><p><i class="fas fa-code-branch icon text-purple-600"></i>El <span class="pill-blue"><strong>31-12-2013</strong></span>, se creó <span class="actor-pill"><strong>ADIF-AV</strong></span> mediante la <strong><u>escisión de la rama de alta velocidad</u></strong> por las <u>diferencias técnicas y económicas</u> con la rama general.</p></li>
+                        <li><p><i class="fas fa-bullseye icon text-red-600"></i><span class="actor-pill">ADIF</span> debe <strong><u>potenciar el transporte ferroviario español</u></strong> mediante un sistema <u>seguro</u>, <u>eficiente</u>, <u>sostenible</u>, y con <u>altos estándares de calidad</u>.</p></li>
+                        <li><p><i class="fas fa-train icon text-gray-600"></i>La entidad pública empresarial <span class="actor-pill"><strong>Ferrocarriles de Vía Estrecha (FEVE)</strong></span> ha quedado <strong><u>integrada</u></strong>, en cuanto a <u>mantenimiento, administración de su red y construcción</u> de infraestructuras ferroviarias, en <span class="actor-pill"><strong>ADIF</strong></span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-train-tram icon text-orange-700"></i>RENFE-Operadora</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-birthday-cake icon text-green-600"></i><strong><u>Nació</u></strong> con la entrada en vigor de la <span class="law-pill">Ley 39/2003</span>, como <strong><u>empresa prestadora del servicio</u></strong> de transporte ferroviario.</p></li>
+                        <li><p><i class="fas fa-exchange-alt icon text-cyan-600"></i><strong><u>Asumiendo los medios</u></strong> que <span class="actor-pill">RENFE</span> había tenido afectos a la prestación de servicios ferroviarios.</p></li>
+                        <li><p><i class="fas fa-sitemap icon text-purple-600"></i>Se ha previsto un <strong><u>nuevo modelo empresarial</u></strong> para el grupo <span class="actor-pill">RENFE-Operadora</span> con la <strong><u>constitución de cinco sociedades mercantiles estatales</u></strong>, para asegurar la <u>coordinación</u> y la <u>asignación eficiente de recursos</u>.</p></li>
+                        <li><p><i class="fas fa-user-tie icon text-slate-700"></i><span class="actor-pill"><strong>Renfe Operadora</strong></span>, propietaria del <span class="pill-blue">100%</span> del capital social de las nuevas sociedades, actúa como <strong><u>matriz del grupo</u></strong> con <u>funciones corporativas y de servicios</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-industry icon text-blue-700"></i>Las <strong>Sociedades Mercantiles Estatales</strong> y su objeto social son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-friends icon text-gray-500"></i><span class="actor-pill"><strong>Renfe Viajeros</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-truck-loading icon text-gray-500"></i><span class="actor-pill"><strong>Renfe Mercancías</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-tools icon text-gray-500"></i><span class="actor-pill"><strong>Renfe Fabricación y Mantenimiento</strong></span> (también <u>reparación</u> y <u>consultoría</u> de ingeniería de talleres).</p></li>
+                                    <li><p><i class="fas fa-retweet icon text-gray-500"></i><span class="actor-pill"><strong>Renfe Alquiler de Material Ferroviario</strong></span> (también <u>venta</u> o cualquier otra forma de <u>puesta a disposición</u> de material rodante).</p></li>
+                                    <li><p><i class="fas fa-globe-americas icon text-gray-500"></i>Y <span class="actor-pill"><strong>Renfe Proyectos Internacionales</strong></span> (<u>desarrollo y gestión</u> de los proyectos internacionales de la compañía).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-train icon text-gray-600"></i><span class="actor-pill"><strong>FEVE</strong></span> ha quedado <strong><u>integrada</u></strong>, en cuanto a lo que respecta a <u>prestación de servicios de transporte de viajeros y mercancías</u> en <span class="actor-pill"><strong>RENFE-Operadora</strong></span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-building icon text-indigo-700"></i>Empresas ferroviarias</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Son aquellas entidades, <strong><u>titulares de una licencia de empresa ferroviaria</u></strong>, cuya <strong><u>actividad principal</u></strong> consiste en <u>prestar servicios de transporte ferroviario</u>.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-red-600"></i>Las <span class="actor-pill">empresas ferroviarias</span> deberán, en todo caso, <strong><u>aportar la tracción</u></strong>.</p></li>
+                        <li><p><i class="fas fa-check-circle icon text-green-600"></i>Se <strong><u>consideran, asimismo, empresas ferroviarias</u></strong> aquellas que aporten <strong><u>exclusivamente la tracción</u></strong>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Concepto de empresa ferroviaria, obtención de licencias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-file-signature"></i></div>
+                <h2>3. Concepto de empresa ferroviaria, obtención de licencias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>licencia de empresa ferroviaria</strong></span> será <strong><u>única</u></strong> para toda la <span class="definition-pill">RFIG</span>.</p></li>
+                    <li><p><i class="fas fa-exchange-alt icon text-red-600"></i>Tendrá carácter <strong><u>intransmisible</u></strong>.</p></li>
+                    <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>Las <span class="doc-pill">licencias de empresa ferroviaria</span> otorgadas por los demás <span class="actor-pill">Estados miembros de la UE</span> <strong><u>producirán todos sus efectos</u></strong> en <u>España</u>.</p></li>
+                    <li><p><i class="fas fa-bullhorn icon text-purple-600"></i>La entidad que desee obtener la <span class="doc-pill">licencia de empresa ferroviaria</span> deberá formular una <strong><u>declaración de actividad</u></strong>, que habrá de <u>comprender los servicios</u> que desea prestar.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-check-circle icon text-green-600"></i>Otorgamiento</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-blue-700"></i>Para la obtención de las <span class="doc-pill">licencias ferroviarias</span> las entidades deberán <strong><u>acreditar el cumplimiento</u></strong> de los siguientes requisitos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-building icon text-gray-500"></i>Revestir la forma de <strong><u>sociedad anónima</u></strong> o ser una <strong><u>empresa pública</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-coins icon text-yellow-600"></i><strong><u>Capacidad financiera</u></strong> para hacer frente a sus <u>obligaciones actuales y futuras</u>.</p></li>
+                                    <li><p><i class="fas fa-user-tie icon text-slate-600"></i><strong><u>Competencia profesional</u></strong> de su <u>personal directivo</u>.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-red-600"></i>Y <strong><u>cobertura de responsabilidad civil</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-shield icon text-indigo-700"></i>La <span class="actor-pill"><strong>Agencia Estatal de Seguridad Ferroviaria (AESF)</strong></span> es la <strong><u>competente para otorgar</u></strong> las <span class="doc-pill">licencias de empresa ferroviaria</span>.</p></li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <strong><u>resolución</u></strong> correspondiente deberá ser <strong><u>expresa</u></strong> y producirse dentro de los <span class="pill-blue"><strong>tres meses</strong></span> siguientes a la presentación de solicitud con toda la documentación exigible.</p></li>
+                        <li><p><i class="fas fa-comment-dots icon text-orange-600"></i>Y será <strong><u>motivada</u></strong> en caso de que sea <u>desestimatoria</u>.</p></li>
+                        <li><p><i class="fas fa-sync-alt icon text-cyan-600"></i>La <span class="doc-pill">licencia</span> se <strong><u>mantendrá</u></strong> mientras la <span class="actor-pill">empresa ferroviaria</span> <strong><u>cumpla los requisitos</u></strong> exigidos para su otorgamiento.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-search-plus icon text-blue-500"></i>La <span class="actor-pill">AESF</span> <strong><u>verificará el cumplimiento</u></strong> de los requisitos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-calendar-check icon text-purple-500"></i>Al menos <strong><u>cada cinco años</u></strong> desde el otorgamiento de la licencia o desde la anterior verificación.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Cuando la <span class="actor-pill">AESF</span> tenga <strong><u>indicios de posible incumplimiento</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-pen-alt icon text-orange-500"></i>O cuando la <span class="actor-pill">empresa ferroviaria</span> sufra una <strong><u>modificación de su régimen jurídico</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-edit icon text-orange-600"></i>Modificación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-ban icon text-red-700"></i>Las <span class="actor-pill">empresas ferroviarias</span> <strong><u>no podrán realizar actividades</u></strong> que no estén expresamente <u>amparadas por la licencia</u>.</p></li>
+                        <li><p><i class="fas fa-plus-circle icon text-green-600"></i>Sin perjuicio de que <strong><u>soliciten</u></strong>, en su caso, su <strong><u>ampliación</u></strong> o la <strong><u>modificación de su contenido</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-pause-circle icon text-yellow-600"></i>Suspensión</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-slash icon text-red-600"></i>La <span class="actor-pill">AESF</span> podrá <strong><u>suspender los efectos de la licencia</u></strong> concedida a una <span class="actor-pill">empresa ferroviaria</span> por las siguientes causas:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-invoice-dollar icon text-red-500"></i>Cuando se abra un <strong><u>expediente sancionador</u></strong> por <u>infracción muy grave</u>, como <u>sanción</u>.</p></li>
+                                    <li><p><i class="fas fa-stopwatch icon text-orange-500"></i>O por <strong><u>interrupción de sus operaciones</u></strong> durante <u>más de <span class="pill-blue">6 meses</span></u> o <strong><u>no comenzarlas</u></strong> en los <span class="pill-blue">6 meses</span> siguientes a la obtención de la licencia, salvo que se acuerde la revocación.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-times-circle icon text-red-700"></i>Revocación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-trash-alt icon text-red-800"></i>La <span class="actor-pill">AESF</span> podrá <strong><u>revocar la licencia</u></strong> por:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-exclamation-circle icon text-gray-500"></i><strong><u>Incumplimiento sobrevenido</u></strong> de los <u>requisitos</u> para su otorgamiento.</p></li>
+                                    <li><p><i class="fas fa-balance-scale-left icon text-gray-500"></i>Por la <strong><u>declaración en estado concursal</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-user-secret icon text-gray-500"></i>Por la <strong><u>obtención en virtud de declaraciones falsas</u></strong> u otro <u>medio irregular</u>.</p></li>
+                                    <li><p><i class="fas fa-store-slash icon text-gray-500"></i>Por <strong><u>disolución forzosa</u></strong> de la <span class="actor-pill">empresa ferroviaria</span> o <strong><u>extinción</u></strong> de la <span class="actor-pill">empresa pública</span>.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-gray-500"></i>Por la <strong><u>imposición de dos sanciones</u></strong> por <u>infracciones muy graves</u> en el plazo de <span class="pill-blue">doce meses</span>.</p></li>
+                                    <li><p><i class="fas fa-play-circle icon text-gray-500"></i>Por <strong><u>no haber comenzado la prestación del servicio</u></strong> en los <span class="pill-blue">6 meses</span> siguientes a la obtención de la licencia (la <span class="actor-pill">empresa ferroviaria</span> podrá solicitar un plazo más largo).</p></li>
+                                    <li><p><i class="fas fa-stop-circle icon text-gray-500"></i>O por la <strong><u>interrupción de sus operaciones</u></strong> durante <u>más de <span class="pill-blue">6 meses</span></u>, salvo que en estos dos casos se acuerde la suspensión.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4: Los cánones y tarifas -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-euro-sign"></i></div>
+                <h2>4. Los cánones y tarifas</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Dentro del <strong><u>régimen económico</u></strong> de la <span class="law-pill">Ley del sector ferroviario 38/2015</span> se establecen diversas <span class="definition-pill">tasas ferroviarias</span> y <span class="definition-pill">tarifas</span>:</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-id-card icon text-purple-600"></i>Tasa por licencia de empresa ferroviaria</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-bullseye icon text-red-500"></i><strong><u>Hecho imponible</u></strong>: su <u>otorgamiento</u>, <u>modificación</u> o <u>renovación</u>.</p></li>
+                        <li><p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujeto pasivo</u></strong>: la <span class="actor-pill">empresa ferroviaria</span>.</p></li>
+                        <li><p><i class="fas fa-calendar-day icon text-orange-500"></i><strong><u>Devengo</u></strong>: en el momento del <u>otorgamiento</u>, su <u>modificación</u> o su <u>renovación</u>.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-gray-600"></i><strong><u>Gestión y afectación</u></strong>: la <span class="actor-pill">AESF</span>.</p></li>
+                        <li><p><i class="fas fa-sync-alt icon text-cyan-600"></i><strong><u>Revisión</u></strong>: la cuantía se determinará por vez primera en la <span class="law-pill">Ley de Presupuestos Generales del Estado</span> y podrá ser actualizada posteriormente mediante una <span class="law-pill">orden del Ministro de TMS</span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-shield icon text-indigo-600"></i>Tasa por otorgamiento de autorización de seguridad y certificado de seguridad</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujeto pasivo</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-cog icon text-gray-500"></i>De la primera el <span class="actor-pill">administrador de infraestructuras ferroviarias</span>.</p></li>
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>Y de la segunda la <span class="actor-pill">empresa ferroviaria</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-info-circle icon text-blue-500"></i><strong><u>Hecho imponible, Devengo, Gestión y afectación, y Revisión</u></strong>: igual que primera tasa.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-stamp icon text-green-700"></i>Tasa por homologación, certificación, títulos, licencias, autorizaciones e inscripción</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-check-double icon text-teal-600"></i>Casos incluidos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-hospital-user icon text-gray-500"></i><strong><u>Homologación</u></strong> de <u>centros de reconocimiento médico</u> y de <u>formación del personal ferroviario</u>.</p></li>
+                                    <li><p><i class="fas fa-id-badge icon text-gray-500"></i><strong><u>Otorgamiento</u></strong> de <u>títulos y licencias de conducción</u> al personal ferroviario.</p></li>
+                                    <li><p><i class="fas fa-tasks icon text-gray-500"></i><strong><u>Organización</u></strong> de <u>convocatorias de examen</u> para personal ferroviario, previos a los títulos y licencias de conducción.</p></li>
+                                    <li><p><i class="fas fa-tools icon text-gray-500"></i><strong><u>Homologación</u></strong> de <u>centros de mantenimiento</u> del material rodante ferroviario.</p></li>
+                                    <li><p><i class="fas fa-certificate icon text-gray-500"></i><strong><u>Certificación</u></strong> de <u>entidades encargadas de mantenimiento</u> de vehículos ferroviarios o certificación de las <u>funciones de mantenimiento delegables</u>.</p></li>
+                                    <li><p><i class="fas fa-power-off icon text-gray-500"></i><strong><u>Autorización de entrada en servicio</u></strong> de <u>vehículos ferroviarios</u>.</p></li>
+                                    <li><p><i class="fas fa-user-shield icon text-gray-500"></i><strong><u>Otorgamiento de títulos</u></strong> de <u>consejeros de seguridad</u> en relación con el transporte de mercancías peligrosas.</p></li>
+                                    <li><p><i class="fas fa-edit icon text-gray-500"></i><strong><u>Inscripción</u></strong> de <u>vehículos y tipos de vehículos</u>, así como sus <u>modificaciones</u> en los registros correspondientes.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujetos pasivos</u></strong>: la <u>persona física o jurídica</u> que efectúe la solicitud.</p></li>
+                        <li><p><i class="fas fa-calendar-day icon text-orange-500"></i><strong><u>Devengo</u></strong>: en el momento de <u>formular la solicitud</u>.</p></li>
+                        <li><p><i class="fas fa-info-circle icon text-blue-500"></i><strong><u>Gestión y afectación, y Revisión</u></strong>: igual que primera tasa.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-shield-alt icon text-red-600"></i>Tasa por la prestación de servicios y realización de actividades en materia de seguridad ferroviaria</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujetos pasivos</u></strong>: las <span class="actor-pill">empresas ferroviarias</span> y los <span class="actor-pill">administradores de infraestructuras ferroviarias</span> a los que se refiera el respectivo hecho imponible.</p></li>
+                        <li><p><i class="fas fa-calendar-day icon text-orange-500"></i><strong><u>Devengo</u></strong>: en el momento de realización de la actividad o servicio correspondiente, y se liquidará <u>mensualmente</u>.</p></li>
+                        <li><p><i class="fas fa-info-circle icon text-blue-500"></i><strong><u>Gestión y afectación, y Revisión</u></strong>: igual que primera tasa.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-landmark icon text-amber-700"></i>Tasa por la utilización o aprovechamiento especial de bienes del dominio público ferroviario</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujeto pasivo</u></strong>: <u>concesionarios</u>, <u>personas autorizadas</u> o <u>adjudicatarios</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-ban icon text-red-700"></i><strong><u>Excepto</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-cog icon text-gray-500"></i>Los <span class="actor-pill">administradores de infraestructuras ferroviarias</span>.</p></li>
+                                    <li><p><i class="fas fa-user-friends icon text-gray-500"></i>Y las <u>personas físicas o jurídicas</u>, que no sean sociedades de capital, cuando la utilización o aprovechamiento <strong><u>no lleve aparejada una utilidad económica relevante</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-calendar-day icon text-orange-500"></i><strong><u>Devengo</u></strong>: con el <u>otorgamiento inicial</u> y <u>anualmente</u>.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-gray-600"></i><strong><u>Gestión y afectación</u></strong>: el <span class="actor-pill">administrador de infraestructuras ferroviarias</span>.</p></li>
+                        <li><p><i class="fas fa-info-circle icon text-blue-500"></i><strong><u>Revisión</u></strong>: igual que primera tasa.</p></li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-money-bill-wave icon text-green-800"></i>Canon por utilización de las infraestructuras ferroviarias</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-hand-holding-usd icon text-green-600"></i>Los <span class="actor-pill">administradores de infraestructuras ferroviarias</span> <strong><u>percibirán</u></strong> de las <span class="actor-pill">empresas ferroviarias</span> que utilicen la <span class="definition-pill">RFIG</span>, el <strong><u>abono de cánones ferroviarios</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-balance-scale icon text-purple-600"></i>De acuerdo con <strong>principios</strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-chart-line icon text-gray-500"></i><u>Viabilidad económica</u> de las infraestructuras y su <u>explotación eficaz</u>.</p></li>
+                                    <li><p><i class="fas fa-store icon text-gray-500"></i><u>Situación del mercado</u>.</p></li>
+                                    <li><p><i class="fas fa-handshake icon text-gray-500"></i><u>Equilibrio financiero</u> en la prestación de los servicios.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-gray-500"></i>Y con <strong>criterios</strong> de <u>igualdad</u>, <u>transparencia</u> y <u>no discriminación</u> entre prestadores de servicios de transporte ferroviario.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-ul icon text-blue-700"></i>Se <strong>distinguen</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-road icon text-cyan-600"></i><strong><u>Canon de acceso mínimo</u></strong> a las líneas ferroviarias de la <span class="definition-pill">RFIG</span> y de acceso a infraestructuras que conecten con instalaciones de servicio.</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-bullseye icon text-red-500"></i>El <strong><u>hecho imponible</u></strong> del canon es la <u>utilización de las líneas</u> y la <u>prestación de servicios inherentes</u>, en las <strong>modalidades</strong> siguientes:</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-calendar-check icon text-gray-400"></i>Canon por <strong><u>adjudicación de capacidad</u></strong>.</p></li>
+                                                            <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Canon por <strong><u>utilización de las líneas ferroviarias</u></strong> y otros elementos relacionados.</p></li>
+                                                            <li><p><i class="fas fa-bolt icon text-gray-400"></i>Canon por <strong><u>utilización de las instalaciones de transformación y distribución</u></strong> de la energía eléctrica de tracción.</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li><p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujetos pasivos</u></strong>: las <span class="actor-pill">empresas ferroviarias</span>, y también para el primero, los <span class="actor-pill">agentes de transporte</span>, los <span class="actor-pill">cargadores</span> y los <span class="actor-pill">operadores de transporte combinado</span> con adjudicación de capacidad.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-building icon text-indigo-600"></i><strong><u>Canon por utilización de las instalaciones de servicio</u></strong> de titularidad y gestión exclusiva de los <span class="actor-pill">administradores generales de infraestructuras ferroviarias</span>.</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-bullseye icon text-red-500"></i>El <strong><u>hecho imponible</u></strong> del canon es la <u>utilización</u> y la <u>prestación de servicios inherentes</u>, en las <strong>modalidades</strong> siguientes:</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-store-alt icon text-gray-400"></i>Canon por la <strong><u>utilización de estaciones</u></strong> de transporte de viajeros.</p></li>
+                                                            <li><p><i class="fas fa-code-branch icon text-gray-400"></i>Canon por <strong><u>utilización de vías en otras instalaciones de servicio</u></strong>: de <u>apartado</u>, de <u>formación de trenes y maniobras</u>, de <u>mantenimiento</u>, de <u>lavado y limpieza</u>, de <u>suministro de combustible</u>.</p></li>
+                                                            <li><p><i class="fas fa-bed icon text-gray-400"></i>Canon por <strong><u>utilización de vías de viajeros</u></strong> que se utilicen como <u>vías de apartado</u>.</p></li>
+                                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i>Canon por <strong><u>diversas operaciones</u></strong>: <u>limpieza del tren</u>, <u>carga o descarga</u> de servicios a bordo, uso de <u>tomas de agua</u>, uso de <u>instalaciones de combustible</u>, uso de <u>tomas eléctricas</u>, uso de <u>instalaciones de vaciado WC</u> y de otras análogas.</p></li>
+                                                            <li><p><i class="fas fa-truck-loading icon text-gray-400"></i>Y canon por <strong><u>utilización de terminales de carga</u></strong> titularidad de <span class="actor-pill">ADIF</span> o <span class="actor-pill">ADIF-AV</span>.</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-user-tag icon text-slate-600"></i><strong><u>Sujetos pasivos</u></strong>:</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-train icon text-gray-400"></i>Las <span class="actor-pill">empresas ferroviarias</span> que los utilicen.</p></li>
+                                                            <li>
+                                                                <div class="collapsible-trigger">
+                                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                                    <p><i class="fas fa-plus icon text-gray-400"></i>Además, para el <strong>canon por diversas operaciones</strong>:</p>
+                                                                </div>
+                                                                <div class="collapsible-content hidden">
+                                                                    <ul class="nested-list" style="border: none; padding-left: 0.5rem;">
+                                                                        <li><p><i class="fas fa-subway icon text-gray-300"></i>Los <span class="actor-pill">titulares del material rodante ferroviario</span> que utilicen las instalaciones de servicio.</p></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="collapsible-trigger">
+                                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                                    <p><i class="fas fa-plus icon text-gray-400"></i>Y para el <strong>canon por utilización de terminales de carga</strong>, además de los anteriores:</p>
+                                                                </div>
+                                                                <div class="collapsible-content hidden">
+                                                                    <ul class="nested-list" style="border: none; padding-left: 0.5rem;">
+                                                                        <li><p><i class="fas fa-user-tie icon text-gray-300"></i>Los <span class="actor-pill">agentes de transporte</span>.</p></li>
+                                                                        <li><p><i class="fas fa-box-open icon text-gray-300"></i>Los <span class="actor-pill">cargadores</span>.</p></li>
+                                                                        <li><p><i class="fas fa-truck icon text-gray-300"></i>Y los <span class="actor-pill">operadores de transporte combinado</span> que utilicen las terminales para mercancías.</p></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-file-invoice icon text-orange-600"></i>Tarifas</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-hand-holding-usd icon text-green-600"></i>Los <strong>precios</strong> de los <span class="definition-pill">servicios básicos</span> <strong><u>no podrán superar el coste</u></strong> de su prestación más un <u>beneficio razonable</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-handshake icon text-purple-600"></i>Los <span class="definition-pill">servicios complementarios y auxiliares</span> prestados en las instalaciones de servicio estarán sujetos a <strong><u>precios libremente acordados</u></strong> entre las partes.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-tag icon text-red-500"></i>No obstante, cuando tales servicios sean prestados por un <strong><u>solo proveedor</u></strong>, los precios que éste aplique <strong><u>no podrán superar el coste</u></strong> de su prestación más un <u>beneficio razonable</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-money-check-alt icon text-blue-600"></i>Los <strong>precios</strong> por la utilización de las instalaciones de servicio:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-cog icon text-slate-700"></i>Se <strong><u>abonarán al explotador</u></strong> de la instalación de servicio.</p></li>
+                                    <li><p><i class="fas fa-chart-pie icon text-teal-600"></i>Y se <strong><u>emplearán para financiar</u></strong> su actividad.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-bullhorn icon text-indigo-600"></i>El <span class="actor-pill">explotador de la instalación de servicio</span> <strong><u>facilitará</u></strong> al <span class="actor-pill">administrador de infraestructuras</span> la <strong><u>información sobre los precios privados</u></strong> que deben incluirse en la <span class="doc-pill">declaración sobre la red</span>.</p></li>
+                        <li><p><i class="fas fa-globe icon text-sky-600"></i>O <strong><u>indicará un sitio web</u></strong> en el que dicha información pueda obtenerse <u>gratuitamente</u> en <u>formato electrónico</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-door-open icon text-cyan-700"></i>Las <strong><u>condiciones de acceso</u></strong> a los <span class="definition-pill">servicios básicos, complementarios y auxiliares</span> prestados por todos los <span class="actor-pill">explotadores</span> en las instalaciones de servicio, incluidos <u>horarios de apertura y cierre</u>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-paper-plane icon text-purple-500"></i>Deben <strong><u>comunicarse</u></strong> al <span class="actor-pill">administrador de infraestructuras</span>.</p></li>
+                                    <li><p><i class="fas fa-upload icon text-green-500"></i>Quien los <strong><u>publicará</u></strong> en la <span class="doc-pill">declaración sobre la red</span> o en un <u>sitio web</u> en el que dicha información pueda obtenerse <u>gratuitamente en formato electrónico</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
