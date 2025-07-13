@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: La vía y sus elementos constitutivos</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-train"></i> MEB2T7. La vía y sus elementos constitutivos <i class="fas fa-cogs"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: La vía y sus elementos constitutivos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-road"></i></div>
+                <h2>1. La vía y sus elementos constitutivos. Tipología y materiales</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="definition-pill"><strong>vía ferroviaria</strong></span> está <strong><u>constituida</u></strong> por:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-minus icon text-gray-500"></i>Los <strong><u>carriles</u></strong>.</p></li>
+                                <li><p><i class="fas fa-equals icon text-gray-500"></i>Las <strong><u>traviesas</u></strong>.</p></li>
+                                <li><p><i class="fas fa-thumbtack icon text-gray-500"></i>Y el <strong><u>material de sujeción</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-layer-group icon text-amber-700"></i>Todo ello sobre <strong><u>balasto</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-exclamation-circle icon text-orange-600"></i>O en <strong>otros casos</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-ruler-horizontal icon text-purple-500"></i>Los carriles se sitúan sobre unos <strong><u>largueros longitudinales</u></strong> unidos por <u>riostras</u> (algunos metros).</p></li>
+                                <li><p><i class="fas fa-road icon text-green-500"></i>Y en otros se utiliza la <strong><u>vía en placa</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-map-marker-alt icon text-red-600"></i>En <strong>España</strong> podemos <strong><u>clasificar los ferrocarriles en tres tipos</u></strong> según el <span class="definition-pill"><strong>ancho de vía</strong></span> (<u>distancia en las alineaciones rectas entre las caras internas de los carriles</u>):</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-ruler-combined icon text-blue-400"></i><span class="definition-pill"><strong>Ancho ibérico</strong></span> <span class="pill-blue"><strong>1,668 m</strong></span>.</p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-green-400"></i><span class="definition-pill"><strong>Ancho internacional</strong></span> <span class="pill-blue"><strong>1,435 m</strong></span>.</p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-orange-400"></i>Y <span class="definition-pill"><strong>ancho de vía estrecha</strong></span> <span class="pill-blue"><strong>1 m</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-minus icon text-indigo-700"></i>Carriles</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-blue-600"></i>Su <strong>misión</strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-weight-hanging icon text-gray-500"></i><strong><u>Absorber, resistir y transmitir</u></strong> a las traviesas los <u>esfuerzos recibidos del material rodante</u>, así como los de <u>origen térmico</u> (<u>verticales</u>, <u>transversales</u> y <u>longitudinales</u>).</p></li>
+                                    <li><p><i class="fas fa-route icon text-gray-500"></i><strong><u>Guiar</u></strong> el <u>material</u>.</p></li>
+                                    <li><p><i class="fas fa-bolt icon text-gray-500"></i>Y servir de <strong><u>elemento conductor</u></strong> para el <u>retorno de las corrientes de tracción y señalización</u> cuando se emplean <u>circuitos de vías</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-stream icon text-cyan-600"></i>El más utilizado es el tipo <span class="definition-pill"><strong>Vignole</strong></span>, y los de <span class="definition-pill"><strong>garganta</strong></span> en calzadas sin que sobresalgan del afirmado.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-purple-600"></i>Se pueden considerar <strong>tres partes</strong> en el <span class="definition-pill">carril Vignole</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-heading icon text-orange-500"></i><strong><u>Cabeza</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-compress-arrows-alt icon text-red-400"></i>Se producen <strong><u>tensiones en el contacto rueda-carril</u></strong> de hasta <span class="pill-blue"><strong>15.000 kg/cm²</strong></span> (<u>superando las tensiones de rotura del material</u>) que la van desgastando.</p></li>
+                                                <li><p><i class="fas fa-ruler-horizontal icon text-blue-400"></i>Su <strong><u>anchura</u></strong> suele ser de <span class="pill-blue"><strong>65 a 72 mm</strong></span>.</p></li>
+                                                <li><p><i class="fas fa-ruler-vertical icon text-blue-400"></i><strong><u>Altura</u></strong> de unos <span class="pill-blue"><strong>50 mm</strong></span>.</p></li>
+                                                <li><p><i class="fas fa-sort-amount-down icon text-blue-400"></i><strong><u>Inclinación</u></strong> caras laterales <span class="formula-pill"><strong>1:20</strong></span> hacia el exterior para <u>evitar contacto con las pestañas de las llantas</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-link icon text-green-500"></i><strong><u>Alma</u></strong>: viene caracterizada por su <strong><u>espesor</u></strong>, que suele ser de unos <span class="pill-blue"><strong>16 mm</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-shoe-prints icon text-blue-500"></i><strong><u>Patín</u></strong>: por su <strong><u>anchura</u></strong> (oscila entre <span class="pill-blue"><strong>125 y 150 mm</strong></span>) que suele ser <span class="formula-pill"><strong>0,87</strong></span> veces el <u>canto del carril</u> (que va de <span class="pill-blue">140 a 170 mm</span>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>La <span class="actor-pill"><strong>UIC (Unión Internacional de Ferrocarriles)</strong></span> ha <strong><u>estandarizado</u></strong> unos perfiles idóneos, siendo los más habituales <span class="definition-pill"><strong>UIC-54</strong></span> (<u>líneas convencionales</u>) y <span class="definition-pill"><strong>UIC-60</strong></span> (<u>AV</u>), donde el número indica el <u>peso en kg/m</u>.</p></li>
+                        <li><p><i class="fas fa-industry icon text-slate-700"></i>Están <strong>fabricados en acero</strong> con contenidos de <u>carbono <span class="formula-pill"><0,9%</span></u>.</p></li>
+                        <li><p><i class="fas fa-fire icon text-red-700"></i>Para obtener carriles de una <strong>resistencia mayor</strong> se utilizan <strong><u>tratamientos de temple</u></strong> (<u>calentamiento controlado del acero</u>), o <strong><u>modificaciones en la estructura química</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-balance-scale icon text-indigo-600"></i>Actualmente se <strong>distinguen</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-arrow-down icon text-orange-500"></i>Carriles de <strong><u>dureza normal</u></strong>, con cargas de rotura a tracción comprendidas entre <span class="pill-blue"><strong>7.000</strong></span> y <span class="pill-blue"><strong>8.500 kg/cm²</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-arrow-up icon text-green-500"></i>De los <strong><u>carriles duros</u></strong> que superan con creces los <span class="pill-blue"><strong>9.000 kg/cm²</strong></span> (con <u>manganeso</u>, <u>silicio</u>, <u>cromo</u> y <u>vanadio</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-equals icon text-amber-700"></i>Traviesas</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-blue-600"></i>Su <strong>misión</strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><strong><u>Mantener la estabilidad</u></strong> de la vía mediante la <u>adecuada absorción y transmisión</u> de los esfuerzos <u>verticales, transversales y longitudinales</u>.</p></li>
+                                    <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i><strong><u>Asegurando su ancho</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-sort-amount-down icon text-gray-500"></i>Deben <strong><u>facilitar el asiento del carril</u></strong> con su correspondiente <u>inclinación</u> (<span class="formula-pill">1:20 a 1:40</span> descendente hacia el eje de la vía).</p></li>
+                                    <li><p><i class="fas fa-bolt-slash icon text-gray-500"></i>Y <strong><u>evitar la conducción de corrientes</u></strong> de <u>retorno de tracción</u> o de <u>circuitos de vía</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-plus-circle icon text-green-600"></i><strong>Además</strong>, deben:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-link icon text-gray-500"></i><strong><u>Adaptarse a la BLS</u></strong> (<u>Barra Larga Soldada</u> o vía sin juntas).</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i>Y a la <strong><u>maquinaria de bateo mecanizado</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-car-crash icon text-gray-500"></i>Tener <strong><u>buen comportamiento</u></strong> en <u>accidentes</u> y ante <u>vibraciones y ruido</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-cyan-600"></i>Pueden ser:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tree icon text-amber-800"></i>De <strong><u>madera</u></strong> (<u>roble, haya, pino</u>, <u>desecada y creosotada</u> para resistir la putrefacción, se adaptan a la <u>BLS con limitaciones</u>, admiten <u>buenas sujeciones</u>, proporcionan <u>aislamiento eficaz</u> y permiten velocidades hasta <span class="pill-blue">160 km/h</span>, duración <span class="pill-blue">30 años</span>).</p></li>
+                                    <li><p><i class="fas fa-train-subway icon text-slate-600"></i><strong><u>Metálicas</u></strong> (de <u>acero laminado</u> y con <u>tratamiento anticorrosión</u>, <u>no admiten BLS</u>, son <u>ruidosas</u>, de <u>aislamiento eléctrico difícil</u>, permiten velocidades de hasta <span class="pill-blue">140 km/h</span>, duración <span class="pill-blue">50 años</span>).</p></li>
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i>De <strong><u>hormigón armado</u></strong> (<u>peor aislamiento</u>, el tipo <u>monoblock</u> tiene el inconveniente de estar sometido a un <u>fuerte momento negativo</u> con las cargas, por lo que surgen las de <u>tipo mixto</u> compuestas por <u>cabezas de hormigón unidas mediante una riostra de acero (RS)</u>, admiten la <u>BLS</u>, no son adecuadas para <u>tráfico pesado</u> y presentan <u>problemas en descarrilamientos</u>, velocidades hasta <span class="pill-blue">160 km/h</span>, duración <span class="pill-blue">40 años</span>).</p></li>
+                                    <li><p><i class="fas fa-cube icon text-indigo-500"></i>De <strong><u>hormigón pretensado</u></strong> (<u>buena sujeción</u> longitudinal y transversal a la vía, <u>mantienen bien el ancho</u>, son <u>utilizables en túneles y ambientes húmedos</u>, se fabrican <u>pretensadas o postensadas</u>, admiten la <u>BLS</u>, <u>buenas para tráfico pesado</u>, <u>adecuadas para alta velocidad</u>, <u>gran rigidez</u> y <u>poco reparto de esfuerzos</u>, duración <span class="pill-blue">50 años</span>, son las <u>más utilizadas en la actualidad</u>, siendo el tipo más corriente el denominado <span class="definition-pill">AI</span> para ancho internacional, y la traviesa polivalente <span class="definition-pill">PR</span> que sirve para los anchos RENFE y UIC).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-thumbtack icon text-red-700"></i>Sujeciones</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Son los <strong><u>elementos de unión</u></strong> del carril a las traviesas.</p></li>
+                        <li><p><i class="fas fa-tasks icon text-green-600"></i><strong>Asegurando</strong> la <u>conservación del ancho de vía</u> y <strong>facilitando</strong> la <u>transferencia eficaz de las cargas horizontales y verticales</u>, <strong>evitando</strong> a su vez el <u>vuelco del carril</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-check icon text-purple-600"></i>Deben tener:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-dumbbell icon text-gray-500"></i><strong><u>Resistencia mecánica</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-wave-square icon text-gray-500"></i><strong><u>Frecuencia de vibración</u></strong> muy superior a la del carril para <u>evitar aflojamientos</u>.</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-v icon text-gray-500"></i><strong><u>Resistencia al desplazamiento longitudinal</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-sun icon text-gray-500"></i><strong><u>Resistencia a la intemperie</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-bolt-slash icon text-gray-500"></i>Y <strong><u>aislamiento eléctrico</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-orange-600"></i><strong>Constan</strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-paperclip icon text-blue-500"></i>Las <strong><u>fijaciones</u></strong> (<u>escarpias</u>, <u>tirafondos</u> y <u>clavos</u> que son <u>sujeciones clásicas</u>, y <u>grapas</u> y <u>abrazaderas</u> que son <u>sujeciones elásticas</u>).</p></li>
+                                    <li><p><i class="fas fa-square-full icon text-green-500"></i>Y la <strong><u>placa de asiento</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>Las <strong>sujeciones más habituales</strong> son del <span class="definition-pill"><strong>tipo HM</strong></span> donde una <u>grapa elástica</u> (<u>abrazadera épsilon</u>) <u>oprime el carril contra la traviesa</u> a través de la <u>placa de asiento</u> y <u>oprime también una placa acodada</u> que hace de <u>guía lateral del carril</u>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Aparatos de vía -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>2. Aparatos de vía</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Se denominan <span class="definition-pill"><strong>aparatos de vía</strong></span> al <strong><u>conjunto de dispositivos</u></strong> que tienen por misión <strong><u>asegurar la continuidad de la vía</u></strong> en los <u>cruces</u> y <u>bifurcaciones</u>.</p></li>
+                    <li><p><i class="fas fa-check-circle icon text-green-600"></i>Para ello se debe procurar que la <strong><u>pestaña</u></strong>, que es el <u>elemento de guiado de las ruedas</u>, cumpla su función <strong><u>sin encontrar obstáculos</u></strong> en su movimiento.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-purple-600"></i>Aunque el número de dispositivos puede ser importante, todos ellos <strong><u>derivan de dos fundamentales</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-code-branch icon text-orange-500"></i>El <span class="definition-pill"><strong>desvío</strong></span>.</p></li>
+                                <li><p><i class="fas fa-times icon text-cyan-500"></i>Y la <span class="definition-pill"><strong>travesía</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-code-branch icon text-orange-600"></i>El desvío</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-route icon text-blue-600"></i><strong>Permite pasar los vehículos de una vía a otra</strong>, cuando los <u>ejes de ambos son tangentes</u> en un punto.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-gray-600"></i>Sus <strong>componentes fundamentales</strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-long-arrow-alt-right icon text-gray-500"></i><u>Agujas</u> (o espadines).</p></li>
+                                    <li><p><i class="fas fa-long-arrow-alt-left icon text-gray-500"></i><u>Contraagujas</u>.</p></li>
+                                    <li><p><i class="fas fa-heart icon text-gray-500"></i><u>Corazón</u>.</p></li>
+                                    <li><p><i class="fas fa-grip-lines icon text-gray-500"></i><u>Tirantes</u>.</p></li>
+                                    <li><p><i class="fas fa-lock icon text-gray-500"></i>Y <u>cerrojos de agujas</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-times icon text-cyan-600"></i>La travesía</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-random icon text-blue-600"></i><strong>Permite efectuar el cruzamiento de dos vías</strong>, siendo <u>secantes sus respectivos ejes</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-gray-600"></i>Sus <strong>componentes fundamentales</strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-paw icon text-gray-500"></i><u>Patas de liebre</u>.</p></li>
+                                    <li><p><i class="fas fa-heart icon text-gray-500"></i><u>Corazón</u>.</p></li>
+                                    <li><p><i class="fas fa-minus icon text-gray-500"></i>Y <u>contracarriles</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tag icon text-indigo-700"></i>Denominación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>denominación de cualquier aparato de vía</u></strong> incluye una <strong><u>serie de caracteres</u></strong> donde se indican las <u>características básicas</u> del desvío.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-pen-fancy icon text-purple-600"></i><strong>Ejemplo</strong>: <span class="formula-pill"><strong>DSH-C-60-500-0,09-CR-D</strong></span></p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-code-branch icon text-gray-500"></i><span class="formula-pill"><strong>DSH</strong></span>: <strong><u>desvío sencillo</u></strong> para <u>vía ancha</u>.</p></li>
+                                    <li><p><i class="fas fa-equals icon text-gray-500"></i><span class="formula-pill"><strong>C</strong></span>: sobre <strong><u>traviesa de hormigón tipo C</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-minus icon text-gray-500"></i><span class="formula-pill"><strong>60</strong></span>: <strong><u>carril 60UIC</u></strong>.</p></li>
+                                    <li><p><i class="far fa-circle icon text-gray-500"></i><span class="formula-pill"><strong>500</strong></span>: <strong><u>radio de 500 m</u></strong> de la vía desviada.</p></li>
+                                    <li><p><i class="fas fa-wave-square icon text-gray-500"></i><span class="formula-pill"><strong>0,09</strong></span>: <strong><u>tangente 0,09</u></strong> del ángulo de cruce.</p></li>
+                                    <li><p><i class="fas fa-heart icon text-gray-500"></i><span class="formula-pill"><strong>CR</strong></span>: <strong><u>corazón recto</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-arrow-right icon text-gray-500"></i><span class="formula-pill"><strong>D</strong></span>: y <strong><u>vía desviada hacia la derecha</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: La vía en placa -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>3. La vía en placa</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Está <strong><u>constituida por una capa portante rígida de hormigón</u></strong> sobre la que se sitúan:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-minus icon text-gray-500"></i>Los <strong><u>carriles</u></strong>.</p></li>
+                                <li><p><i class="fas fa-thumbtack icon text-gray-500"></i><strong><u>Sistemas de sujeción</u></strong>.</p></li>
+                                <li><p><i class="fas fa-equals icon text-gray-500"></i>Y en algunos tipos las <strong><u>traviesas</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-plus-circle icon text-green-600"></i>Presenta como <strong>ventajas</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-weight-hanging icon text-gray-500"></i>Que <strong><u>soporta mayores cargas por eje</u></strong>.</p></li>
+                                <li><p><i class="fas fa-compress-arrows-alt icon text-gray-500"></i><strong><u>Disminuye la presión</u></strong> transmitida a la plataforma.</p></li>
+                                <li><p><i class="fas fa-euro-sign icon text-gray-500"></i>Supone un <strong><u>menor coste de mantenimiento</u></strong>.</p></li>
+                                <li><p><i class="fas fa-wind icon text-gray-500"></i>Y <strong><u>elimina totalmente el fenómeno de vuelo de balasto</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-minus-circle icon text-red-600"></i>Y como <strong>inconvenientes</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-money-bill-wave icon text-gray-500"></i>Un <strong><u>mayor coste de construcción</u></strong>.</p></li>
+                                <li><p><i class="fas fa-tools icon text-gray-500"></i>Y un <strong><u>mantenimiento de la plataforma más dificultoso</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-layer-group icon text-purple-600"></i>Las <strong>partes</strong> de la <span class="definition-pill">vía en placa</span> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-square-full icon text-gray-500"></i>La <span class="definition-pill"><strong>placa principal</strong></span>.</p></li>
+                                <li><p><i class="fas fa-wave-square icon text-gray-500"></i>El <span class="definition-pill"><strong>elastómero</strong></span> (de <u>caucho</u> y colocado <u>entre el carril y la placa principal</u>).</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-layer-group icon text-gray-500"></i>La <span class="definition-pill"><strong>placa base</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-map-marker-alt icon text-blue-400"></i>Situada <strong><u>entre la placa principal y la plataforma</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-bullseye icon text-red-400"></i>Tiene como <strong><u>objetivo</u></strong> el <u>repartir por igual las presiones</u> sobre la plataforma.</p></li>
+                                            <li><p><i class="fas fa-ruler-vertical icon text-purple-400"></i>Su <strong><u>espesor</u></strong> suele ser de <span class="pill-blue"><strong>15 cm</strong></span> de <u>hormigón pobre</u> o <u>suelos estabilizados con cemento</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-check-double icon text-teal-600"></i>En este tipo de vía la <strong><u>calidad de la plataforma es fundamental</u></strong> y debe tener una <strong><u>buena capacidad de drenaje</u></strong>.</p></li>
+                    <li><p><i class="fas fa-industry icon text-indigo-600"></i>Los <strong>sistemas más habituales</strong> son <span class="definition-pill"><strong>STEDEF</strong></span> y <span class="definition-pill"><strong>EDILON</strong></span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-chart-line icon text-green-700"></i>La <strong>tendencia actual</strong> es disponer <span class="definition-pill"><strong>carril embebido</strong></span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-plus-circle icon text-green-500"></i>Que tiene la <strong><u>ventaja</u></strong> de permitir el <u>acceso de vehículos con ruedas de neumáticos</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-map-pin icon text-orange-600"></i>La <span class="definition-pill">vía en placa</span> se dispone en <strong><u>tramos subterráneos</u></strong> generalmente.</p></li>
+                    <li><p><i class="fas fa-archway icon text-red-700"></i>Siendo <strong><u>obligatoria en túneles</u></strong> con longitud mayor de <span class="pill-blue"><strong>1.500 m</strong></span> salvo justificación.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: El ancho de vía en España -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-arrows-alt-h"></i></div>
+                <h2>4. El ancho de vía en España</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-history icon text-orange-600"></i>Durante el <strong><u>siglo XIX</u></strong>, se implantó en España un <strong><u>ancho de vía mayor de lo habitual</u></strong> (<span class="pill-blue"><strong>1,668 m</strong></span> frente a <span class="pill-blue"><strong>1,435 m</strong></span>).</p></li>
+                    <li><p><i class="fas fa-train icon text-purple-600"></i>Con el fin de poder utilizar <strong><u>locomotoras más anchas y potentes</u></strong> para solventar las <u>dificultades orográficas</u>.</p></li>
+                    <li><p><i class="fas fa-times-circle icon text-red-600"></i>Ello supuso una indudable <strong><u>barrera</u></strong> que ha <strong><u>frenado el desarrollo</u></strong> de los <u>tráficos internacionales</u> tanto para <u>viajeros</u> como para <u>mercancías</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-600"></i>Para <strong>implantar el Ancho Internacional</strong> se analizaron <strong><u>dos alternativas</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-retweet icon text-gray-500"></i><strong><u>Cambiar la mayor parte</u></strong> de la <u>red existente</u>.</p></li>
+                                <li><p><i class="fas fa-plus-circle icon text-gray-500"></i>O <strong><u>crear una red incremental</u></strong> de ancho internacional destinada al uso de la <u>AV</u> y <u>tráfico mixto</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>En <span class="pill-blue"><strong>1988</strong></span> se adoptó la <strong><u>decisión</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-rocket icon text-red-500"></i><strong><u>Introducir el ancho internacional</u></strong> en la línea de AV <u>Madrid-Sevilla</u> que ya se estaba construyendo y en las que en un futuro se construyeran para <u>tráficos de AV</u>.</p></li>
+                                <li><p><i class="fas fa-search icon text-cyan-500"></i>Y <strong><u>estudiar la viabilidad</u></strong> de una <u>reconversión total de la red</u> y decidir el <u>calendario</u> para ella.</p></li>
+                                <li><p><i class="fas fa-pause-circle icon text-yellow-500"></i>Idea que actualmente se ha <strong><u>pospuesto indefinidamente</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-sync-alt icon text-green-700"></i>Cambiadores de ancho</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Los <span class="definition-pill"><strong>sistemas de cambio automático de ancho</strong></span> permiten a los trenes <strong><u>pasar de una línea con un ancho ibérico a otra con ancho internacional</u></strong>, o viceversa.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-purple-600"></i><strong><u>Variando la distancia entre las ruedas</u></strong>, sin cambiar los ejes ni los bogíes, de forma <u>automática</u> y <u>mientras pasa el tren por la instalación</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cog icon text-orange-600"></i>Estos sistemas se <strong>basan</strong> en que, al paso por una instalación denominada <span class="definition-pill">cambiador de ancho</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-weight-hanging icon text-gray-500"></i>Las ruedas del tren se <strong><u>descargan de su peso</u></strong>, pasando el coche a estar apoyado sobre unos <u>carriles laterales elevados</u>.</p></li>
+                                    <li><p><i class="fas fa-unlock-alt icon text-gray-500"></i>Una vez que las ruedas ya no soportan peso, se <strong><u>liberan los cerrojos</u></strong> que impiden su desplazamiento lateral.</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i>Tras ello, las ruedas encuentran unos <strong><u>carriles convergentes o divergentes</u></strong> que las llevan a su <u>nueva posición</u>.</p></li>
+                                    <li><p><i class="fas fa-lock icon text-gray-500"></i>Y finalmente se <strong><u>vuelven a encerrojar</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-robot icon text-teal-600"></i>Todas estas operaciones se realizan de <strong><u>forma automática</u></strong> mediante <u>accionadores mecánicos</u> que encuentra el tren al <u>avanzar linealmente por la instalación</u>.</p></li>
+                        <li><p><i class="fas fa-stream icon text-blue-700"></i>Se pueden <strong>clasificar</strong> los cambiadores que han existido en <strong><u>tres generaciones distintas</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-chart-line icon text-green-600"></i>Cuya <strong><u>evolución</u></strong> ha permitido:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-stopwatch icon text-purple-500"></i><strong><u>Reducir el tiempo de operación</u></strong> hasta <u>menos de <span class="pill-blue">10 minutos</span></u>.</p></li>
+                                    <li><p><i class="fas fa-industry icon text-indigo-500"></i><strong><u>Independizando la operación de la tracción</u></strong> con <u>perfiles en bañera</u>.</p></li>
+                                    <li><p><i class="fas fa-train-tram icon text-cyan-500"></i>Y <strong><u>permitiendo el paso de las locomotoras</u></strong> por el cambiador, tanto en el sistema <span class="actor-pill"><strong>TALGO</strong></span> como en el de <span class="actor-pill"><strong>CAF</strong></span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-layer-group icon text-amber-700"></i>La vía de tres hilos, principales elementos y su problemática</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Se define como <span class="definition-pill"><strong>vía de tres hilos</strong></span> aquella en la que, partiendo de una vía de <u>ancho ibérico</u>, se le dota en su interior de un <strong><u>tercer carril</u></strong>.</p></li>
+                        <li><p><i class="fas fa-check-circle icon text-green-600"></i>Para <strong><u>conseguir el ancho internacional</u></strong>, haciendo posible la <u>circulación de trenes de ambos anchos</u>.</p></li>
+                        <li><p><i class="fas fa-retweet icon text-purple-600"></i>A esta configuración se le denomina de <span class="definition-pill"><strong>ancho mixto</strong></span> y requiere siempre que <strong><u>uno de los dos carriles se comparta</u></strong> para ambos tipos de circulaciones.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-train icon text-orange-600"></i><strong><u>Superestructura</u></strong> de la vía de tres hilos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-equals icon text-gray-500"></i><strong><u>Traviesas mixtas</u></strong> (en <span class="pill-blue">2001</span> la <span class="definition-pill">AM-00</span>, que se ha mejorado a la <span class="definition-pill">AM-05</span>).</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-random icon text-gray-500"></i><strong><u>Aparatos de vías</u></strong> (para simplificarlos se utilizan los <span class="definition-pill">cambiadores de hilo</span> que permiten llegar al desvío en la posición de los hilos más conveniente).</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-directions icon text-blue-400"></i>Así aquellos con <strong><u>desviación de ancho internacional</u></strong> lo hacen hacia el lado de la vía en que hay un <u>único carril</u>.</p></li>
+                                                <li><p><i class="fas fa-directions icon text-green-400"></i>Y los de <strong><u>ancho ibérico</u></strong> hacia el lado en donde están los <u>dos carriles próximos</u>.</p></li>
+                                                <li><p><i class="fas fa-tachometer-alt icon text-red-400"></i>De esta forma, se consiguen <strong><u>velocidades de paso a directa</u></strong> de hasta <span class="pill-blue"><strong>220 km/h</strong></span>.</p></li>
+                                                <li><p><i class="fas fa-ruler-horizontal icon text-purple-400"></i>Los <span class="definition-pill">cambiadores de hilo</span> tienen una longitud de <span class="pill-blue"><strong>37 metros</strong></span>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-indigo-700"></i><strong><u>Criterios de diseño y problemáticas</u></strong>. Los elementos para los que se debe establecer un criterio y que deberán ser objeto de estudio en la implantación de una vía de tres hilos se pueden resumir en:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i><strong><u>Entrevías</u></strong> (tener en cuenta los <u>gálibos cinemáticos mínimos</u> para ambos anchos).</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Colocación de aparatos de vía</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-search icon text-blue-400"></i><u>Analizar todos los desvíos</u> y hacer un <u>estudio de la cantidad de cambiadores de hilo</u> a implantar.</p></li>
+                                                <li><p><i class="fas fa-map-marker-alt icon text-green-400"></i>Tratando de <u>colocarlos en recta o curvas con el mayor radio</u> para obtener las desviadas de ancho UIC con la <u>mayor velocidad de paso posible</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-person-walking-luggage icon text-gray-500"></i><strong><u>Andenes</u></strong> (en las estaciones es <u>recomendable tener la posición del tercer carril en el lado del andén</u> para tener <u>mejores tolerancias</u> en el paso de los trenes de ancho UIC, en el caso de que en el ancho ibérico se explote con viajeros y el ancho UIC con mercancías).</p></li>
+                                    <li><p><i class="fas fa-building icon text-gray-500"></i><strong><u>Refuerzo de estructuras existentes</u></strong> (en la <u>zona inferior de cada uno de los 3 carriles</u> por la <u>asimetría de los esfuerzos</u> transmitidos al circular las cargas por cada uno de los anchos).</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-bolt icon text-gray-500"></i><strong><u>Electrificación</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-train-tram icon text-blue-400"></i>Es necesario utilizar <u>material móvil adaptado a la tensión instalada</u> en el tramo de vía mixta y la que corresponda al ancho de vía de cada tren, siempre que sea diferente.</p></li>
+                                                <li><p><i class="fas fa-times-circle icon text-red-400"></i>Ya que <u>no es posible el uso simultáneo</u> en la catenaria de ambas tensiones.</p></li>
+                                                <li><p><i class="fas fa-check-circle icon text-green-400"></i>Aunque sí hay <u>catenarias polivalentes</u> que pueden funcionar hoy a <span class="formula-pill">CC 3.000 V</span> y en un futuro a <span class="formula-pill">CA 25.000 V</span>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-shield-alt icon text-gray-500"></i><strong><u>Instalaciones de seguridad y comunicaciones</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-server icon text-purple-400"></i>El <u>incremento de elementos de campo e itinerarios posibles</u>, requieren de un <u>enclavamiento electrónico de mayor capacidad</u>.</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-memory icon text-gray-300"></i>Controlando un <u>elevado número de tarjetas de entrada y de salida</u> por cambiadores de hilo con sus respectivos motores.</p></li>
+                                                            <li><p><i class="fas fa-route icon text-gray-300"></i><u>Control del doble de itinerarios posibles</u>, etc.</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li><p><i class="fas fa-broadcast-tower icon text-cyan-400"></i>La <u>protección del material rodante</u> se realiza mediante <u>sistemas de señalización y comunicaciones</u> que pueden ser <u>coincidentes o diferentes</u> para ambos anchos.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
