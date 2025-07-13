@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Infraestructura Ferroviaria (Ley 38/2015)</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header del mapa -->
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-train-subway"></i> MEB2T1. La infraestructura ferroviaria en la Ley 38/2015(I) <i class="fas fa-gavel"></i>
+            </h1>
+        </header>
+
+        <!-- Contenido del mapa (tarjetas) -->
+
+        <!-- Card 1: La Red Ferroviaria de Interés General -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-network-wired"></i></div>
+                <h2>1. La Red Ferroviaria de Interés General</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>En la <span class="law-pill"><strong>Ley 38/2015 del Sector Ferroviario</strong></span> se define la <span class="definition-pill"><strong>infraestructura ferroviaria</strong></span> como el <strong><u>total de los elementos</u></strong> que forman parte de las <u>vías principales y de las de servicio</u>.</p></li>
+                    <li><p><i class="fas fa-ban icon text-red-600"></i>Se exceptúan las vías situadas dentro de los <strong><u>talleres de reparación</u></strong> de material rodante y de los <strong><u>depósitos o garajes</u></strong> de máquinas de tracción.</p></li>
+                    <li><p><i class="fas fa-code-branch icon text-green-600"></i>También se exceptúan los <strong><u>ramales de desviación</u></strong> para <u>particulares</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-gray-600"></i>Entre dichos <strong>elementos se encuentran</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-layer-group icon text-amber-700"></i>Los <strong><u>terrenos</u></strong>, <strong><u>obras de explotación</u></strong> y <strong><u>plataformas</u></strong> de la vía.</p></li>
+                                <li><p><i class="fas fa-person-walking-luggage icon text-purple-600"></i>Los <strong><u>andenes</u></strong> de <u>viajeros</u> y de <u>mercancías</u>.</p></li>
+                                <li><p><i class="fas fa-building icon text-orange-600"></i>Las <strong><u>obras civiles</u></strong>.</p></li>
+                                <li><p><i class="fas fa-traffic-light icon text-yellow-500"></i>Los <strong><u>pasos a nivel</u></strong>.</p></li>
+                                <li><p><i class="fas fa-road icon text-gray-500"></i>Los <strong><u>caminos de servicio</u></strong>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-blue-600"></i>Las instalaciones de <strong><u>seguridad</u></strong>, <strong><u>comunicaciones</u></strong>, <strong><u>electrificación</u></strong>, <strong><u>señalización</u></strong> y <strong><u>alumbrado</u></strong>.</p></li>
+                                <li><p><i class="fas fa-bolt icon text-yellow-400"></i>Las instalaciones de <strong><u>transformación y transporte de energía eléctrica</u></strong>, y sus <u>edificios anexos</u>, etc.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-cyan-600"></i>Por otro lado, la Ley define la <span class="definition-pill"><strong>Red Ferroviaria de Interés General (RFIG)</strong></span> como aquella <strong>integrada por</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train icon text-slate-700"></i>Las <strong><u>infraestructuras ferroviarias</u></strong>.</p></li>
+                                <li><p><i class="fas fa-store icon text-emerald-600"></i>Las <strong><u>estaciones de viajeros</u></strong> y <strong><u>terminales de transporte de mercancías</u></strong> que resulten <strong><u>esenciales</u></strong> para garantizar el transporte ferroviario en todo el <u>Estado</u>.</p></li>
+                                <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>Las vinculadas a los <strong><u>itinerarios internacionales</u></strong>.</p></li>
+                                <li><p><i class="fas fa-map-signs icon text-lime-600"></i>Las que <strong><u>enlacen las comunidades autónomas</u></strong>.</p></li>
+                                <li><p><i class="fas fa-city icon text-indigo-600"></i>Las de <strong><u>acceso a sus principales núcleos</u></strong>.</p></li>
+                                <li><p><i class="fas fa-landmark icon text-slate-800"></i>Las <strong><u>instalaciones esenciales</u></strong> para la <u>economía</u> o la <u>defensa nacional</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-tie icon text-gray-800"></i>La <strong>competencia</strong> para la <strong><u>inclusión o exclusión</u></strong> de nuevas infraestructuras, estaciones o terminales en la RFIG, reside en el <span class="actor-pill"><strong>Ministro de Transportes y Movilidad Sostenible</strong></span>.</p></li>
+                    <li><p><i class="fas fa-file-alt icon text-blue-500"></i>Esta decisión se toma <strong><u>previo informe</u></strong> de las <span class="actor-pill"><strong>Comunidades Autónomas</strong></span>.</p></li>
+                    <li><p><i class="fas fa-handshake icon text-green-700"></i>Si la infraestructura ferroviaria discurre <strong><u>íntegramente dentro de una Comunidad Autónoma</u></strong> será necesario su <strong><u>consentimiento</u></strong> para que se realice la inclusión.</p></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Card 2: La planificación de sus infraestructuras. La estrategia indicativa -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-map-signs"></i></div>
+                <h2>2. La planificación de sus infraestructuras. La estrategia indicativa</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-bullhorn icon text-indigo-600"></i>El <span class="actor-pill"><strong>Ministerio de Transportes y Movilidad Sostenible (MITMS)</strong></span> hará pública la <span class="plan-pill"><strong>estrategia indicativa</strong></span> del <u>desarrollo, mantenimiento y renovación</u> de las infraestructuras ferroviarias de la RFIG.</p></li>
+                    <li><p><i class="fas fa-bullseye icon text-red-600"></i>Su <strong>objetivo</strong> es <strong><u>satisfacer las necesidades futuras</u></strong> de <u>movilidad</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-check icon text-blue-600"></i>Esta <strong>estrategia</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-calendar-alt icon text-purple-600"></i>Cubrirá un período de al menos <span class="pill-blue"><strong>cinco años</strong></span> y será <strong><u>renovable</u></strong>.</p></li>
+                                <li><p><i class="fas fa-tasks icon text-orange-600"></i>Establecerá un <strong><u>marco general</u></strong> de <u>prioridades</u> y <u>financiero</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-balance-scale icon text-green-600"></i>Estará <strong>basada en</strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-chart-line icon text-teal-600"></i>La <strong><u>eficiencia económica y social</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-coins icon text-yellow-600"></i>La <strong><u>financiación sostenible</u></strong> del sistema ferroviario.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>Tendrá en cuenta las <strong><u>necesidades globales</u></strong> de la <span class="actor-pill">Unión Europea</span>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-users icon text-gray-600"></i>Se establecerá tras dar <strong><u>audiencia</u></strong> a:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-building-user icon text-slate-500"></i><span class="actor-pill">Administraciones públicas autonómicas y locales</span> afectadas.</p></li>
+                                            <li><p><i class="fas fa-user-friends icon text-slate-500"></i>Los <span class="actor-pill">demás interesados</span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-exchange-alt icon text-cyan-700"></i>La estrategia deberá realizarse desde una <strong><u>perspectiva intermodal</u></strong> para garantizar la <strong><u>optimización de los recursos</u></strong> invertidos y su <strong><u>asignación eficiente</u></strong> entre modos de transporte.</p></li>
+                    <li><p><i class="fas fa-history icon text-amber-700"></i>Tendrá en cuenta el <strong><u>déficit histórico</u></strong> en la inversión en <u>ferrocarriles convencionales</u> y su <u>uso compatible con las mercancías</u>.</p></li>
+                    <li><p><i class="fas fa-people-carry-box icon text-lime-700"></i>Tendrá en cuenta el <strong><u>papel esencial</u></strong> que el ferrocarril convencional juega en la <strong><u>vertebración de la España vaciada</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-shield-alt icon text-green-700"></i>Se <strong>garantizará</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-wrench icon text-gray-600"></i>El <strong><u>mantenimiento y mejora</u></strong> de las infraestructuras existentes.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-blue-600"></i>La <strong><u>modernización</u></strong> de las <u>líneas convencionales y de cercanías</u>.</p></li>
+                                <li><p><i class="fas fa-plus-circle icon text-emerald-600"></i>En su caso, la <strong><u>construcción de nuevas infraestructuras</u></strong> para garantizar la <u>accesibilidad y conectividad territorial</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-gavel icon text-red-700"></i><strong><u>Reglamentariamente se delimitarán</u></strong> los supuestos en que, por razones de <u>interés general y social</u>, podrán aprobarse <strong><u>inversiones no previstas</u></strong> en la estrategia indicativa, así como su <strong><u>revisión</u></strong>.</p></li>
+                    <li><p><i class="fas fa-calendar-check icon text-purple-700"></i>La <span class="plan-pill"><strong>estrategia indicativa para el periodo 2021-2026</strong></span> se ha aprobado por <span class="law-pill">Orden Ministerial</span> en <span class="pill-blue">diciembre de 2022</span>.</p></li>
+                    <li><p><i class="fas fa-user-tie icon text-gray-800"></i>Corresponde al <span class="actor-pill"><strong>MITMS</strong></span> la <strong><u>planificación</u></strong> de las infraestructuras ferroviarias integrantes de la RFIG.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                             <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-users-cog icon text-slate-600"></i>Esta planificación se hará <strong><u>oídos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-shield icon text-gray-500"></i>El <span class="actor-pill">Consejo Asesor de Transportes y Movilidad Sostenible</span>.</p></li>
+                                <li><p><i class="fas fa-user-cog icon text-gray-500"></i>Los <span class="actor-pill">administradores de infraestructuras</span>.</p></li>
+                                <li><p><i class="fas fa-building-user icon text-gray-500"></i>Las <span class="actor-pill">comunidades autónomas afectadas</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-sitemap icon text-indigo-700"></i>Las <strong><u>competencias</u></strong> relativas a planificación se ejercen a través de la <span class="actor-pill"><strong>Secretaría General de Transporte Terrestre</strong></span>, de la cual depende la <span class="actor-pill"><strong>Dirección General del Sector Ferroviario (DGSF)</strong></span>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Estudios y proyectos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-file-signature"></i></div>
+                <h2>3. Estudios y proyectos: tipos, contenido y tramitación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-blue-600"></i>Los diferentes <strong><u>estudios y proyectos ferroviarios</u></strong> que aparecen contemplados en la <span class="law-pill">Ley del Sector ferroviario</span> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-alt icon text-purple-600"></i><span class="doc-pill"><strong>Estudio Informativo</strong></span></p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-orange-600"></i><span class="doc-pill"><strong>Proyecto Básico</strong></span></p></li>
+                                <li><p><i class="fas fa-hard-hat icon text-green-600"></i><span class="doc-pill"><strong>Proyecto de Construcción</strong></span></p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-file-alt icon text-purple-600"></i>Estudio Informativo</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-check-circle icon text-green-600"></i>Para el <strong><u>establecimiento o modificación</u></strong> de infraestructuras ferroviarias pertenecientes a la <span class="definition-pill">RFIG</span> es necesaria la <strong><u>aprobación</u></strong> por parte del <span class="actor-pill">MITMS</span> de un <span class="doc-pill"><strong>estudio informativo</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-search icon text-cyan-600"></i>El estudio <strong>comprende</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tasks icon text-blue-500"></i>La <strong><u>definición y el análisis</u></strong> de las <u>opciones</u> de una actuación determinada.</p></li>
+                                    <li><p><i class="fas fa-star icon text-yellow-500"></i>Y la <strong><u>selección</u></strong> de la <u>alternativa más recomendable</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-leaf icon text-green-700"></i>Además, debe incluir un <strong><u>estudio de evaluación de impacto ambiental</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-times-circle icon text-red-600"></i><strong><u>No será preceptivo</u></strong> un estudio informativo cuando se trate de <strong>obras que no supongan una modificación sustancial</strong> del trazado de las líneas existentes.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-wrench icon text-gray-500"></i>(<u>reposición</u>, <u>conservación</u>, <u>acondicionamientos de trazado</u>, <u>ensanches de plataforma</u> o <u>desdoblamientos de vía sobre la misma</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-cog icon text-slate-700"></i>El estudio informativo será <strong>elaborado</strong> por la <span class="actor-pill"><strong>Subdirección General de Planificación Ferroviaria (SGPF)</strong></span>.</p></li>
+                        <li><p><i class="fas fa-sitemap icon text-indigo-600"></i>La SGPF depende de la <span class="actor-pill"><strong>D.G. del Sector Ferroviario</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-book-open icon text-blue-700"></i><strong>Constará</strong> de <u>memoria con anejos</u> y <u>planos</u>, y <strong>comprenderá</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-bullseye icon text-red-500"></i>El <strong><u>objeto del estudio</u></strong> y la <strong><u>exposición de las circunstancias</u></strong> que justifiquen el <u>interés general</u> de las infraestructuras ferroviarias y su <u>concepción global</u>.</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-600"></i>Las <strong><u>características técnicas</u></strong> de las infraestructuras ferroviarias.</p></li>
+                                    <li><p><i class="fas fa-map-signs icon text-lime-600"></i>La <strong><u>definición</u></strong>, en líneas generales y en aspectos tanto <u>geográficos como funcionales</u>, de <strong>todas las opciones</strong> de diseño estudiadas.</p></li>
+                                    <li><p><i class="fas fa-map-marker-alt icon text-red-400"></i>Y, en su caso, la <strong><u>situación</u></strong> de las <u>estaciones</u> y de las <u>zonas de servicio ferroviario</u>.</p></li>
+                                    <li><p><i class="fas fa-leaf icon text-green-700"></i>El <strong><u>estudio del impacto ambiental</u></strong> de las diferentes opciones, siempre que sea preceptivo el procedimiento de <u>evaluación de impacto ambiental ordinaria</u>.</p></li>
+                                    <li><p><i class="fas fa-balance-scale icon text-orange-600"></i>El <strong><u>análisis</u></strong> de las <u>ventajas</u>, <u>inconvenientes</u> y <u>costes</u> de cada una de las opciones.</p></li>
+                                    <li><p><i class="fas fa-chart-pie icon text-purple-500"></i>Y su <strong><u>repercusión</u></strong> en la <u>satisfacción de las demandas de transporte</u> y en la <u>ordenación territorial y urbanística</u>.</p></li>
+                                    <li><p><i class="fas fa-star icon text-yellow-500"></i>La <strong><u>selección</u></strong>, en su caso, de la <u>opción más recomendable</u>, debidamente justificada.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-stamp icon text-indigo-600"></i>El estudio informativo, con carácter previo a su tramitación, será objeto de <strong><u>aprobación provisional</u></strong> por la <span class="actor-pill">DGSF</span>.</p></li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>Esta aprobación implicará que está <strong><u>bien redactado</u></strong> y <strong><u>cumple todos los requisitos</u></strong> para practicar la información pública, antes de su aprobación definitiva.</p></li>
+                        <li><p><i class="fas fa-user-check icon text-emerald-700"></i>La <strong><u>aprobación definitiva</u></strong> es por el <span class="actor-pill">Ministro de TMS</span> (delegada en el <span class="actor-pill">SETMS</span>).</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-blue-800"></i>La <strong>tramitación</strong> de un estudio informativo contempla:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-building-user icon text-slate-500"></i>Un periodo de <span class="pill-blue"><strong>un mes</strong></span> para que las <span class="actor-pill">Comunidades Autónomas</span> y <span class="actor-pill">Entidades Locales</span> afectadas lo informen.</p></li>
+                                    <li><p><i class="fas fa-building icon text-slate-600"></i>También se someterá a <strong><u>informe</u></strong> de otros <span class="actor-pill">departamentos ministeriales</span> que afecten a su ámbito de competencia.</p></li>
+                                    <li><p><i class="fas fa-users icon text-gray-500"></i>Además, y de forma coincidente en el tiempo con el periodo anterior, se efectuará durante <span class="pill-blue"><strong>30 días</strong></span> la <strong><u>información pública</u></strong> del estudio.</p></li>
+                                    <li><p><i class="fas fa-share-square icon text-green-800"></i>Concluidos estos pasos se remitirá el <strong><u>expediente completo al MITECO</u></strong> a efectos de cumplir la legislación ambiental.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-ruler-combined icon text-orange-600"></i>Proyecto Básico</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-pen-ruler icon text-cyan-700"></i>Es aquel que <strong><u>define con detalle la geometría</u></strong> de la infraestructura ferroviaria.</p></li>
+                        <li><p><i class="fas fa-map-marked-alt icon text-lime-700"></i>...de modo que quede <strong><u>claramente definido</u></strong> el <u>trazado proyectado</u>, así como los <u>bienes y derechos afectados</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-book-open icon text-blue-700"></i><strong>Consta de</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-invoice icon text-purple-600"></i><u>Memoria</u> (descripción y justificación de la solución adoptada).</p></li>
+                                    <li><p><i class="fas fa-paperclip icon text-slate-500"></i>Y <u>anejos</u>, <u>planos</u>, y <u>presupuesto estimado</u> de las obras.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-users icon text-gray-500"></i>El proyecto básico será sometido a <strong><u>información pública</u></strong> a efectos de <u>expropiaciones</u>.</p></li>
+                        <li><p><i class="fas fa-info-circle icon text-indigo-500"></i>Y además si las <u>circunstancias lo aconsejan</u> o si existen <u>modificaciones respecto del estudio informativo</u>.</p></li>
+                        <li><p><i class="fas fa-comment-dots icon text-yellow-600"></i>Teniendo en cuenta que las <strong><u>observaciones</u></strong> existentes en este trámite sólo podrán versar sobre esas <u>modificaciones</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-hard-hat icon text-green-600"></i>Proyecto de Construcción</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                   <ul>
+                        <li><p><i class="fas fa-cogs icon text-gray-700"></i>Establece el <strong><u>desarrollo completo</u></strong> de la infraestructura ferroviaria, con el <strong><u>detalle necesario</u></strong> para su <u>construcción</u> y posterior <u>explotación</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-book-open icon text-blue-700"></i>Y <strong>constará</strong> de los siguientes documentos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-invoice icon text-purple-600"></i><strong><u>Memoria</u></strong>: descripción y justificación de la solución proyectada, las características de la línea ferroviaria y de sus elementos funcionales, las consideraciones sobre el medioambiente y el territorio afectado, etc.</p></li>
+                                    <li><p><i class="fas fa-paperclip icon text-slate-500"></i><strong><u>Anejos a la memoria</u></strong>: antecedentes, cartografía y topografía, geología y geotecnia, climatología, hidrología y drenaje, trazado, yacimientos y materiales, infraestructura, superestructura de vía, estructuras, túneles y estaciones, electrificación, instalaciones de seguridad, expropiaciones, plan de obra, etc.</p></li>
+                                    <li><p><i class="fas fa-drafting-compass icon text-orange-600"></i><strong><u>Planos</u></strong>: describirán todos y cada uno de los elementos del proyecto y su proceso constructivo, de los mismos se podrán deducir las mediciones.</p></li>
+                                    <li><p><i class="fas fa-file-contract icon text-amber-700"></i><strong><u>PPTP</u></strong>: describirá detalladamente las actuaciones a realizar y fijará las características de los materiales y de las unidades de obra, con la forma de ejecución, medición, abono y control de calidad de éstas.</p></li>
+                                    <li><p><i class="fas fa-euro-sign icon text-yellow-600"></i><strong><u>Presupuestos</u></strong>: incluyendo mediciones, cuadros de precios, y presupuestos por capítulos y totales (PEM y PBL).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-check icon text-emerald-700"></i><strong>Corresponde a los <span class="actor-pill">administradores de infraestructuras ferroviarias</span></strong> la <strong><u>aprobación</u></strong> de los <u>proyectos básicos</u> y de <u>construcción</u> de las infraestructuras ferroviarias de su titularidad.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullhorn icon text-indigo-600"></i>Los <strong>proyectos de construcción</strong> de <u>nuevas infraestructuras</u> o de aquellos que las <u>modifiquen significativamente</u> o introduzcan <u>perturbaciones relevantes</u> en la explotación ferroviaria, se pondrán en <strong><u>conocimiento</u></strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>Las <span class="actor-pill">empresas ferroviarias</span>.</p></li>
+                                    <li><p><i class="fas fa-user-tie icon text-gray-500"></i>El <span class="actor-pill">MITMS</span>.</p></li>
+                                    <li><p><i class="fas fa-user-shield icon text-gray-500"></i>La <span class="actor-pill">Agencia Estatal de Seguridad Ferroviaria</span>.</p></li>
+                                    <li><p><i class="fas fa-building-user icon text-gray-500"></i>Y de las <span class="actor-pill">comunidades autónomas</span>, antes de su aprobación.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-calendar-times icon text-red-600"></i><strong>Transcurridos <span class="pill-blue">cinco años</span></strong> desde la aprobación técnica de un proyecto de construcción sin que se haya iniciado la ejecución de las obras correspondientes, éste <strong><u>quedará sin efecto</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-landmark icon text-amber-800"></i>La <strong><u>aprobación del proyecto básico o de construcción</u></strong> de líneas ferroviarias <strong>supondrá</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check icon text-green-500"></i>La <strong><u>declaración de utilidad pública</u></strong> o interés social.</p></li>
+                                    <li><p><i class="fas fa-map-pin icon text-red-500"></i>La <strong><u>necesidad de ocupación</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Y la <strong><u>declaración de urgencia</u></strong>, a efectos de la expropiación forzosa.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-gavel icon text-red-700"></i>La <strong><u>potestad expropiatoria</u></strong> será ejercida por la <span class="actor-pill"><strong>AGE</strong></span>.</p></li>
+                        <li><p><i class="fas fa-hand-holding-usd icon text-green-700"></i>Y el <strong><u>beneficiario</u></strong> será el <span class="actor-pill"><strong>administrador de infraestructuras ferroviarias (adif)</strong></span> que abonará el justiprecio.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Construcción y puesta en servicio -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-industry"></i></div>
+                <h2>4. La construcción y puesta en servicio</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-hard-hat icon text-orange-600"></i>Construcción</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-cog icon text-slate-700"></i><strong>Corresponde a los <span class="actor-pill">administradores de infraestructuras ferroviarias</span></strong> la <strong><u>construcción</u></strong> de las <u>infraestructuras ferroviarias de su titularidad</u>.</p></li>
+                        <li><p><i class="fas fa-file-signature icon text-blue-700"></i>El <span class="actor-pill"><strong>adif</strong></span> <strong><u>tramitará los expedientes de contratación</u></strong> relativos a la construcción de las infraestructuras ferroviarias de la <span class="definition-pill">RFIG</span>.</p></li>
+                        <li><p><i class="fas fa-balance-scale icon text-amber-800"></i>La tramitación se hará <strong>ajustándose a la <span class="law-pill">LCSP</span></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-exclamation-circle icon text-red-600"></i>Se establece una <strong>excepción</strong> para:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-bolt icon text-yellow-500"></i>Las obras de <strong><u>electrificación y señalización</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-wrench icon text-gray-600"></i>El <strong><u>mantenimiento</u></strong> de la infraestructura ferroviaria.</p></li>
+                                    <li><p><i class="fas fa-traffic-light icon text-red-500"></i>Y la <strong><u>gestión</u></strong> de los sistemas de <u>control, circulación y seguridad del tráfico</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-gavel icon text-purple-700"></i>Estos casos de excepción se contratarán con arreglo a lo previsto en el <span class="law-pill"><strong>Real Decreto-Ley 3/2020</strong></span> relativo a la contratación pública en determinados sectores.</p></li>
+                        <li><p><i class="fas fa-user-check icon text-green-700"></i>El <span class="actor-pill">adif</span> es <strong><u>competente para seleccionar al contratista</u></strong>.</p></li>
+                        <li><p><i class="fas fa-road icon text-cyan-700"></i>Pudiendo, en su caso, realizar la construcción mediante un <strong><u>contrato de concesión de obras públicas</u></strong>.</p></li>
+                        <li><p><i class="fas fa-tasks icon text-blue-800"></i>Al <span class="actor-pill">adif</span> le corresponderá también la <strong><u>dirección</u></strong>, el <strong><u>control</u></strong>, la <strong><u>vigilancia</u></strong> y la <strong><u>inspección</u></strong> de las obras.</p></li>
+                    </ul>
+                </div>
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-power-off icon text-green-600"></i>Puesta en servicio de nuevas líneas y Modificación de líneas existentes</h3>
+                </div>
+                 <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-shield icon text-blue-800"></i>La <span class="actor-pill"><strong>Agencia Estatal de Seguridad Ferroviaria</strong></span> es la <strong><u>autoridad competente</u></strong> para <strong><u>otorgar las autorizaciones</u></strong> para la puesta en servicio.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-ul icon text-purple-600"></i>Las autorizaciones para la puesta en servicio se aplican a:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-route icon text-gray-500"></i>Líneas ferroviarias.</p></li>
+                                    <li><p><i class="fas fa-vector-square icon text-gray-500"></i>De sus tramos.</p></li>
+                                    <li><p><i class="fas fa-store-alt icon text-gray-500"></i>De las estaciones de transporte de viajeros.</p></li>
+                                    <li><p><i class="fas fa-truck-loading icon text-gray-500"></i>Y de las terminales de transporte de mercancías.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-network-wired icon text-indigo-600"></i>Siempre que sean pertenecientes a la <span class="definition-pill">RFIG</span>.</p></li>
+                        <li><p><i class="fas fa-book icon text-amber-800"></i>Todo ello de acuerdo con los procedimientos regulados en el <span class="law-pill"><strong>RD 929/2020</strong></span> sobre seguridad operacional e interoperabilidad ferroviarias.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Incidencia sobre el planeamiento urbanístico -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-landmark"></i></div>
+                <h2>5. Incidencia sobre el planeamiento urbanístico</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-file-alt icon text-blue-600"></i>Los <span class="doc-pill"><strong>instrumentos generales de ordenación urbanística</strong></span> <strong>calificarán los terrenos</strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-layer-group icon text-amber-700"></i>Los <strong>terrenos a calificar</strong> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train icon text-gray-600"></i>Los que se <strong><u>ocupen</u></strong> por las <u>infraestructuras ferroviarias, estaciones y terminales</u> que formen parte de la <span class="definition-pill">RFIG</span>.</p></li>
+                                <li><p><i class="fas fa-map-pin icon text-red-600"></i>Y los que <strong><u>deban ocuparse</u></strong> para tal finalidad.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-check-double icon text-green-600"></i>Esta calificación se hará de acuerdo con los <span class="doc-pill"><strong>estudios informativos</strong></span> <u>aprobados definitivamente</u>.</p></li>
+                    <li><p><i class="fas fa-tag icon text-purple-600"></i>La calificación será como <span class="definition-pill"><strong>sistema general ferroviario</strong></span> o equivalente, de <u>titularidad estatal</u>.</p></li>
+                    <li><p><i class="fas fa-ban icon text-red-700"></i>Y <strong><u>no incluirán determinaciones</u></strong> que <strong><u>perturben</u></strong> el ejercicio de las competencias atribuidas al <span class="actor-pill">adif</span>.</p></li>
+                    <li><p><i class="fas fa-sync-alt icon text-cyan-600"></i>Además, toda <strong><u>revisión del planeamiento urbanístico</u></strong> que afecte a las infraestructuras ferroviarias será objeto de <strong><u>informe vinculante</u></strong> del <span class="actor-pill">MITMS</span>.</p></li>
+                    <li><p><i class="fas fa-hourglass-half icon text-orange-500"></i>Y en el plazo de <span class="pill-blue"><strong>dos meses</strong></span>, si no lo emite, se entiende que está <strong><u>conforme</u></strong> con el proyecto urbanístico.</p></li>
+                    <li><p><i class="fas fa-times-circle icon text-red-800"></i><strong><u>No podrán aprobarse</u></strong> <span class="doc-pill">instrumentos de ordenación urbanística</span> que <strong><u>contravengan</u></strong> lo establecido en un <span class="doc-pill">estudio informativo</span> aprobado definitivamente.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-pause-circle icon text-yellow-600"></i>Si los instrumentos están <strong>en tramitación</strong> y han sido sometidos a <strong>información pública</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="actor-pill"><strong>administración urbanística</strong></span> procederá en las zonas afectadas por las actuaciones ferroviarias a la <strong><u>suspensión de cualquier acción urbanística</u></strong>.</p></li>
+                                <li><p><i class="fas fa-stopwatch icon text-blue-500"></i>La suspensión durará <strong><u>hasta tanto se apruebe el estudio</u></strong>.</p></li>
+                                <li><p><i class="fas fa-calendar-alt icon text-purple-500"></i>Con un <strong><u>plazo máximo de suspensión de <span class="pill-blue">un año</span></u></strong> desde el anuncio de información pública.</p></li>
+                                <li><p><i class="fas fa-plus-circle icon text-green-500"></i>El cual <strong><u>podrá prorrogarse</u></strong> motivadamente por el <span class="actor-pill">MITMS</span>.</p></li>
+                                <li><p><i class="fas fa-calendar-plus icon text-teal-500"></i>Por un <strong><u>plazo máximo de <span class="pill-blue">seis meses</span></u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
