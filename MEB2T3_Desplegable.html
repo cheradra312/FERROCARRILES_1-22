@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Infraestructura Ferroviaria (Ley 38/2015) (III)</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-train"></i> MEB2T3. La infraestructura ferroviaria en la Ley 38/2015(III) <i class="fas fa-map"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Zonas de servicio -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-map-marked-alt"></i></div>
+                <h2>1. Zonas de servicio</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-user-tie icon text-slate-700"></i>El <span class="actor-pill"><strong>MITMS</strong></span> podrá <strong><u>delimitar</u></strong>, especialmente en <u>ámbitos vinculados a estaciones o terminales de mercancías</u>, <span class="definition-pill"><strong>zonas de servicio ferroviario</strong></span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-layer-group icon text-amber-700"></i>Que <strong>incluirán</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-gray-500"></i>Los <strong><u>terrenos necesarios</u></strong> para la <u>ejecución de infraestructuras ferroviarias</u>.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Para la realización de las <strong><u>actividades propias</u></strong> del <span class="actor-pill">administrador de infraestructuras ferroviarias</span> u otras <u>complementarias</u>.</p></li>
+                                <li><p><i class="fas fa-object-group icon text-gray-500"></i>Y los <strong><u>espacios de reserva</u></strong> que garanticen el <u>desarrollo del servicio ferroviario</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-file-alt icon text-purple-600"></i>De conformidad con lo que determine el <span class="doc-pill"><strong>Proyecto de Delimitación y Utilización de Espacios Ferroviarios</strong></span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Dicho proyecto será:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-edit icon text-orange-600"></i><strong><u>Elaborado</u></strong> por el <span class="actor-pill">administrador de infraestructuras ferroviarias</span>.</p></li>
+                                <li><p><i class="fas fa-user-check icon text-green-600"></i>Y <strong><u>aprobado</u></strong> por el <span class="actor-pill">Ministro de TMS</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i><strong><u>Reglamentariamente se establecerá</u></strong> el <u>contenido</u>, la <u>documentación</u> y el <u>procedimiento</u> que se debe seguir para su aprobación.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-700"></i>Que <strong>comprenderá, necesariamente</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-signature icon text-cyan-600"></i>La <strong><u>emisión de informe</u></strong> por las <span class="actor-pill">administraciones urbanísticas locales y autonómicas</span> sobre aspectos de su competencia.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-red-600"></i>En todo caso, el procedimiento para la aprobación de los proyectos incluirá el <strong><u>informe vinculante</u></strong> del <span class="actor-pill">Ministerio de Defensa</span> cuando la propuesta de delimitación incluya <u>terrenos, edificaciones e instalaciones</u>, incluidas sus <u>zonas de seguridad</u>, vinculados a los fines de la <u>defensa nacional</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-landmark icon text-indigo-600"></i>La <strong><u>aprobación</u></strong> del <span class="doc-pill">Proyecto de Delimitación y Utilización de Espacios Ferroviarios</span> <strong>llevará implícita</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>La <strong><u>declaración de utilidad pública</u></strong> o <u>interés social</u>.</p></li>
+                                <li><p><i class="fas fa-map-pin icon text-red-500"></i>La <strong><u>necesidad de ocupación</u></strong>.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Y la <strong><u>declaración de urgencia</u></strong> de la misma, a efectos <u>expropiatorios</u>, de los <u>bienes y derechos necesarios</u> para su implantación.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-city icon text-blue-800"></i>Los <span class="doc-pill"><strong>instrumentos de ordenación urbanística</strong></span> <strong><u>calificarán</u></strong> los terrenos destinados a <span class="definition-pill">zonas de servicio ferroviario</span> como <span class="definition-pill"><strong>sistema general ferroviario</strong></span> o equivalente.</p></li>
+                    <li><p><i class="fas fa-ban icon text-red-700"></i>Y <strong><u>no incluirán determinaciones</u></strong> que <u>perturben el ejercicio de las competencias</u> atribuidas al <span class="actor-pill">administrador de infraestructuras ferroviarias</span>.</p></li>
+                    <li><p><i class="fas fa-sitemap icon text-purple-700"></i>Dicho <span class="definition-pill">sistema general ferroviario</span> (establecido a través del <span class="doc-pill">Proyecto de Delimitación y Utilización de Espacios Ferroviarios</span>) se <strong><u>desarrollará</u></strong> a través de un <span class="plan-pill"><strong>Plan Especial de ordenación de la zona de servicio ferroviario</strong></span> o instrumento equivalente.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-gray-600"></i>Que se <strong>tramitará</strong> de la siguiente forma:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-pen-alt icon text-orange-500"></i>El <span class="actor-pill">administrador de infraestructuras ferroviarias</span> podrá <strong><u>formular el proyecto del Plan Especial</u></strong>, que se tramitará como <u>plan de iniciativa pública</u> por la <span class="actor-pill">autoridad urbanística competente</span>.</p></li>
+                                <li><p><i class="fas fa-share-square icon text-blue-500"></i><strong><u>Concluida la tramitación</u></strong>, con carácter previo a la aprobación definitiva, la <span class="actor-pill">autoridad urbanística competente</span> <strong><u>dará traslado del proyecto</u></strong> del Plan al <span class="actor-pill">administrador de infraestructuras ferroviarias</span>, para que éste <strong><u>emita informe</u></strong> sobre las cuestiones de su competencia en el plazo máximo de <span class="pill-blue">un mes</span>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-handshake-slash icon text-red-600"></i>En caso de que <strong><u>no se dé traslado</u></strong> del proyecto del plan, en el plazo de <span class="pill-blue">seis meses</span> desde su remisión por el <span class="actor-pill">administrador</span> al órgano encargado de su tramitación, o de <strong><u>desacuerdo</u></strong> entre ambas autoridades sobre su contenido:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-times-circle icon text-red-700"></i>La <span class="actor-pill">administración urbanística</span> <strong><u>no podrá aprobarlo</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-comments icon text-yellow-600"></i>Debiendo iniciar un <strong><u>período de negociación</u></strong> con el <span class="actor-pill">administrador</span> con objeto de obtener un <u>acuerdo expreso</u> en el plazo de <span class="pill-blue">dos meses</span>.</p></li>
+                                            <li><p><i class="fas fa-balance-scale icon text-amber-800"></i>Transcurrido dicho plazo sin acuerdo, se <strong><u>remitirá el expediente al Consejo de Ministros</u></strong> que <strong><u>resolverá, con carácter vinculante</u></strong>, sobre las cuestiones objeto de discrepancia.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Limitaciones a la propiedad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-exclamation-triangle"></i></div>
+                <h2>2. Limitaciones a la propiedad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="law-pill"><strong>Ley del Sector Ferroviario</strong></span> <strong><u>establece las limitaciones a la propiedad</u></strong> para los <u>terrenos contiguos</u> a las líneas ferroviarias que formen parte de la <span class="definition-pill">RFIG</span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-blue-600"></i>Concretando:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-landmark icon text-red-600"></i><span class="definition-pill"><strong>Zona de dominio público</strong></span>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-yellow-600"></i><span class="definition-pill"><strong>Zona de protección</strong></span>.</p></li>
+                                <li><p><i class="fas fa-building icon text-purple-600"></i>Y <span class="definition-pill"><strong>límite de edificación</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ruler-combined icon text-cyan-600"></i>Para la <strong><u>definición correcta</u></strong> de estas zonas se define:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-mountain icon text-orange-600"></i>La <span class="definition-pill"><strong>arista exterior de la explanación</strong></span> (<u>intersección del talud de desmonte o de terraplén</u> o, en su caso, de los <u>muros de sostenimiento con el terreno natural</u>).</p></li>
+                                <li><p><i class="fas fa-road icon text-green-600"></i>Y la <span class="definition-pill"><strong>arista exterior de la plataforma</strong></span> (la de la <u>capa final de las obras de tierra</u>, y/o de <u>fábrica</u> sobre la cual se asentará posteriormente la <u>superestructura</u>).</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-landmark icon text-red-600"></i>Dominio Público</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-layer-group icon text-amber-700"></i>Comprende:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train-tram icon text-gray-600"></i>Los <strong><u>terrenos ocupados</u></strong> por las <u>líneas ferroviarias</u>.</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-blue-500"></i>Y una <strong><u>franja de terreno de <span class="pill-blue">8 m</span></u></strong> a cada lado de la plataforma, medida en <u>horizontal</u> y <u>perpendicularmente al eje</u> de la misma, desde la <u>arista exterior de la explanación</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bridge icon text-indigo-600"></i>En los <strong>casos especiales de puentes</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ruler-vertical icon text-purple-500"></i>Se podrán fijar como <u>aristas exteriores de la explanación</u> las <strong><u>líneas de proyección vertical del borde de las obras</u></strong> sobre el terreno.</p></li>
+                                    <li><p><i class="fas fa-check-circle icon text-green-500"></i>Siendo, en todo caso, de <strong><u>dominio público el terreno comprendido</u></strong> entre las referidas líneas.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-archway icon text-slate-600"></i>En los <strong>túneles</strong>, la determinación de la <span class="definition-pill">zona de dominio público</span> se extenderá a la <strong><u>superficie de los terrenos necesarios</u></strong> para asegurar la <u>conservación y el mantenimiento</u> de la obra.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-city icon text-cyan-700"></i>En <strong>suelo clasificado como urbano o urbanizable</strong> por el correspondiente planeamiento urbanístico:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ruler-horizontal icon text-blue-500"></i>La distancia será de <span class="pill-blue"><strong>5 m</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-compress-arrows-alt icon text-orange-500"></i>Pudiendo ser <strong><u>reducida</u></strong> por los <span class="actor-pill">administradores generales de infraestructuras ferroviarias</span> (<span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span>).</p></li>
+                                    <li><p><i class="fas fa-tasks icon text-teal-600"></i>Siempre que se <strong>acredite la necesidad</strong> de reducción y <strong>no se ocasione perjuicio</strong> a la <u>infraestructura ferroviaria</u> y a la <u>seguridad y regularidad</u> de la circulación.</p></li>
+                                    <li><p><i class="fas fa-file-signature icon text-purple-600"></i>Requiere <strong><u>informe favorable de la AESF</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-ban icon text-red-700"></i>Sin que, en ningún caso, la <span class="definition-pill">zona de dominio público</span> pueda ser <strong><u>inferior a <span class="pill-blue">2 m</span></u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-shield-alt icon text-yellow-600"></i>Zona de Protección</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-vector-square icon text-blue-600"></i>Consiste en una <strong><u>franja de terreno a cada lado</u></strong> de las líneas ferroviarias.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-map-marked-alt icon text-purple-600"></i>Delimitada:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-arrow-right icon text-green-500"></i><strong><u>Interiormente</u></strong>, por la <span class="definition-pill">zona de dominio público</span>.</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-red-500"></i>Y, <strong><u>exteriormente</u></strong>, por dos líneas paralelas situadas a <span class="pill-blue"><strong>70 m</strong></span> de las <u>aristas exteriores de la explanación</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-city icon text-cyan-700"></i>En <strong>suelo clasificado como urbano o urbanizable</strong> por el correspondiente planeamiento urbanístico, la distancia será de <span class="pill-blue"><strong>20 m</strong></span>, contados en todos los casos desde las <u>aristas exteriores de la explanación</u>.</p></li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tools icon text-gray-600"></i>Limitaciones en las zonas de dominio público y de protección</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                         <li><p><i class="fas fa-file-contract icon text-amber-700"></i>Para <strong><u>ejecutar cualquier tipo de obras o instalaciones</u></strong>, <strong><u>cambiar el destino o uso</u></strong> de las mismas, y <strong><u>plantar o talar árboles</u></strong> se requerirá la <strong><u>previa autorización</u></strong> del <span class="actor-pill">administrador de infraestructuras ferroviarias</span>.</p></li>
+                         <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-landmark icon text-red-600"></i>En la <strong>zona de dominio público</strong>, además de lo anterior:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check-circle icon text-green-500"></i>Sólo podrán realizarse obras o instalaciones cuando sean <strong><u>necesarias para la prestación del servicio ferroviario</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-info-circle icon text-blue-500"></i>O bien cuando la <strong><u>prestación de un servicio de interés general</u></strong> así lo requiera.</p></li>
+                                    <li><p><i class="fas fa-code-branch icon text-cyan-500"></i>Aunque sí que se admitirá, por motivos de interés privado, el <strong><u>cruce de la zona</u></strong>, tanto <u>aéreo como subterráneo</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-shield-alt icon text-yellow-600"></i>En la <strong>zona de protección</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ban icon text-red-700"></i><strong><u>No podrán realizarse obras</u></strong> ni se permitirán más usos que aquellos que sean <strong><u>compatibles con la seguridad</u></strong> del tráfico ferroviario.</p></li>
+                                    <li><p><i class="fas fa-file-signature icon text-purple-600"></i>Previa <strong><u>autorización</u></strong>, en cualquier caso, del <span class="actor-pill">adif</span>.</p></li>
+                                    <li><p><i class="fas fa-seedling icon text-green-600"></i>Podrán realizarse <strong><u>cultivos agrícolas</u></strong> en la zona de protección, <strong><u>sin necesidad de autorización previa</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-teal-600"></i>Siempre que se <strong><u>garantice la correcta evacuación de las aguas de riego</u></strong> y <strong><u>no se causen perjuicios</u></strong> a la explanación.</p></li>
+                                    <li><p><i class="fas fa-fire-extinguisher icon text-orange-600"></i>Quedando <strong><u>prohibida la quema de rastrojos</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                         <li><p><i class="fas fa-building-user icon text-indigo-600"></i>En <strong>ambas zonas</strong>, en las <strong>construcciones e instalaciones ya existentes</strong> podrán realizarse, <strong>exclusivamente</strong>, <strong><u>obras de reparación y mejora</u></strong>.</p></li>
+                         <li><p><i class="fas fa-plus-square icon text-red-500"></i>Siempre que <strong><u>no supongan aumento de volumen</u></strong> de la construcción.</p></li>
+                         <li><p><i class="fas fa-hand-holding-usd icon text-red-700"></i>Y sin que el <strong><u>incremento de valor</u></strong> que aquéllas comporten pueda ser <strong><u>tenido en cuenta a efectos expropiatorios</u></strong>.</p></li>
+                         <li><p><i class="fas fa-file-signature icon text-purple-600"></i>Y siempre con <strong><u>previa autorización</u></strong> del <span class="actor-pill">adif</span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-ruler-vertical icon text-purple-600"></i>Línea Límite de Edificación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-arrows-alt-h icon text-blue-600"></i>A ambos lados de las líneas ferroviarias se establece la <span class="definition-pill"><strong>línea límite de edificación</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-map-marker-alt icon text-red-500"></i>Que se sitúa a:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-road icon text-gray-600"></i><span class="pill-blue"><strong>50 m</strong></span> de la <u>arista exterior más próxima de la plataforma</u> con <strong><u>carácter general</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-city icon text-cyan-600"></i>Y a <span class="pill-blue"><strong>20 m</strong></span> en <strong><u>zonas urbanas</u></strong> donde el <span class="actor-pill">MITMS</span> podrá determinar reglamentariamente una <u>distancia inferior</u> en función de las características de las líneas.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-compress-arrows-alt icon text-orange-600"></i>Asimismo, <span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> podrán, <strong><u>reducir la distancia</u></strong> establecida con carácter general.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-signature icon text-purple-500"></i>Previo <strong><u>informe</u></strong> de las <span class="actor-pill">CCAA</span> y las <span class="actor-pill">entidades locales</span> afectadas.</p></li>
+                                    <li><p><i class="fas fa-map-signs icon text-lime-600"></i>Por <strong><u>razones geográficas o socioeconómicas</u></strong> en determinadas líneas en <u>zonas delimitadas</u> correspondientes a <u>tramos completos de longitud significativa</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-hard-hat icon text-green-700"></i>Cuando resulte <strong>necesaria la ejecución de obras</strong> dentro de la zona límite de edificación en un área concreta, y exista una <strong>razón de interés general</strong> para ello:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-cog icon text-slate-700"></i><span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> podrán <strong><u>establecer la línea límite de edificación a una distancia inferior</u></strong> a las descritas.</p></li>
+                                    <li><p><i class="fas fa-hand-pointer icon text-blue-500"></i>A <strong><u>solicitud del interesado</u></strong> y tras la <strong><u>tramitación del correspondiente procedimiento administrativo</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-teal-600"></i>Si se cuenta con <strong><u>informe favorable</u></strong> de la <span class="actor-pill">administración urbanística competente</span> y <strong><u>no se causa perjuicio</u></strong> a la <u>seguridad, regularidad, conservación y libre tránsito</u> del ferrocarril.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-bullhorn icon text-indigo-600"></i>Las <strong><u>decisiones adoptadas</u></strong> por <span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> serán <strong><u>puestas en conocimiento</u></strong> de la <span class="actor-pill">AESF</span> con <u>periodicidad semestral</u> para su <u>eventual supervisión</u>.</p></li>
+                        <li><p><i class="fas fa-ban icon text-red-700"></i>Desde esta línea de edificación hasta la línea ferroviaria queda <strong><u>prohibido cualquier tipo de obra de construcción, reconstrucción o ampliación</u></strong>.</p></li>
+                        <li><p><i class="fas fa-wrench icon text-yellow-600"></i>A <strong>excepción</strong> de las que resultaren <strong><u>imprescindibles para la conservación y mantenimiento</u></strong> de las <u>edificaciones existentes</u> en el momento de la entrada en vigor de la Ley.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Infraestructuras ferroviarias en puertos y aeropuertos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-network-wired"></i></div>
+                <h2>3. Infraestructuras ferroviarias en puertos y aeropuertos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-anchor icon text-cyan-700"></i>Puertos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Las <strong><u>infraestructuras ferroviarias</u></strong> que, en cada momento, existan en el ámbito de los <span class="definition-pill">Puertos de Interés General</span> y estén <strong><u>conectadas con la RFIG</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check-circle icon text-green-500"></i><strong><u>Formarán parte de ésta</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-book icon text-purple-500"></i>Y se <strong><u>incorporarán al Catálogo</u></strong> de infraestructuras de la <span class="definition-pill">RFIG</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-cog icon text-slate-700"></i>La <span class="actor-pill"><strong>Autoridad Portuaria</strong></span> de cada <span class="definition-pill">Puerto de Interés General</span> <strong><u>ejercerá</u></strong> respecto de las infraestructuras ferroviarias existentes en los <span class="definition-pill">Puertos de Interés General</span> las <strong><u>competencias propias</u></strong> de los <span class="actor-pill">administradores generales de la infraestructura ferroviaria</span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-ban icon text-red-600"></i><strong>Salvo</strong> las referentes a:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-alt icon text-orange-500"></i>La <strong><u>elaboración, aprobación y publicación</u></strong> de la <span class="doc-pill">declaración sobre la red</span>.</p></li>
+                                    <li><p><i class="fas fa-handshake icon text-green-500"></i>La <strong><u>adjudicación de capacidad</u></strong> de infraestructura.</p></li>
+                                    <li><p><i class="fas fa-euro-sign icon text-yellow-600"></i>La <strong><u>determinación, revisión y cobro de los cánones</u></strong> por utilización de las infraestructuras ferroviarias.</p></li>
+                                    <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>La <strong><u>cooperación</u></strong> con los organismos que en otros <span class="actor-pill">Estados miembros de la UE</span> administren las infraestructuras ferroviarias, para <u>establecer y adjudicar capacidad</u> de infraestructura que abarque más de una red nacional.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-link icon text-blue-700"></i>La <strong><u>conexión</u></strong> de las infraestructuras ferroviarias dentro de cada <span class="definition-pill">Puerto de Interés General</span> con el resto de la <span class="definition-pill">RFIG</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-alt icon text-purple-500"></i>Se <strong><u>recogerá</u></strong> en la <span class="doc-pill">declaración sobre la red</span>.</p></li>
+                                    <li><p><i class="fas fa-file-signature icon text-amber-700"></i>Y estará <strong><u>regulada por un convenio</u></strong> en el que se establecerán las <u>obligaciones y derechos</u> de cada una de las partes.</p></li>
+                                    <li><p><i class="fas fa-users icon text-indigo-600"></i>El convenio será entre la <span class="actor-pill">Autoridad Portuaria</span>, <span class="actor-pill">ADIF</span> o <span class="actor-pill">ADIF-AV</span>, y <span class="actor-pill">Puertos del Estado</span>, previa autorización del <span class="actor-pill">Ministro de TMS</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-check icon text-teal-600"></i>En este convenio se seguirán las siguientes <strong>indicaciones</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-600"></i>El <span class="actor-pill">adif</span> y la <span class="actor-pill">Autoridad Portuaria</span> <strong><u>establecerán</u></strong>, de acuerdo con las directrices del <span class="actor-pill">MITMS</span>, las <strong><u>reglas para la conexión física y funcional</u></strong> de las infraestructuras ferroviarias administradas por cada entidad.</p></li>
+                                    <li><p><i class="fas fa-ruler-combined icon text-cyan-600"></i>La <span class="actor-pill">Autoridad Portuaria</span> de que se trate <strong><u>establecerá</u></strong>, previo <u>informe favorable</u> de <span class="actor-pill">Puertos del Estado</span>, las <strong><u>reglas para el diseño y la explotación</u></strong> de la red existente en cada puerto.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>En cuanto <strong><u>no perturbe el adecuado funcionamiento</u></strong> del resto de la <span class="definition-pill">RFIG</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-plane-departure icon text-blue-800"></i>Aeropuertos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Las <strong><u>infraestructuras ferroviarias</u></strong> que, en cada momento, existan en las <span class="definition-pill">zonas de servicio</span> de los <span class="definition-pill">Aeropuertos de Interés General</span> y estén <strong><u>conectadas con la RFIG</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check-circle icon text-green-500"></i><strong><u>Formarán parte de ésta</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>Y se <strong><u>regirán por las normas generales</u></strong> contenidas en la <span class="law-pill">Ley del Sector Ferroviario</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-handshake icon text-purple-600"></i>Sin perjuicio del <strong><u>oportuno convenio</u></strong> que, para <u>coordinar competencias</u>, se celebre entre la <span class="actor-pill">entidad pública que gestione el aeropuerto</span> y el <span class="actor-pill">administrador de infraestructuras ferroviarias</span>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4: Infraestructuras ferroviarias privadas -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-train"></i></div>
+                <h2>4. Infraestructuras ferroviarias privadas</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Son <strong><u>infraestructuras de titularidad privada</u></strong> las pertenecientes a <u>particulares</u>, <u>individual o colectivamente</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-file-signature icon text-purple-600"></i>Para el <strong><u>establecimiento o la explotación</u></strong> de una infraestructura ferroviaria de titularidad privada que discurra por el territorio de <u>más de una comunidad autónoma</u>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>Será necesario obtener, previamente, la correspondiente <strong><u>autorización administrativa</u></strong>.</p></li>
+                                <li><p><i class="fas fa-user-tie icon text-slate-700"></i>Que será <strong><u>otorgada por el <span class="actor-pill">MITMS</span></u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-tasks icon text-orange-600"></i>El <strong><u>solicitante deberá presentar</u></strong> un <span class="doc-pill">proyecto de establecimiento o de explotación de la línea</span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-cyan-600"></i>Que <strong><u>incluirá, como mínimo</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-invoice-dollar icon text-yellow-500"></i>Una <u>memoria</u>, <u>planos</u>, y <u>presupuesto</u>.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Las <u>actividades</u> que vayan a prestarse sobre la línea.</p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-blue-500"></i>La <u>descripción de las obras</u> y sus <u>circunstancias técnicas</u>.</p></li>
+                                <li><p><i class="fas fa-gavel icon text-amber-800"></i>Que habrán de <strong><u>ajustarse a las normas</u></strong> que, en materia de <u>seguridad e interoperabilidad</u>, se establezcan por el <span class="actor-pill">MITMS</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-tag icon text-indigo-600"></i>Sobre la referida infraestructura ferroviaria de titularidad privada, solo se podrá llevar a cabo <strong><u>transporte ferroviario por cuenta propia</u></strong>.</p></li>
+                    <li><p><i class="fas fa-plus-circle icon text-green-700"></i>Como <strong><u>complemento de otras actividades principales</u></strong> realizadas por su titular.</p></li>
+                    <li><p><i class="fas fa-link icon text-blue-700"></i>La <strong><u>conexión con la <span class="definition-pill">RFIG</span></u></strong> de las infraestructuras ferroviarias no pertenecientes a ella únicamente podrá realizarse cuando el <span class="actor-pill">administrador de infraestructuras ferroviarias</span> lo <strong><u>autorice</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-landmark icon text-purple-700"></i>Cuando el establecimiento de una línea ferroviaria de titularidad privada sea, con arreglo a la legislación expropiatoria, de <strong><u>utilidad pública o interés social</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-user-check icon text-green-600"></i>El <span class="actor-pill">MITMS</span> podrá <strong><u>habilitar a su titular</u></strong> para:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-map-pin icon text-red-500"></i><strong><u>Ocupar los terrenos de dominio público</u></strong> que resulten necesarios.</p></li>
+                                            <li><p><i class="fas fa-hand-holding-usd icon text-yellow-600"></i>Y, en su caso, para <strong><u>adquirir los de propiedad privada</u></strong> a través del procedimiento de <u>expropiación forzosa</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-gavel icon text-amber-800"></i>En el que aquél tendrá la <strong><u>condición de beneficiario</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
