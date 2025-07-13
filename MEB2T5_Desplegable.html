@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Infraestructura ferroviaria: trazado y geometría</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-ruler-combined"></i> MEB2T5. Infraestructura ferroviaria: trazado y geometría <i class="fas fa-drafting-compass"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Infraestructura ferroviaria: trazado y geometría -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-road"></i></div>
+                <h2>1. Infraestructura ferroviaria: trazado y geometría</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="definition-pill"><strong>infraestructura ferroviaria</strong></span> incluye <strong><u>todas las obras necesarias</u></strong> para la <u>construcción de la explanación</u> y <u>obras de fábrica</u>.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-map-signs icon text-purple-600"></i>Trazado en planta</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-exclamation-triangle icon text-red-600"></i>Las <strong><u>características propias del ferrocarril</u></strong> imponen <strong><u>fuertes restricciones</u></strong> a su <u>trazado en planta</u>.</p></li>
+                        <li><p><i class="fas fa-tachometer-alt icon text-orange-600"></i>Así una <strong><u>curva con <span class="pill-blue">500 m</span> de radio</u></strong> sólo permite una <strong><u>velocidad de <span class="pill-blue">85 km/h</span></u></strong>, siendo éste un <u>valor mínimo</u> para <u>líneas de tráfico significante</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-cyan-600"></i>El <strong>trazado en planta</strong> consiste en una <strong><u>secuencia de tres tipos de alineaciones</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-minus icon text-gray-500"></i><u>Rectas</u>.</p></li>
+                                    <li><p><i class="far fa-circle icon text-gray-500"></i><u>Curvas circulares</u>.</p></li>
+                                    <li><p><i class="fas fa-wave-square icon text-gray-500"></i><u>Curvas de transición</u> (<u>clotoides</u>, <u>óvalos</u>, <u>lemniscatas</u>, <u>senoides de Bloss y de Klein</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>Como <strong>norma</strong>, dos curvas de sentido contrario deben estar <strong><u>separadas por una alineación recta</u></strong>.</p></li>
+                        <li><p><i class="fas fa-ruler-horizontal icon text-blue-500"></i>Que será de <span class="pill-blue"><strong>30 m</strong></span> en <u>vías principales</u> para velocidad superior a <span class="pill-blue">100 km/h</span>.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-gray-600"></i>Esta longitud es <strong><u>mayor que la máxima de un coche</u></strong> y pretende <strong><u>reducir la importancia de las oscilaciones de balanceo</u></strong> de los vehículos.</p></li>
+                        <li><p><i class="fas fa-industry icon text-indigo-600"></i>En <strong>vías de servicio</strong> (<u>estaciones</u>, <u>apartaderos</u>), su objeto es <strong><u>evitar la trabazón de los topes</u></strong> de dos vagones consecutivos.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-green-600"></i>Las <strong>curvas de transición</strong> cumplen un <strong><u>doble cometido</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-sync-alt icon text-purple-500"></i><strong><u>Cambio continuo</u></strong> de la <u>curvatura en planta</u>.</p></li>
+                                    <li><p><i class="fas fa-sort-amount-up icon text-blue-500"></i>Y <strong><u>establecimiento progresivo del peralte</u></strong>, presentando <u>curvatura progresiva</u> entre los puntos de tangencia.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-mountain icon text-green-700"></i>Trazado en alzado</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-layer-group icon text-amber-700"></i>Está <strong><u>constituido por una sucesión</u></strong> de <u>rectas</u> (horizontales, rampas y pendientes) y <u>curvas de acuerdo vertical</u>.</p></li>
+                        <li><p><i class="fas fa-link icon text-blue-600"></i>Como consecuencia de la <strong><u>necesidad de enlazar rasantes</u></strong> de <u>pendientes diferentes</u>.</p></li>
+                        <li><p><i class="fas fa-bezier-curve icon text-cyan-600"></i>Pudiendo ser <strong><u>cóncavos y convexos</u></strong>.</p></li>
+                        <li><p><i class="fas fa-tachometer-alt-slow icon text-red-600"></i>Las <strong>rampas y pendientes</strong> están <strong><u>condicionadas</u></strong> por razones de <u>adherencia</u> y de <u>distancia de frenado</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-balance-scale icon text-orange-700"></i>Peraltes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-wind icon text-red-600"></i>La aparición de la <strong><u>fuerza centrífuga</u></strong> en las alineaciones curvas puede provocar <u>descarrilamientos</u>.</p></li>
+                        <li><p><i class="fas fa-shield-alt icon text-green-600"></i>Para evitarlo, se da un <strong><u>peralte al plano de rodadura</u></strong>, actuando el <u>peso del vehículo</u> como <u>fuerza estabilizadora</u> frente a la <u>aceleración centrífuga</u>.</p></li>
+                        <li><p><i class="fas fa-calculator icon text-purple-600"></i>Se denomina <span class="definition-pill"><strong>peralte teórico</strong></span> al que para la velocidad de circulación consigue que la <strong><u>resultante del peso y de la fuerza centrífuga</u></strong> incida <u>perpendicularmente sobre el plano de la vía</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Pero dado que por la vía pasan <strong><u>trenes con distintas velocidades</u></strong>, si se construyera la vía para los trenes más rápidos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train-tram icon text-orange-500"></i>Cuando circulara uno <strong><u>más lento</u></strong> las <u>pestañas de las llantas desgastarían los carriles interiores</u>.</p></li>
+                                    <li><p><i class="fas fa-hand-paper icon text-red-500"></i>Y en <strong><u>caso de parada</u></strong> el <u>arranque sería difícil</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>Por ello se debe adoptar una <strong><u>solución de compromiso</u></strong>, que en <u>España</u> ha consistido en construir un peralte igual a <span class="formula-pill"><strong>2/3</strong></span> del teórico para los trenes más rápidos, denominado <span class="definition-pill"><strong>peralte práctico</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-not-equal icon text-red-700"></i>Las <strong><u>diferencias</u></strong> entre el <span class="definition-pill">peralte teórico</span> y el <span class="definition-pill">práctico</span> suponen:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-arrow-down icon text-blue-500"></i><strong><u>Insuficiencias de peralte</u></strong> para <u>trenes rápidos</u>.</p></li>
+                                    <li><p><i class="fas fa-arrow-up icon text-orange-500"></i>Y <strong><u>excesos de peralte</u></strong> para <u>trenes lentos</u> respectivamente.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-arrows-alt-h icon text-indigo-600"></i>Y se traducen en una <strong><u>aceleración no compensada lateralmente</u></strong> que se <strong><u>limita a valores</u></strong> que oscilan entre <span class="pill-blue"><strong>0,39</strong></span> y <span class="pill-blue"><strong>0,98 m/s²</strong></span>, dependiendo de la <u>velocidad máxima del trayecto</u> (a <u>mayores velocidades menores aceleraciones</u> laterales no compensadas admisibles).</p></li>
+                        <li><p><i class="fas fa-ban icon text-red-800"></i>Además, se <strong><u>limita el peralte práctico</u></strong> a valores que oscilan entre <span class="pill-blue"><strong>140</strong></span> y <span class="pill-blue"><strong>180 mm</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-500"></i>Dependiendo del:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-layer-group icon text-gray-500"></i><strong><u>Tipo de vía</u></strong> (<u>con o sin balasto</u>).</p></li>
+                                    <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>Y del <strong><u>ancho</u></strong> (<u>ibérico o UIC</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-friends icon text-cyan-600"></i>Para <strong><u>evitar molestias a los pasajeros</u></strong> en caso de parada, así como <strong><u>evitar derrames en cajas de grasa</u></strong> u otros inconvenientes.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Parámetros básicos en planta y alzado (AV) -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-drafting-compass"></i></div>
+                <h2>2. Parámetros básicos en planta y alzado (AV)</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-rocket icon text-red-600"></i>Velocidad máxima</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-key icon text-yellow-600"></i>El <strong><u>factor determinante</u></strong> en el diseño de una línea de alta velocidad es la <strong><u>elección de la velocidad de circulación</u></strong>.</p></li>
+                        <li><p><i class="fas fa-chart-line icon text-green-600"></i>Ya que de ella <strong>dependerán</strong> los <u>tiempos de recorrido</u> y el <u>éxito comercial de la línea</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-blue-600"></i>De la <strong>velocidad dependen</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>Los <strong><u>parámetros geométricos</u></strong> de trazado.</p></li>
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>El <strong><u>material rodante</u></strong> a utilizar.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Y los <strong><u>sistemas de seguridad</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-map-marker-alt icon text-purple-600"></i>En <strong>España</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-route icon text-orange-500"></i>La línea <strong><u>Madrid-Sevilla</u></strong> permite circular a una velocidad máxima de <span class="pill-blue"><strong>300 km/h</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-route icon text-cyan-500"></i>Y la línea <strong><u>Madrid y Barcelona</u></strong> a <span class="pill-blue"><strong>350 km/h</strong></span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="far fa-circle icon text-indigo-600"></i>Radio mínimo en planta</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tachometer-alt icon text-blue-500"></i>Para velocidades máximas de <span class="pill-blue"><strong>300 km/h</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check icon text-green-500"></i>Radio mínimo <strong><u>normal</u></strong> de <span class="pill-blue"><strong>5.350 m</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-exclamation icon text-yellow-500"></i>Y <strong><u>excepcional</u></strong> <span class="pill-blue"><strong>4.750 m</strong></span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tachometer-alt-fast icon text-red-500"></i>Y para velocidad de <span class="pill-blue"><strong>350 km/h</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check icon text-green-500"></i>Radio mínimo <strong><u>normal</u></strong> de <span class="pill-blue"><strong>7.250 m</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-exclamation icon text-yellow-500"></i>Y <strong><u>excepcional</u></strong> de <span class="pill-blue"><strong>6.500 m</strong></span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-sort-amount-up icon text-green-700"></i>Inclinación máxima</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Este parámetro adquiere una <strong><u>mayor importancia</u></strong> en las líneas de <strong><u>tráfico mixto</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-ban icon text-red-600"></i>Ya que las <strong><u>rampas máximas han de limitarse</u></strong> para que los <strong>trenes de mercancías</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-play-circle icon text-green-500"></i>Puedan <strong><u>arrancar en cualquier punto</u></strong> de la línea si se han detenido por cualquier motivo o necesidad del servicio.</p></li>
+                                    <li><p><i class="fas fa-hand-paper icon text-red-500"></i>Para que tengan la <strong><u>capacidad de frenado necesaria</u></strong> para detenerse en cualquier pendiente.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-tachometer-alt-slow icon text-orange-500"></i>Y para que la <strong><u>reducción de la velocidad</u></strong>, como consecuencia de la <u>falta de potencia</u> de la locomotora o del <u>remolcado de vagones pesados</u>, <strong><u>no afecte negativamente</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-balance-scale icon text-purple-400"></i>Tanto a los <strong><u>criterios de tolerabilidad del exceso de peralte</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-tools icon text-amber-600"></i>Como al <strong><u>desgaste prematuro</u></strong> de la vía.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-route icon text-cyan-700"></i>La línea <strong><u>Madrid-Sevilla</u></strong> tiene una inclinación máxima de <span class="pill-blue"><strong>12,5 milésimas</strong></span> porque está diseñada para albergar <u>tráfico mixto</u>.</p></li>
+                        <li><p><i class="fas fa-chart-line icon text-blue-700"></i>La <strong><u>tendencia observada</u></strong> en líneas posteriores de tráfico mixto es la <strong><u>adopción de mayores rampas</u></strong>.</p></li>
+                        <li><p><i class="fas fa-map-marker-alt icon text-purple-600"></i>Así, la línea <strong><u>Barcelona-frontera francesa</u></strong>, que acepta la circulación de un cierto porcentaje de trenes de mercancías con cargas remolcadas de hasta <span class="pill-blue">900 t</span> ha sido diseñada con valores máximos de <span class="pill-blue"><strong>18 milésimas</strong></span>.</p></li>
+                        <li><p><i class="fas fa-user-friends icon text-indigo-600"></i>Por el contrario, en las líneas diseñadas para <strong><u>tráfico exclusivo de viajeros</u></strong> mediante ramas especializadas de alta velocidad el valor de las rampas puede <strong><u>incrementarse</u></strong>.</p></li>
+                        <li><p><i class="fas fa-arrow-up icon text-green-500"></i>Situándose el <strong><u>valor máximo excepcional</u></strong> en el entorno de las <span class="pill-blue"><strong>35 milésimas</strong></span>.</p></li>
+                        <li><p><i class="fas fa-building icon text-slate-700"></i><span class="actor-pill"><strong>ADIF-AV</strong></span> limita sus pendientes máximas a <span class="pill-blue"><strong>25 milésimas</strong></span> (línea Madrid-Barcelona), siendo los valores excepcionales permitidos los de <span class="pill-blue">30 milésimas</span>.</p></li>
+                        <li><p><i class="fas fa-rocket icon text-red-700"></i>Con el <strong><u>aumento progresivo de la potencia</u></strong> de los trenes, los valores máximos de las rampas han podido ser <strong><u>incrementados</u></strong> en algunas líneas diseñadas <u>exclusivamente para la circulación de trenes de viajeros de altas prestaciones</u>.</p></li>
+                        <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>Como en el caso de la línea <strong><u>Colonia-Frankfurt</u></strong>, en la que la rampa máxima es de <span class="pill-blue"><strong>40 milésimas</strong></span>.</p></li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>Las <span class="doc-pill"><strong>ETIs</strong></span> limitan la <strong><u>longitud de la inclinación máxima</u></strong> de <span class="pill-blue">35 milésimas</span> a <span class="pill-blue"><strong>6 km</strong></span>.</p></li>
+                        <li><p><i class="fas fa-ruler-horizontal icon text-blue-500"></i><span class="actor-pill"><strong>ADIF-AV</strong></span> limita las <strong><u>longitudes de las inclinaciones máximas</u></strong> en líneas de Alta velocidad a <span class="pill-blue"><strong>3.000 m</strong></span>.</p></li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>Comprobando que la <strong><u>pérdida de velocidad no es superior al <span class="pill-blue">10%</span></u></strong> de la velocidad máxima y mínima de circulación.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Secciones transversales -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-road"></i></div>
+                <h2>3. Secciones transversales</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Las <span class="definition-pill"><strong>secciones transversales de las líneas de alta velocidad</strong></span>, se caracterizan por un <strong><u>aumento en las dimensiones</u></strong> de sus elementos.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ruler-horizontal icon text-purple-600"></i>Como:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i>El <span class="definition-pill"><strong>hombro lateral</strong></span> que es la <u>distancia del borde activo del carril al borde superior del balasto</u> (<span class="pill-blue"><strong>1,1 m</strong></span>).</p></li>
+                                <li><p><i class="fas fa-plug icon text-gray-500"></i>La <strong><u>distancia al eje del poste de catenaria</u></strong> desde eje de vía (<span class="pill-blue"><strong>3,35 m</strong></span>).</p></li>
+                                <li><p><i class="fas fa-broadcast-tower icon text-gray-500"></i>O la <strong><u>distancia a canaleta de comunicaciones</u></strong> desde eje de vía (<span class="pill-blue"><strong>4 m</strong></span>).</p></li>
+                                <li><p><i class="fas fa-info icon text-gray-400"></i>Entre paréntesis los <u>valores habituales en España</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-expand-arrows-alt icon text-cyan-600"></i>El <strong><u>ancho total de la plataforma</u></strong> en la <u>cota superior del subbalasto</u> y de <u>estructura en viaductos</u> está:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-green-500"></i>En el entorno de los <span class="pill-blue"><strong>14 m</strong></span> para <strong><u>vía doble</u></strong>.</p></li>
+                                <li><p><i class="fas fa-road icon text-orange-500"></i>Y en <span class="pill-blue"><strong>8,5 m</strong></span> para <strong><u>vía única</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-archway icon text-indigo-600"></i><strong><u>Especial mención</u></strong> en el apartado de sección transversal merecen los <strong><u>túneles</u></strong>.</p></li>
+                    <li><p><i class="fas fa-wind icon text-red-600"></i>Dado que durante la circulación de un tren en su interior se generan <strong><u>ondas de presión</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-blue-700"></i>Que <strong>dependen</strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i>La <strong><u>velocidad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>De las <strong><u>características del tren</u></strong> (<u>dimensiones</u>, <u>propiedades aerodinámicas</u> y <u>fricción</u>).</p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>De la <strong><u>longitud y sección</u></strong> del túnel.</p></li>
+                                <li><p><i class="fas fa-compress icon text-gray-500"></i>Y de su <span class="definition-pill"><strong>coeficiente de bloqueo</strong></span> (<u>relación entre la sección transversal del tren y la sección libre del túnel</u>).</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-chart-line icon text-green-700"></i>La <strong><u>sección de los túneles ha aumentado</u></strong> con el <u>incremento de la velocidad máxima</u> de circulación y con el <u>mayor conocimiento</u> de los fenómenos aerodinámicos.</p></li>
+                    <li><p><i class="fas fa-route icon text-purple-600"></i>La línea <strong><u>Madrid-Sevilla</u></strong> fue proyectada con secciones libres de túnel de vía doble de <span class="pill-blue"><strong>75 m²</strong></span>.</p></li>
+                    <li><p><i class="fas fa-route icon text-cyan-600"></i>Frente a los <span class="pill-blue"><strong>100 m²</strong></span> de la línea <strong><u>Madrid-Barcelona-F.F.</u></strong></p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: Gálibos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-object-group"></i></div>
+                <h2>4. Gálibos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-bullseye icon text-red-600"></i>El <span class="definition-pill"><strong>gálibo</strong></span> tiene por <strong><u>objeto definir contornos</u></strong> que permitan la <u>circulación del material rodante</u> de tal manera que <strong><u>no encuentre obstáculos</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-clone icon text-blue-600"></i>Se trata de un <strong><u>concepto doble</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-purple-500"></i>El <span class="definition-pill"><strong>gálibo del obstáculo</strong></span>, que define el <u>contorno mínimo de la infraestructura</u>.</p></li>
+                                <li><p><i class="fas fa-train icon text-orange-500"></i>Y el <span class="definition-pill"><strong>gálibo del material rodante</strong></span>, que define el <u>contorno máximo de éste</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-drafting-compass icon text-cyan-600"></i>Se <strong><u>definen contornos de referencia diferentes</u></strong> para:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-rocket icon text-gray-500"></i>Líneas de <strong><u>alta velocidad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>Líneas de <strong><u>ancho ibérico</u></strong>.</p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>Y <strong><u>ancho métrico</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-cogs icon text-green-600"></i>A partir de los cuales se <strong><u>obtienen los gálibos</u></strong> del <u>material rodante</u> y de <u>implantación de obstáculos</u>.</p></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Card 5: Entre-eje -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-arrows-alt-h"></i></div>
+                <h2>5. Entre-eje</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El <span class="definition-pill"><strong>entre-eje</strong></span> es la <strong><u>distancia entre los ejes</u></strong> de las <u>dos vías</u> de una línea ferroviaria.</p></li>
+                    <li><p><i class="fas fa-wind icon text-red-600"></i>Su elección viene <strong><u>condicionada por factores aerodinámicos</u></strong> producidos en el <u>cruce de trenes</u>.</p></li>
+                    <li><p><i class="fas fa-chart-line icon text-green-600"></i>Por lo que el valor del <span class="definition-pill">entre-eje</span> ha ido <strong><u>aumentando con la velocidad máxima</u></strong> de circulación.</p></li>
+                    <li><p><i class="fas fa-arrow-up icon text-purple-600"></i>La <strong><u>tendencia en AV</u></strong> es <strong><u>no construir infraestructuras</u></strong> con entre-ejes <strong><u>inferiores a <span class="pill-blue">4,5 m</span></u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-map-marker-alt icon text-orange-600"></i>Ejemplos de valores:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-route icon text-cyan-500"></i>La línea <strong><u>Madrid-Sevilla</u></strong> tiene <span class="pill-blue"><strong>4,3 m</strong></span>.</p></li>
+                                <li><p><i class="fas fa-route icon text-blue-500"></i>La línea <strong><u>Madrid-Barcelona</u></strong> tiene <span class="pill-blue"><strong>4,7 m</strong></span>.</p></li>
+                                <li><p><i class="fas fa-route icon text-indigo-500"></i>Y la línea <strong><u>Barcelona-frontera francesa</u></strong> <span class="pill-blue"><strong>4,8 m</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Card 6: Criterios de eficiencia -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>6. Criterios de eficiencia (Orden FOM 3317/2010)</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Con esta <span class="law-pill"><strong>Orden</strong></span> el <span class="actor-pill">Ministerio</span> establece una <strong><u>serie de instrucciones</u></strong> para todos los <span class="doc-pill">estudios informativos</span> y <span class="doc-pill">proyectos</span> enfocadas a la <strong><u>reducción del coste</u></strong> de las actuaciones.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-file-alt icon text-purple-600"></i>Estudios informativos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-route icon text-green-600"></i>Se <strong><u>optimizarán los trazados</u></strong> minimizando los <u>costes</u> de las alternativas que cumplan los <u>requisitos funcionales y medioambientales</u> exigibles.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-blue-600"></i>Y se realizará un <strong><u>estudio funcional de la línea</u></strong> que determine sus <u>características principales</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-project-diagram icon text-orange-600"></i>Proyectos básicos y de construcción</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-edit icon text-indigo-600"></i>En los proyectos el <strong><u>autor elaborará un informe</u></strong>, que indique de forma motivada las <strong><u>modificaciones del trazado</u></strong> que, en su caso, se hayan producido en el <span class="doc-pill">Proyecto</span> respecto al <span class="doc-pill">Estudio Informativo</span>.</p></li>
+                        <li><p><i class="fas fa-city icon text-red-600"></i><strong><u>No se realizarán obras de integración urbana</u></strong> salvo que estén regidas por un <span class="doc-pill"><strong>Convenio específico</strong></span>.</p></li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>En cuyo caso se atenderá <strong><u>estrictamente a las condiciones económicas y técnicas</u></strong> que en éste se reflejen, y siempre en el marco de los <u>criterios generales de economía y eficiencia</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-plus-circle icon text-green-700"></i>Podrán <strong><u>admitirse modificaciones</u></strong> en los proyectos con relación a los <span class="doc-pill">Estudios Informativos</span>, a propuesta de las <span class="actor-pill"><strong>Administraciones Territoriales</strong></span>, cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-times-circle icon text-red-500"></i><strong><u>No contradigan</u></strong> los <u>criterios generales de esta Orden</u>.</p></li>
+                                    <li><p><i class="fas fa-hand-holding-usd icon text-yellow-600"></i>Y la <span class="actor-pill">Administración proponente</span> <strong><u>asuma el sobrecoste</u></strong> derivado de su propuesta.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-certificate icon text-purple-700"></i>El <strong><u>autor de cada proyecto</u></strong> deberá presentar al <span class="actor-pill">Centro Directivo</span> correspondiente, antes de la aprobación del mismo, una <strong><u>certificación</u></strong> en la que reconozca <u>cumplir las instrucciones y parámetros</u> que se recogen en la <span class="law-pill">Orden Ministerial</span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tasks icon text-blue-700"></i>Criterios de eficiencia</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>El <strong>trazado de los ferrocarriles</strong> tendrá en cuenta las siguientes <strong><u>consideraciones</u></strong> para <u>incrementar la eficiencia</u> de la infraestructura:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-bridge icon text-indigo-500"></i>La <strong><u>longitud de las estructuras</u></strong> proyectadas deberá ser la <strong><u>mínima compatible</u></strong> con la <span class="doc-pill">Declaración de Impacto Ambiental</span> y con el <u>obstáculo a salvar</u>, con <u>tipologías normalizadas</u>, seleccionando la de <strong><u>coste mínimo</u></strong> considerando <u>construcción y conservación</u> que resuelva los condicionantes existentes.</p></li>
+                                    <li><p><i class="fas fa-archway icon text-slate-600"></i>Se proyectarán los <strong><u>túneles estrictamente necesarios</u></strong>, vinculando su longitud exclusivamente a los <u>aspectos técnicos</u> inherentes a cada caso.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-ban icon text-red-600"></i><strong><u>Sin disponer en fase de proyecto</u></strong> nuevos túneles o túneles artificiales <strong><u>no previstos</u></strong> en el <span class="doc-pill">Estudio Informativo</span> y en la <span class="doc-pill">Declaración de Impacto Ambiental</span>.</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i><strong><u>Salvo autorización expresa</u></strong> del <span class="actor-pill">Presidente de ADIF y ADIF-AV</span>, previo <u>informe técnico justificativo</u> de su necesidad.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-vector-square icon text-purple-600"></i>Los <strong><u>túneles bitubo</u></strong> se considerarán <strong><u>singulares</u></strong> y precisarán de un <u>informe justificativo</u> del autor del proyecto, previo a la <u>autorización</u> por parte del <span class="actor-pill">Presidente de ADIF y ADIF-AV</span>.</p></li>
+                                    <li><p><i class="fas fa-plug icon text-orange-600"></i>Sólo se proyectarán <strong><u>desvíos de servicios</u></strong> que <u>intercepten con la explanación</u> de las obras o con el <u>gálibo de explotación</u>.</p></li>
+                                    <li><p><i class="fas fa-ruler-combined icon text-cyan-600"></i>Se <strong><u>normalizará el diseño</u></strong> de la <u>sección transversal de la plataforma</u>.</p></li>
+                                    <li><p><i class="fas fa-search-dollar icon text-green-600"></i>Se realizará un <strong><u>análisis específico</u></strong> con los distintos <u>escenarios de explotación previsibles</u>, contemplando <u>puestas en servicio por fases</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-store-alt icon text-blue-800"></i>En el <strong>diseño de estaciones</strong> se prestará <strong><u>especial atención</u></strong> a:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-ruler-vertical icon text-gray-500"></i>El diseño de <strong><u>vías y andenes</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-building icon text-gray-500"></i>El <strong><u>dimensionamiento</u></strong> de los <u>edificios</u>, <u>accesos viarios</u> y <u>estacionamientos</u>.</p></li>
+                                                <li><p><i class="fas fa-compress-arrows-alt icon text-red-500"></i><strong><u>Evitando el sobredimensionamiento</u></strong>, pero <strong><u>facilitando el crecimiento modular</u></strong> en el futuro si lo exige la variación de la demanda.</p></li>
+                                                <li><p><i class="fas fa-leaf icon text-green-500"></i>Aplicación de <strong><u>medidas de eficiencia energética</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-paint-roller icon text-amber-600"></i><strong><u>Acabados interiores y exteriores</u></strong> con <u>materiales habituales</u> en edificación, <u>evitando el uso de materiales derivados de diseños singulares</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-calculator icon text-purple-700"></i>Parámetros de eficiencia</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Se establecen unos <strong><u>valores máximos y mínimos</u></strong> para cada uno de los elementos de la infraestructura ferroviaria en función del <u>tipo de terreno</u> desde el punto de vista <u>geológico-geotécnico</u> y <u>orográfico</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-rocket icon text-red-600"></i>Así por ejemplo para <strong>nuevas líneas de alta velocidad</strong> el <strong><u>máximo coste de ejecución material admitido</u></strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>Para <strong><u>plataforma</u></strong> es <span class="pill-blue"><strong>16 M€/km</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-train-tram icon text-gray-500"></i>Para <strong><u>vía</u></strong> (<span class="pill-blue"><strong>1,1-1,35 M€/km</strong></span>).</p></li>
+                                    <li><p><i class="fas fa-bolt icon text-gray-500"></i><strong><u>Energía</u></strong> (<span class="pill-blue"><strong>0,5-0,7 M€/km</strong></span>).</p></li>
+                                    <li><p><i class="fas fa-signal icon text-gray-500"></i><strong><u>Señalización y comunicaciones</u></strong> (<span class="pill-blue"><strong>1-1,25 M€/km</strong></span>).</p></li>
+                                    <li><p><i class="fas fa-bridge icon text-gray-500"></i><strong><u>Viaductos</u></strong> (<span class="pill-blue"><strong>800-2.500 €/m²</strong></span>).</p></li>
+                                    <li><p><i class="fas fa-store-alt icon text-gray-500"></i>O para <strong><u>estaciones</u></strong> (<span class="pill-blue"><strong>300-600 €/m²</strong></span>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Estos valores <strong>contemplan</strong> los <u>costes de ingeniería</u>, pero <strong>no</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-city icon text-gray-400"></i>De <strong><u>integraciones urbanas</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-archway icon text-gray-400"></i><strong><u>Grandes túneles</u></strong> de base.</p></li>
+                                    <li><p><i class="fas fa-vector-square icon text-gray-400"></i><strong><u>Túneles bitubo</u></strong> en general.</p></li>
+                                    <li><p><i class="fas fa-plug icon text-gray-400"></i>Ni <strong><u>líneas de acometida</u></strong> para subestaciones eléctricas.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
