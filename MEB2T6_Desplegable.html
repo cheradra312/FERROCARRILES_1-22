@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Las capas de asiento ferroviario</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-layer-group"></i> MEB2T6. Las capas de asiento ferroviario <i class="fas fa-road"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Las capas de asiento ferroviario -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-train-tram"></i></div>
+                <h2>1. Las capas de asiento ferroviario. Plataforma</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Dentro de la <strong>vía</strong> se distinguen:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-orange-600"></i>La <span class="definition-pill"><strong>infraestructura de vía</strong></span> es el conjunto de <u>obras de tierra y de fábrica</u> necesarias para construir la <u>plataforma</u> sobre la que se apoya la superestructura de vía.</p></li>
+                                <li><p><i class="fas fa-train icon text-purple-600"></i>La <span class="definition-pill"><strong>superestructura de vía</strong></span> es el conjunto integrado por los <u>carriles</u>, las <u>traviesas</u> (o en su caso la placa), las <u>sujeciones</u>, los <u>aparatos de vía</u> y, en su caso, el <u>lecho elástico</u> formado por el <u>balasto</u>, y las <u>demás capas de asiento</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-layer-group icon text-green-700"></i>Capas de asiento</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-red-600"></i>Su <strong>misión</strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-compress-arrows-alt icon text-gray-500"></i><strong><u>Amortiguar y repartir</u></strong> los <u>esfuerzos</u>.</p></li>
+                                    <li><p><i class="fas fa-wave-square icon text-gray-500"></i>Constituir un <strong><u>lecho elástico suavizador</u></strong> de la <u>rodadura</u>.</p></li>
+                                    <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>Permitir el establecimiento de la <strong><u>nivelación y el peralte</u></strong>, y facilitar las <strong><u>correcciones de alineación</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-bolt-slash icon text-gray-500"></i><strong><u>Evitar las fugas de corrientes</u></strong> (de <u>tracción</u> y de <u>señalización</u>).</p></li>
+                                    <li><p><i class="fas fa-water icon text-gray-500"></i>Posibilitar el <strong><u>drenaje</u></strong> y facilitar la <strong><u>evaporación del agua</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i><strong><u>Estabilizar horizontalmente</u></strong> la vía.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-ul icon text-blue-700"></i>Las <strong>capas de asiento</strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i><span class="definition-pill"><strong>Balasto</strong></span>: capa de <u>piedra machacada de naturaleza silícea</u> que cumple una serie de requisitos normalizados.</p></li>
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i><span class="definition-pill"><strong>Subbalasto</strong></span>: <u>grava arenosa bien graduada</u>, con algún porcentaje de elementos finos.</p></li>
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i><span class="definition-pill"><strong>Capa de fundación</strong></span>: constituida por <u>gravilla anticontaminante</u> compactada al <span class="pill-blue">100%</span> del <u>Proctor Normal</u>, que se utiliza para la <u>circulación de la maquinaria</u> durante la obra y se <u>suprime en las plataformas con buena capacidad portante</u>.</p></li>
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i><span class="definition-pill"><strong>Capa anticontaminante</strong></span>: formada por <u>arena</u> (se dispone en las plataformas de baja calidad).</p></li>
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i><span class="definition-pill"><strong>Geotextil</strong></span>: se coloca en las plataformas de <u>media y baja calidad</u>, como <u>aislante</u> entre la capa de forma y las superiores.</p></li>
+                                    <li><p><i class="fas fa-cubes icon text-gray-500"></i><span class="definition-pill"><strong>Capa de forma</strong></span>: no es una capa de asiento propiamente dicha, sino la <u>capa de terminación de la plataforma</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>En la <strong>actualidad</strong> la mayoría de los proyectos que se ejecutan en <strong>líneas nuevas</strong> tanto de <u>Alta Velocidad</u> como <u>Convencionales</u> utilizan <strong>únicamente las capas</strong> de <u>balasto</u>, <u>subbalasto</u> y <u>capa de Forma</u> y en ocasiones la <u>geotextil</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-cubes icon text-orange-600"></i>Subbalasto</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El <span class="definition-pill">subbalasto</span> está <strong>constituido</strong> por una <u>grava arenosa bien graduada</u>, con un <u>pequeño porcentaje de elementos finos</u>.</p></li>
+                        <li><p><i class="fas fa-ruler-vertical icon text-purple-600"></i>Los <strong>tamaños varían</strong> desde los <span class="pill-blue"><strong>40 mm</strong></span> máximo hasta un <span class="pill-blue"><strong>3-9%</strong></span> que debe pasar por el <u>tamiz de 0,063 mm</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-green-600"></i>Para que sea:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-compress-arrows-alt icon text-gray-500"></i><u>Compactable</u>.</p></li>
+                                    <li><p><i class="fas fa-unlink icon text-gray-500"></i><u>No se desligue</u> bajo el tráfico de las máquinas durante la obra.</p></li>
+                                    <li><p><i class="fas fa-snowflake icon text-gray-500"></i>Sea <u>poco sensible al hielo</u>.</p></li>
+                                    <li><p><i class="fas fa-tint-slash icon text-gray-500"></i>Y <u>proteja a la plataforma</u> de la erosión de las aguas de lluvia.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-percentage icon text-cyan-600"></i>Este material lleva un <strong>porcentaje no menor del <span class="pill-blue">30%</span></strong> de <u>piedra procedente de machaqueo</u>.</p></li>
+                        <li><p><i class="fas fa-shield-alt icon text-red-600"></i>Los elementos que la integran deben ser <strong><u>suficientemente duros</u></strong> para <u>resistir las cargas</u> transmitidas por el balasto.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-blue-700"></i>Quedar <strong><u>compactada al <span class="pill-blue">100%</span></u></strong> de la densidad del ensayo <span class="formula-pill">Proctor Modificado</span>.</p></li>
+                        <li><p><i class="fas fa-tachometer-alt icon text-orange-700"></i>Y su <strong><u>módulo de compresibilidad</u></strong> en el segundo ciclo de carga <span class="formula-pill"><strong>Ev2 ≥ 120 MPa</strong></span>, medido con placa de carga.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-check icon text-indigo-600"></i>Las <strong>principales características exigibles</strong> al material son las exigidas en la <span class="law-pill"><strong>Orden FOM 1269/2006</strong></span>, y entre ellas destacan:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-heart-broken icon text-red-500"></i><strong><u>Resistencia al desgaste-fragmentación</u></strong> (<span class="formula-pill">coeficiente de desgaste de Los Ángeles CLA < 28%</span>, y <span class="formula-pill">coeficiente Micro-Deval Húmedo MDH < 22%</span>).</p></li>
+                                    <li><p><i class="fas fa-water icon text-blue-500"></i><strong><u>Permeabilidad</u></strong>: el <span class="formula-pill">coeficiente de permeabilidad vertical</span>, compactado al <span class="pill-blue">100%</span> de la densidad máxima del <span class="formula-pill">Proctor Modificado</span>, debe ser <span class="formula-pill"><strong>≤10⁻⁶ m/s</strong></span>, ya que el subbalasto debe servir de <u>capa de protección contra la infiltración de agua</u> de precipitación al resto de la plataforma.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-road icon text-purple-700"></i>Plataforma</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Es el <strong><u>conjunto de obras de tierra y de fábrica</u></strong> necesarias para <u>dar apoyo a la superestructura de la vía</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-green-600"></i>Sus <strong>funciones</strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-life-ring icon text-gray-500"></i><strong><u>Proporciona apoyo</u></strong> a la <u>vía e instalaciones</u>.</p></li>
+                                    <li><p><i class="fas fa-weight-hanging icon text-gray-500"></i>Debe <strong><u>recibir y absorber los esfuerzos</u></strong> que le transmite el material y los de <u>origen térmico</u>, actuando como <u>cimiento resistente sin asientos plásticos</u>.</p></li>
+                                    <li><p><i class="fas fa-tint icon text-gray-500"></i>Debe <strong><u>posibilitar la evacuación del agua</u></strong>, ya que disminuye la capacidad resistente de la plataforma, se le da una <strong><u>pendiente transversal entre el <span class="pill-blue">2%</span> y el <span class="pill-blue">5%</span></u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-mountain icon text-amber-700"></i>Las <strong>obras de tierra</strong> por debajo de la capa de forma se caracterizan por la <strong><u>calidad de los suelos</u></strong> que las forman.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-cyan-600"></i>Se distinguen <strong>cuatro tipos de suelos</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-times-circle icon text-red-500"></i><span class="definition-pill"><strong>QS0</strong></span> (suelos <u>difícilmente mejorables</u>, <u>inadecuados</u> para capas de forma o subyacentes).</p></li>
+                                    <li><p><i class="fas fa-arrow-down icon text-orange-500"></i><span class="definition-pill"><strong>QS1</strong></span> (suelos <u>malos mejorables</u>).</p></li>
+                                    <li><p><i class="fas fa-minus icon text-yellow-500"></i><span class="definition-pill"><strong>QS2</strong></span> (suelos <u>intermedios</u>).</p></li>
+                                    <li><p><i class="fas fa-arrow-up icon text-green-500"></i><span class="definition-pill"><strong>QS3</strong></span> (suelos <u>buenos</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-cogs icon text-blue-700"></i>Las <strong>características de la plataforma</strong>, como conjunto, se determinan por su <strong><u>capacidad portante</u></strong>, que depende de las condiciones de la <u>explanada</u> y de la <u>capa de forma</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-chart-bar icon text-indigo-600"></i>En función de su capacidad portante se consideran <strong>tres clases de plataformas</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-battery-quarter icon text-red-500"></i><span class="definition-pill"><strong>P1</strong></span> (plataforma com <u>baja capacidad portante</u>).</p></li>
+                                    <li><p><i class="fas fa-battery-half icon text-yellow-500"></i><span class="definition-pill"><strong>P2</strong></span> (plataforma com <u>media capacidad portante</u>).</p></li>
+                                    <li><p><i class="fas fa-battery-full icon text-green-500"></i><span class="definition-pill"><strong>P3</strong></span> (plataforma com <u>alta capacidad portante</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>Como <strong><u>criterio general</u></strong>, en el caso de <strong>obra nueva</strong>, se deberá disponer siempre de una <span class="definition-pill"><strong>plataforma P3</strong></span> para <u>minimizar el espesor de subbalasto</u> y <u>mejorar el comportamiento a largo plazo</u>.</p></li>
+                        <li><p><i class="fas fa-exclamation-circle icon text-orange-600"></i>En <strong><u>casos excepcionales</u></strong> (<u>disponibilidad de materiales</u>, <u>bajo tráfico</u>, etc.) y tras los <u>adecuados estudios justificativos</u>, se podrán admitir <span class="definition-pill"><strong>plataformas de capacidad portante P1 y P2</strong></span>.</p></li>
+                        <li><p><i class="fas fa-layer-group icon text-purple-600"></i>Lo que <strong><u>supondrá colocar mayores espesores de subbalasto</u></strong> que en el caso de <span class="definition-pill">plataformas P3</span>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: El balasto -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-layer-group"></i></div>
+                <h2>2. El balasto: funciones y características</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-600"></i>El <span class="definition-pill"><strong>balasto</strong></span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-thumbtack icon text-gray-500"></i><strong><u>Sujeta la vía</u></strong> en su emplazamiento.</p></li>
+                                <li><p><i class="fas fa-water icon text-gray-500"></i>Y le proporciona el <strong><u>drenaje adecuado</u></strong>.</p></li>
+                                <li><p><i class="fas fa-compress-arrows-alt icon text-gray-500"></i>A la vez que <strong><u>reparte la presión</u></strong> bajo la traviesa para <u>impedir que el subbalasto se dañe</u> con el paso de los trenes.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-ruler-combined icon text-purple-600"></i>El <strong><u>tamaño del balasto</u></strong> está entre <span class="pill-blue"><strong>2,5</strong></span> y <span class="pill-blue"><strong>6 cm</strong></span>.</p></li>
+                    <li><p><i class="fas fa-cogs icon text-orange-600"></i>Bajo la presión de los trenes, estas piedras se <strong><u>ajustan unas con otras</u></strong> y forman un <strong><u>armazón que distribuye las cargas</u></strong>.</p></li>
+                    <li><p><i class="fas fa-tint icon text-cyan-600"></i>Las piedras de este tamaño permiten un <strong><u>drenaje rápido</u></strong> de las <u>aguas pluviales</u> y la <strong><u>evaporación de la humedad</u></strong> del <u>subbalasto</u>.</p></li>
+                    <li><p><i class="fas fa-layer-group icon text-green-700"></i>El <strong><u>espesor de la capa de balasto</u></strong> depende de la <u>velocidad de los trenes</u> que tengan que circular por la vía.</p></li>
+                    <li><p><i class="fas fa-ruler-vertical icon text-blue-500"></i>Siendo el <strong><u>mínimo de <span class="pill-blue">25 cm</span></u></strong> bajo traviesa.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-arrows-alt-h icon text-indigo-600"></i>La capa de balasto <strong><u>sobresale de las traviesas</u></strong> por sus extremos formando una <span class="definition-pill"><strong>banqueta</strong></span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                             <ul class="nested-list">
+                                 <li><p><i class="fas fa-bullseye icon text-red-500"></i>Para <strong><u>resistir los esfuerzos laterales</u></strong> de los trenes.</p></li>
+                                 <li><p><i class="fas fa-link icon text-purple-500"></i>Y <strong><u>sujetar los carriles soldados</u></strong> impidiendo que se curven con tiempo caluroso.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-water-lower icon text-blue-800"></i>Por otra parte, el <strong><u>extender el balasto</u></strong> hasta el canal de desagüe permite <strong><u>desalojar el agua</u></strong> de la plataforma.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-broom icon text-yellow-600"></i>Con los años, el balasto se va <strong><u>obstruyendo</u></strong>; por ello, es necesario <strong><u>limpiarlo</u></strong> de vez en cuando con <span class="definition-pill"><strong>desguarnecedoras</strong></span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-recycle icon text-gray-500"></i>Que <strong><u>recogen el balasto</u></strong>, lo <strong><u>criban</u></strong>, <strong><u>desechando la capa manchada</u></strong> de grasa y aceite.</p></li>
+                                <li><p><i class="fas fa-undo icon text-gray-500"></i>Y, una vez limpio, lo <strong><u>devuelven a la vía</u></strong>, <strong><u>añadiendo balasto nuevo</u></strong> para reemplazar el que se ha perdido en la limpieza.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="law-pill"><strong>Orden FOM 1269/2006</strong></span> <strong><u>regula las características</u></strong> del balasto.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-cyan-700"></i>Encuadrándolo en <strong>3 tipos diferentes</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-star icon text-green-500"></i><span class="definition-pill"><strong>Tipo 1</strong></span> (<span class="formula-pill">CLA<14%</span>).</p></li>
+                                <li><p><i class="fas fa-star-half-alt icon text-yellow-500"></i><span class="definition-pill"><strong>Tipo 2</strong></span> (<span class="formula-pill">CLA<16%</span>).</p></li>
+                                <li><p><i class="far fa-star icon text-orange-500"></i><span class="definition-pill"><strong>Tipo 3</strong></span> (<span class="formula-pill">CLA<20%</span>).</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                     <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Usos según el tipo:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-rocket icon text-red-500"></i>En el <strong><u>AVE</u></strong> se utiliza el <span class="definition-pill">tipo 1</span>.</p></li>
+                                <li><p><i class="fas fa-train icon text-blue-500"></i>En las <strong><u>líneas convencionales</u></strong> el <span class="definition-pill">tipo 2</span>.</p></li>
+                                <li><p><i class="fas fa-train-tram icon text-purple-500"></i>Quedando el <span class="definition-pill">tipo 3</span> para <strong><u>líneas secundarias</u></strong> con <u>poco tráfico</u> que no suelen superar las <span class="pill-blue">8</span> circulaciones al día.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-check icon text-indigo-600"></i>Las <strong>características principales</strong> del material son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-search icon text-gray-500"></i><strong><u>Granulometría</u></strong>: <u>grava gruesa</u>, <span class="pill-blue">100%</span> pasa por tamiz <span class="pill-blue">63</span> y menos del <span class="pill-blue">3-5%</span> por tamiz <span class="pill-blue">22,4</span>, centro de producción-obra.</p></li>
+                                <li><p><i class="fas fa-filter icon text-gray-500"></i><strong><u>Partículas finas</u></strong>: tamizado en <u>vía seca</u>, por tamiz <span class="pill-blue">0,50</span> pasa <span class="formula-pill">≤0,6-1%</span>, centro de producción-obra.</p></li>
+                                <li><p><i class="fas fa-flask icon text-gray-500"></i><strong><u>Finos</u></strong>: tamizado en <u>vía húmeda</u>, cuando se observe <u>contaminación por finos</u>, lo juzgue necesario el <span class="actor-pill">Director de obra</span>, o <u>partículas finas >0,6%</u>, exigiendo que pase por tamiz <span class="pill-blue">0,063</span> <span class="formula-pill">≤0,5-0,7%</span> (centro de producción-obra).</p></li>
+                                <li><p><i class="fas fa-shapes icon text-gray-500"></i><strong><u>Índice de forma</u></strong>: peso de <u>elementos no cúbicos</u> con respecto al total retenido por el tamiz <span class="pill-blue">22,4</span> <span class="formula-pill">≤10%</span>.</p></li>
+                                <li><p><i class="fas fa-ruler-vertical icon text-gray-500"></i><strong><u>Longitud de las piedras</u></strong>: sobre una muestra <span class="pill-blue">>40 kg</span>, piedras cuya <u>longitud máxima sea superior a <span class="pill-blue">100 mm</span></u> <span class="formula-pill">≤4%</span>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-snowflake icon text-gray-500"></i><strong><u>Resistencia a la meteorización por la acción de la helada</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-database icon text-blue-400"></i>Cuando se disponga de <strong><u>datos que avalen el comportamiento satisfactorio</u></strong> de un árido de balasto bajo condiciones meteorológicas similares a las de uso se considerará <strong><u>aceptable</u></strong>.</p></li>
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-vial icon text-orange-400"></i>En <strong><u>caso contrario</u></strong> se realizarán ensayos de <u>análisis petrográfico</u> para detectar la presencia de piedras de elevada absorción, con ensayos de <u>densidad y absorción de agua</u>.</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-check icon text-green-300"></i><strong><u>Aceptable si <span class="formula-pill"><0,5%</span></u></strong>.</p></li>
+                                                        <li><p><i class="fas fa-question icon text-yellow-300"></i>Entre <span class="formula-pill">0,5 y 1,5%</span> se realizará el <strong><u>ensayo de resistencia a la acción del sulfato magnésico</u></strong>.</p></li>
+                                                        <li><p><i class="fas fa-times icon text-red-300"></i>Y si <span class="formula-pill">>1,5%</span> se <strong><u>rechazará el material</u></strong>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-sun icon text-gray-500"></i><strong><u>Resistencia a la alteración <span class="definition-pill">Sonnenbrand</span></u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-eye icon text-blue-400"></i>Caracterizada por la <strong><u>aparición de puntos de color gris y blanco</u></strong>, seguida por <u>microfracturas radiales</u> en dichos puntos, que posteriormente se <u>interconectan</u> disminuyendo la <u>resistencia del árido</u> o provocando incluso su <u>disgregación posterior</u>.</p></li>
+                                            <li><p><i class="fas fa-thermometer-three-quarters icon text-red-400"></i>Si una explotación presenta estos signos se realizará un <strong><u>ensayo de ebullición</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-check-double icon text-teal-400"></i>Cumpliendo que la <strong><u>diferencia en los <span class="formula-pill">CLA ≤5%</span></u></strong>, antes y después de la ebullición.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Dimensionamiento -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-drafting-compass"></i></div>
+                <h2>3. Dimensionamiento</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="law-pill"><strong>Instrucción Ferroviaria IF-3</strong></span> (aprobada por <span class="law-pill">Orden FOM 1631/2015</span>) sobre <u>cálculo de espesores de capas de la sección transversal en vía sobre balasto</u>, <strong><u>establece los criterios</u></strong> para el <u>cálculo de los espesores</u> de las <span class="definition-pill">capas de asiento de la vía sobre balasto</span> (<u>balasto</u>, <u>subbase</u> y <u>capa de forma</u>), que constituyen parte de la sección transversal ferroviaria.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-teal-600"></i>Es de <strong><u>total aplicación</u></strong> a:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-hard-hat icon text-gray-500"></i>El <strong><u>proyecto y construcción</u></strong> de toda <u>obra nueva ferroviaria</u>.</p></li>
+                                <li><p><i class="fas fa-wrench icon text-gray-500"></i>A su <strong><u>mantenimiento</u></strong> (<u>conservación</u>, <u>renovación</u>).</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-gray-500"></i>Y a la <strong><u>adaptación a nuevas condiciones de explotación</u></strong> que <u>no supongan cambio de trazado</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>En:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-layer-group icon text-gray-500"></i><strong><u>Vía sobre balasto</u></strong>.</p></li>
+                                <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>De <strong><u>ancho estándar europeo</u></strong> (<span class="pill-blue">1435mm</span>) o <strong><u>ibérico</u></strong> (<span class="pill-blue">1668 mm</span>).</p></li>
+                                <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i>Y para <strong><u>velocidades de circulación</u></strong> de hasta <span class="pill-blue"><strong>350 km/h</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-plus-circle icon text-green-700"></i>En el concepto de <span class="definition-pill"><strong>obra nueva</strong></span> se incluyen:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-gray-500"></i>Tanto las <strong><u>líneas de nueva construcción</u></strong>.</p></li>
+                                <li><p><i class="fas fa-edit icon text-gray-500"></i>Como las <strong><u>modificaciones de las existentes</u></strong> que supongan <u>nuevo trazado</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tools icon text-orange-600"></i>En las <strong>obras de mantenimiento</strong> (<u>conservación y renovación</u>) y en las de <strong>adaptación a nuevas condiciones de explotación</strong> que no supongan cambio de trazado:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-recycle icon text-green-500"></i>Se tratará de <strong><u>aprovechar al máximo</u></strong> las <u>capas de soporte de la vía existentes</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-check-circle icon text-blue-500"></i>En este caso, para el proyecto de la nueva sección transversal, será <strong><u>admisible</u></strong>, si resulta justificado:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-layer-group icon text-purple-400"></i>El <strong><u>mantener alguna de las capas existentes</u></strong> cuyas características <u>no coincidan</u> con las recogidas en la Instrucción.</p></li>
+                                            <li><p><i class="fas fa-times-circle icon text-red-400"></i>Así como el <strong><u>no colocar la totalidad de las capas</u></strong> definidas en ella.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ruler-vertical icon text-purple-600"></i>La <span class="law-pill"><strong>IF-3</strong></span> establece un <strong><u>espesor mínimo de la capa de balasto</u></strong> bajo traviesa, en función de la <u>velocidad máxima de circulación</u> en la línea ferroviaria, de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tachometer-alt icon text-orange-500"></i><span class="pill-blue"><strong>25 cm</strong></span> (para v < 120 km/h).</p></li>
+                                <li><p><i class="fas fa-rocket icon text-red-500"></i>Y de <span class="pill-blue"><strong>30 cm</strong></span> (para v ≥ 120 km/h).</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-calculator icon text-cyan-700"></i>Para continuar el dimensionamiento es necesario <strong><u>calcular el tráfico medio diario equivalente</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-gray-600"></i>En función del:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-weight-hanging icon text-gray-500"></i><strong><u>Tonelaje medio diario</u></strong> de <u>viajeros</u>, <u>mercancías</u> y sus <u>locomotoras</u>.</p></li>
+                                <li><p><i class="fas fa-chart-bar icon text-gray-500"></i>Así como unos <strong><u>coeficientes</u></strong> función de la <u>velocidad de circulación</u> y el <u>tipo de tráfico</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-stream icon text-blue-700"></i>Una vez obtenido el tráfico equivalente las líneas se <strong><u>clasifican</u></strong> según el valor en <strong><u>seis grupos</u></strong>.</p></li>
+                    <li><p><i class="fas fa-code-branch icon text-indigo-600"></i>A partir de este momento los <strong><u>métodos de dimensionamiento varían</u></strong> entre <u>plataformas de obra nueva</u> o sobre <u>trazado existente</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-road icon text-green-800"></i>En las <strong>plataformas de obra nueva</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-layer-group icon text-amber-600"></i>Se obtiene el <strong><u>espesor de subbalasto</u></strong> como un <strong><u>sumatorio de parámetros</u></strong> que dependen de:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-road icon text-gray-400"></i>La <u>clase de plataforma</u>.</p></li>
+                                            <li><p><i class="fas fa-traffic-light icon text-gray-400"></i><u>Grupo de tráfico</u>.</p></li>
+                                            <li><p><i class="fas fa-train-tram icon text-gray-400"></i><u>Tipo de traviesa</u>.</p></li>
+                                            <li><p><i class="fas fa-hard-hat icon text-gray-400"></i><u>Dificultad de ejecución</u>.</p></li>
+                                            <li><p><i class="fas fa-truck-loading icon text-gray-400"></i><u>Carga máxima remolcada por eje</u>.</p></li>
+                                            <li><p><i class="fas fa-cubes icon text-gray-400"></i>Y <u>geotextil</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-retweet icon text-purple-600"></i>El <strong><u>dimensionamiento de la capa de forma</u></strong> se hace de <strong><u>forma inversa</u></strong>.</p></li>
+                                <li><p><i class="fas fa-question icon text-yellow-600"></i>Ya que ésta, junto con el tipo de suelo de las obras de tierra, <strong><u>determina el tipo de plataforma</u></strong> y, de forma indirecta, el <strong><u>espesor de subbalasto a colocar</u></strong>.</p></li>
+                                <li><p><i class="fas fa-search-dollar icon text-green-600"></i>Por lo tanto, un <strong><u>estudio económico</u></strong> de las diferentes opciones <strong><u>determinará</u></strong> que <u>combinación de capa de forma y espesor de subbalasto</u> es la <strong><u>idónea</u></strong> en cada caso.</p></li>
+                                <li><p><i class="fas fa-ruler icon text-blue-500"></i>En cualquier caso, el <strong><u>espesor de la capa de subbalasto o subbase</u></strong> será siempre <strong><u>mayor o igual a <span class="pill-blue">15 cm</span></u></strong>, por <u>exigencias de puesta en obra</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
