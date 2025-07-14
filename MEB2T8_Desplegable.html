@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Túneles y estructuras de ferrocarril</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-archway"></i> MEB2T8. Túneles y estructuras de ferrocarril <i class="fas fa-gavel"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Normativa técnica -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-book"></i></div>
+                <h2>1. Normativa técnica</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El <strong><u>túnel está presente</u></strong> en la gran mayoría de las <strong><u>líneas de ferrocarril españolas</u></strong>.</p></li>
+                    <li><p><i class="fas fa-mountain icon text-amber-700"></i>Debido a sus <strong><u>exigencias geométricas</u></strong> y nuestra <strong><u>accidentada orografía</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ruler-horizontal icon text-purple-600"></i>Los <strong>túneles más largos</strong> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-archway icon text-gray-500"></i><strong><u>Guadarrama</u></strong> <span class="pill-blue"><strong>28 km</strong></span>.</p></li>
+                                <li><p><i class="fas fa-archway icon text-gray-500"></i>Y <strong><u>Pajares</u></strong> <span class="pill-blue"><strong>25 km</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-red-600"></i>En cuanto a la <strong>normativa vigente</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-times-circle icon text-orange-500"></i>Después de la <strong><u>anulación por sentencia del tribunal Supremo</u></strong> de la <span class="doc-pill">Instrucción de Obras Subterráneas</span>.</p></li>
+                                <li><p><i class="fas fa-star icon text-yellow-500"></i>Destaca el <span class="doc-pill"><strong>Reglamento de la UE 1303/2014</strong></span> sobre la <span class="doc-pill">especificación técnica de interoperabilidad relativa a la seguridad en los túneles ferroviarios del sistema ferroviario de la Unión Europea</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Card 2: Secciones -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-vector-square"></i></div>
+                <h2>2. Secciones</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-expand-arrows-alt icon text-blue-600"></i>Sección libre</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-book-open icon text-purple-600"></i>Existen unas <span class="doc-pill"><strong>Recomendaciones para dimensionar túneles ferroviarios</strong></span> por efectos aerodinámicos de presión sobre viajeros publicadas en <span class="pill-blue">2001</span> por la <span class="actor-pill">DGF</span>, con la colaboración de <span class="actor-pill">RENFE</span> y el <span class="actor-pill">GIF</span>.</p></li>
+                        <li><p><i class="fas fa-ruler-combined icon text-cyan-600"></i>Donde se especifican las <strong><u>secciones libres mínimas necesarias</u></strong> para <u>evitar molestias a los viajeros</u> por estos efectos.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tachometer-alt icon text-orange-600"></i>Para velocidad <span class="pill-blue"><strong>250 km/h</strong></span> sección mínima:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>Túneles de <strong><u>vía doble <span class="pill-blue">75 m²</span></u></strong>.</p></li>
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>De <strong><u>vía única <span class="pill-blue">52 m²</span></u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-shield-alt icon text-red-600"></i>Por <strong>criterios de seguridad</strong>, en túneles de <strong><u>gran longitud</u></strong> se recomienda la <strong><u>configuración de la sección tipo en tubos separados</u></strong>, <u>unidireccionales</u>.</p></li>
+                        <li><p><i class="fas fa-link icon text-blue-500"></i>Con <strong><u>conexiones</u></strong> que permitan el <u>paso de personas y vehículos de emergencia</u> de uno al otro.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Ya que un <strong>túnel de doble vía</strong> tiene <strong><u>mayores riesgos</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-car-crash icon text-gray-400"></i><u>Choque</u> entre trenes.</p></li>
+                                    <li><p><i class="fas fa-random icon text-gray-400"></i>Cualquier <u>incidencia afecta a ambos sentidos</u>.</p></li>
+                                    <li><p><i class="fas fa-door-open icon text-gray-400"></i><u>Dificultad de acceder a una zona segura</u> rápidamente en cualquier punto del túnel.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-times-circle icon text-red-700"></i>Y la solución de <strong><u>tres tubos</u></strong> (<span class="definition-pill">Canal de la Mancha</span>) es <u>bastante más cara</u> y <u>no aporta mayor seguridad</u> de forma relevante.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-drafting-compass icon text-green-700"></i>Sección geométrica</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Para cada túnel, una vez fijada la sección libre, se <strong><u>diseña su sección geométrica</u></strong> en función de la <u>sección tipo de la plataforma</u> y del <u>gálibo ferroviario</u>.</p></li>
+                        <li><p><i class="fas fa-stream icon text-purple-600"></i>Utilizando el <strong><u>menor número posible de secciones distintas</u></strong> en los túneles de un mismo tramo.</p></li>
+                        <li><p><i class="fas fa-ruler-combined icon text-cyan-600"></i>Estos requerimientos llevan a <strong>secciones con radios</strong> (para alta velocidad en vía doble) que pueden <strong><u>superar los <span class="pill-blue">7 m</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-road icon text-orange-600"></i>Con <strong><u>anchos de plataforma</u></strong> de más de <span class="pill-blue"><strong>11 m</strong></span> y <strong><u>aceras</u></strong> de <span class="pill-blue"><strong>1,5 m</strong></span>.</p></li>
+                        <li><p><i class="fas fa-vector-square icon text-indigo-600"></i>Con <strong><u>bitubo para vía simple</u></strong> se va a <strong><u>diámetros en torno a <span class="pill-blue">8,5 m</span></u></strong> (túneles de <u>Guadarrama</u> y <u>Pajares</u>).</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-pen-ruler icon text-teal-600"></i>Diseño</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-cogs icon text-gray-600"></i>Se realiza siguiendo el <strong><u>método gráfico</u></strong> de la <span class="doc-pill"><strong>ficha U.I.C. 779-11</strong></span> y lo especificado en las <span class="doc-pill"><strong>Recomendaciones</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-red-600"></i>Definiendo las <strong><u>secciones mínimas necesarias</u></strong> en cada túnel según:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tachometer-alt icon text-blue-500"></i>La <strong><u>velocidad de explotación</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-heartbeat icon text-red-500"></i>El <span class="definition-pill"><strong>criterio de salud</strong></span> (<u>evitar traumatismos graves en los tímpanos</u>), que <strong><u>limita a <span class="pill-blue">10 kPa</span></u></strong> la máxima variación de la presión durante el tiempo necesario para que el tren pase por el túnel.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-assistive-listening-systems icon text-yellow-600"></i>El <span class="definition-pill"><strong>criterio de confort</strong></span> (<u>prevenir molestias auditivas</u>), que <strong><u>limita la variación máxima de presión</u></strong> en el interior del tren en un intervalo de <span class="pill-blue">4 s</span> a un valor inferior a:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-exchange-alt icon text-orange-400"></i><span class="pill-blue"><strong>4 kPa</strong></span> (cruce de un tren de <u>alta velocidad</u> y otro <u>convencional</u> a su máxima velocidad).</p></li>
+                                                <li><p><i class="fas fa-rocket icon text-green-400"></i>O de <span class="pill-blue"><strong>2 kPa</strong></span> (un <u>solo tren de alta velocidad</u> a su máxima velocidad).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Métodos constructivos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>3. Métodos constructivos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-city icon text-blue-600"></i>Método clásico de Madrid</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-purple-600"></i>También conocido como <span class="definition-pill"><strong>método belga</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-orange-600"></i>Consiste en realizar la <strong>excavación</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-archway icon text-gray-500"></i>Abriendo una <strong><u>pequeña galería en clave</u></strong> del túnel para ir <u>ensanchándola poco a poco</u>.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><strong><u>Protegiendo y entibando</u></strong> el frente.</p></li>
+                                    <li><p><i class="fas fa-fill-drip icon text-gray-500"></i>Hasta permitir <strong><u>hormigonar toda la bóveda</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-sort-amount-down icon text-green-600"></i>Después se hace la <strong><u>destroza</u></strong> y se construyen los <strong><u>hastiales por bataches</u></strong> y <u>alternativamente</u> en cada uno de los lados, <u>decalándolos</u> respecto a los módulos de ejecución de la bóveda.</p></li>
+                        <li><p><i class="fas fa-ruler-combined icon text-cyan-600"></i>Este método se suele utilizar en <strong><u>túneles de <span class="pill-blue">8 m</span> libres más <span class="pill-blue">3 m</span> de ambos hastiales</u></strong>, que corresponden al túnel de línea.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-industry icon text-red-600"></i>Método alemán</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-expand-arrows-alt icon text-blue-600"></i>Se emplea en <strong><u>túneles de luces mayores de <span class="pill-blue">8 m</span></u></strong> y para la <strong><u>construcción de estaciones subterráneas</u></strong>.</p></li>
+                        <li><p><i class="fas fa-list-ol icon text-purple-600"></i>Consiste en <strong><u>construir primero los hastiales</u></strong> de gran anchura (<span class="pill-blue">2,5 o 3 m</span> al menos), en general en <u>dos fases</u>, mitad <u>superior</u> e <u>inferior</u>, excavando siempre secciones <u>menores de <span class="pill-blue">3 m²</span></u>.</p></li>
+                        <li><p><i class="fas fa-archway icon text-orange-600"></i>Una vez construidos éstos, la <strong><u>bóveda</u></strong>, que ya tendrá un <u>apoyo sólido</u> sobre los hastiales, se va construyendo por <strong><u>costillas</u></strong>.</p></li>
+                        <li><p><i class="fas fa-compress-arrows-alt icon text-cyan-600"></i>Que pueden <strong><u>simplificarse</u></strong> si se ha excavado antes una <u>galería en clave</u>, de muy pequeña sección.</p></li>
+                        <li><p><i class="fas fa-arrow-down icon text-green-600"></i>Con la <strong>bóveda terminada</strong> ya se puede proceder a la <strong><u>excavación</u></strong>, <u>protegiendo o no los frentes</u> con <u>entibaciones u hormigonados</u>, según sea necesario.</p></li>
+                        <li><p><i class="fas fa-retweet icon text-indigo-600"></i>El método es <strong><u>similar al método belga</u></strong>, pero <strong><u>cambiando el orden</u></strong> de las fases de ejecución: <u>hastiales</u>, <u>bóveda</u>, <u>destroza</u> y <u>solera</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-mountain icon text-green-700"></i>Métodos de gran frente abierto</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Entre ellos el <span class="definition-pill"><strong>Nuevo Método Austriaco</strong></span>, introducido en <span class="pill-blue">1964</span> para la excavación de <u>túneles alpinos en rocas</u>.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-purple-600"></i>Consiste en <strong><u>excavar grandes secciones</u></strong> de túneles, incluso la <u>sección completa</u>.</p></li>
+                        <li><p><i class="fas fa-ring icon text-orange-600"></i>Y permitir que la propia <strong><u>roca sana forme un anillo de descarga</u></strong> en el contorno de la excavación.</p></li>
+                        <li><p><i class="fas fa-compress icon text-cyan-600"></i>Que <strong><u>reduzca las presiones</u></strong> a absorber por el <u>revestimiento del túnel</u>.</p></li>
+                        <li><p><i class="fas fa-shield-alt icon text-green-600"></i>Se coloca <strong><u>inmediatamente después de la excavación</u></strong> un <strong><u>sostenimiento</u></strong>.</p></li>
+                        <li><p><i class="fas fa-check-circle icon text-teal-600"></i>Funciona con <strong><u>éxito en túneles de roca dura</u></strong>.</p></li>
+                        <li><p><i class="fas fa-exclamation-triangle icon text-red-600"></i>Y provoca <strong><u>problemas de hundimientos</u></strong> en <u>terrenos blandos</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-dungeon icon text-slate-700"></i>Tuneladoras de frente abierto</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Consisten en un <strong><u>robusto escudo de acero</u></strong> que <u>protege el perímetro</u> de la excavación.</p></li>
+                        <li><p><i class="fas fa-door-open icon text-red-600"></i>Pero dejando el <strong><u>frente del túnel abierto y desprotegido</u></strong>.</p></li>
+                        <li><p><i class="fas fa-layer-group icon text-purple-600"></i>A continuación, se va colocando el <strong><u>anillo de revestimiento</u></strong>, pero se pueden producir <u>problemas de inestabilidad en el frente</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-compact-disc icon text-indigo-700"></i>Tuneladoras de frente cerrado (EPB)</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-shield-alt icon text-green-600"></i>La <strong><u>estabilidad del frente queda garantizada</u></strong> porque el material excavado queda <strong><u>almacenado en una cámara cerrada</u></strong> en la cabeza de la máquina.</p></li>
+                        <li><p><i class="fas fa-compress-alt icon text-blue-600"></i>Donde se conserva a la <strong><u>misma presión horizontal</u></strong> que tenía en el terreno resistiendo también la <u>presión del agua del terreno</u>.</p></li>
+                        <li><p><i class="fas fa-city icon text-cyan-600"></i>Este sistema se utiliza <strong><u>mayoritariamente</u></strong> en la excavación de <u>túneles urbanos</u> en <u>suelos o rocas blandas</u>.</p></li>
+                        <li><p><i class="fas fa-tachometer-alt icon text-green-700"></i>Siendo el <strong><u>método más rápido y seguro</u></strong>.</p></li>
+                        <li><p><i class="fas fa-exclamation-triangle icon text-red-600"></i>Tiene su <strong><u>punto débil</u></strong> si el <strong><u>terreno no es demasiado homogéneo</u></strong> intercalando <u>capas duras con blandas</u>.</p></li>
+                        <li><p><i class="fas fa-search icon text-orange-600"></i>Donde la <strong><u>cabeza de corte ha de ser minuciosamente estudiada</u></strong>, ya que los <u>rendimientos conseguidos</u> dependerán en gran medida de ello.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Efectos aerodinámicos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-wave-square"></i></div>
+                <h2>4. Efectos aerodinámicos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>circulación de un tren por un túnel</u></strong> genera <span class="definition-pill"><strong>ondas de presión</strong></span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-purple-600"></i>Que <strong>dependen</strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>Las <strong><u>dimensiones</u></strong> del tren.</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>Las <strong><u>propiedades aerodinámicas</u></strong> de la <u>cabeza</u> y la <u>cola</u> del tren.</p></li>
+                                <li><p><i class="fas fa-hand-paper icon text-gray-500"></i>Las <strong><u>características de fricción</u></strong> del <u>tren</u> y de la <u>superficie interior del túnel</u>.</p></li>
+                                <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i>La <strong><u>velocidad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-compress icon text-gray-500"></i>Y el <span class="definition-pill"><strong>coeficiente de bloqueo</strong></span> (<u>sección transversal del tren / sección libre del túnel</u>).</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-arrows-alt-h icon text-cyan-600"></i>Las <strong>ondas se desplazan</strong> a lo largo del túnel a la <strong><u>velocidad del sonido</u></strong>.</p></li>
+                    <li><p><i class="fas fa-sign-out-alt icon text-orange-600"></i>Con <strong><u>reflexión en el aire libre</u></strong> en la <u>extremidad del túnel</u>.</p></li>
+                    <li><p><i class="fas fa-exchange-alt icon text-red-600"></i>En caso de <strong>cruce con otro tren</strong>, la <strong><u>presión resultante</u></strong> en cualquier punto del túnel es <strong><u>igual a la suma</u></strong> de las que provocan ambos.</p></li>
+                    <li><p><i class="fas fa-search icon text-indigo-600"></i>Para el <strong>estudio aerodinámico</strong> de un tren se concibe como una <strong><u>entidad completa</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-teal-600"></i>Así es que todos los vehículos del tren en la actualidad:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-stream icon text-blue-500"></i>Tienen unos <strong><u>faldones en la parte inferior</u></strong> que <u>controlan la corriente de aire</u> por debajo de los coches.</p></li>
+                                <li><p><i class="fas fa-balance-scale icon text-green-500"></i>Que además van <strong><u>equipados con unos dispositivos</u></strong> para <u>mantener el vehículo a una altura constante</u> independientemente de su carga.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Seguridad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-hard-hat"></i></div>
+                <h2>5. Seguridad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-search icon text-blue-600"></i>Los <strong><u>estudios de seguridad</u></strong> en los túneles incluyen:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-exclamation-triangle icon text-red-500"></i><strong><u>Estudio de los escenarios de riesgo</u></strong>: <u>fallos en la estructura</u>, en las <u>instalaciones</u>, o <u>disfunciones en la explotación</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-stream icon text-purple-600"></i><strong><u>Definición de situaciones tipo</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-pause-circle icon text-yellow-400"></i><strong><u>Trenes detenidos por parada no programada</u></strong> donde el tren es <u>capaz de abandonar el túnel</u> cuando la señalización se lo indique.</p></li>
+                                            <li><p><i class="fas fa-stop-circle icon text-orange-400"></i><strong><u>Parada por causas diversas</u></strong> que obligan a la <u>actuación exterior remolcando el tren</u>.</p></li>
+                                            <li><p><i class="fas fa-car-crash icon text-red-400"></i><strong><u>Parada por accidente del tren</u></strong> que <u>no puede ser remolcado</u> y los <u>viajeros tienen que evacuarlo</u> (por <u>daños significativos</u> en la infraestructura o instalaciones, <u>incendio</u>, <u>explosión</u>, <u>fuga de gases tóxicos</u>).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-lightbulb icon text-cyan-600"></i>A la vista de estas situaciones, el <strong><u>enfoque cualitativo</u></strong> lleva a considerar <strong><u>cómo resolverlas</u></strong>.</p></li>
+                    <li><p><i class="fas fa-fire-extinguisher icon text-red-700"></i>Prestando <strong><u>especial atención a la peor de las mismas</u></strong>, y define la <u>obra civil e instalaciones</u> en el proyecto del túnel.</p></li>
+                    <li><p><i class="fas fa-running icon text-orange-600"></i>La <strong><u>peor situación posible</u></strong> implica la <strong><u>necesidad de evacuar el tren</u></strong>, alcanzando una <u>zona segura</u> en un <strong><u>tiempo máximo del orden de <span class="pill-blue">6 a 10 minutos</span></u></strong>, donde los pasajeros puedan esperar la llegada de los vehículos de emergencia.</p></li>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>En el <span class="doc-pill"><strong>reglamento 1303/2014</strong></span> se establecen las <strong><u>exigencias mínimas de seguridad</u></strong> aplicables a los túneles que formen parte de la <u>red transeuropea</u>.</p></li>
+                    <li><p><i class="fas fa-edit icon text-purple-600"></i>Esta norma ha sido objeto de <strong><u>modificación ampliando el ámbito de aplicación</u></strong> a todos los túneles.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-blue-700"></i>Definiendo los siguientes <strong>escenarios de riesgo y tipos de incidentes</strong> de más peligrosidad a menos:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-fire icon text-red-500"></i><strong><u>Calientes</u></strong>: <u>Incendio</u>, <u>Explosión + Incendio</u>, <u>Gases y Humos tóxicos</u>. Son los <strong><u>más peligrosos</u></strong>, existe <u>límite de tiempo</u>.</p></li>
+                                <li><p><i class="fas fa-snowflake icon text-blue-500"></i><strong><u>Fríos</u></strong>: <u>Colisión y/o descarrilamiento</u>, <strong><u>relativamente menos peligrosos</u></strong>, <u>no existe límite de tiempo</u>.</p></li>
+                                <li><p><i class="fas fa-clock icon text-yellow-500"></i><strong><u>Parada Prolongada</u></strong>: de <u>más de <span class="pill-blue">10 min</span></u>, <strong><u>no es una amenaza</u></strong>, pero existe el <u>riesgo de provocarse pánico</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Card 6: Estructuras ferroviarias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>6. Estructuras ferroviarias: IAPF 2007</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-book-open icon text-purple-600"></i>Instrucción de Acciones en Puentes de Ferrocarril (IAPF 2007)</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>instrucción</strong></span> contempla:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-calculator icon text-green-500"></i><strong><u>Mejoras en el cálculo simplificado</u></strong> según el <u>coeficiente de impacto</u>, elevando la velocidad para su uso a <span class="pill-blue"><strong>220 km/h</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-trash-alt icon text-red-500"></i>El <strong><u>abandono del tren de cargas</u></strong> de la antigua <span class="doc-pill">IAPF-75</span> y se adopta el <span class="definition-pill"><strong>UIC-71</strong></span> como <u>tren de cargas</u>.</p></li>
+                                    <li><p><i class="fas fa-paperclip icon text-orange-500"></i>Un <strong><u>apéndice relativo al cálculo dinámico de alta velocidad</u></strong> en el que se repasan los <u>métodos disponibles</u>, sus <u>límites de aplicación</u> y los <u>criterios de comprobación</u> a tener en cuenta.</p></li>
+                                    <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>Los <strong><u>criterios de interoperabilidad de redes</u></strong> fijados en las <span class="doc-pill">ETIs</span> y <span class="doc-pill">Eurocódigos</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-life-ring icon text-yellow-600"></i>Los <strong><u>puentes de ferrocarril</u></strong> constituyen <strong><u>puntos vitales</u></strong>.</p></li>
+                        <li><p><i class="fas fa-wrench icon text-blue-700"></i>Por lo que su <strong><u>mantenimiento y conservación</u></strong> requiere una <strong><u>atención especial</u></strong> con <u>inspecciones técnicas periódicas</u>, así como, en su caso, las <u>reparaciones que procedan</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-red-700"></i>Con la <strong>finalidad</strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-car-crash icon text-gray-500"></i><strong><u>Evitar riesgos</u></strong>, que puedan producir <u>accidentes</u> o <u>interrumpir el servicio</u>.</p></li>
+                                    <li><p><i class="fas fa-check-circle icon text-gray-500"></i>Y <strong><u>mantenerlos en condiciones adecuadas de uso</u></strong> minimizando los <u>costes de conservación</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>Estas necesidades se regulan en la <span class="doc-pill"><strong>Instrucción sobre los registros de la actividad de vigilancia de infraestructuras ferroviarias (REVINFE-23)</strong></span>.</p></li>
+                        <li><p><i class="fas fa-search-plus icon text-cyan-600"></i>Que contempla <strong><u>inspecciones básicas, principales y especiales</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-wave-square icon text-indigo-600"></i>Singularidad de los efectos dinámicos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-tachometer-alt icon text-red-600"></i>Por encima de <span class="pill-blue"><strong>220 km/h</strong></span>, se ha comprobado que se puede producir <strong><u>resonancia</u></strong> en las estructuras reales.</p></li>
+                        <li><p><i class="fas fa-sync-alt icon text-purple-600"></i>Lo que ha provocado la <strong><u>actualización de las normas de diseño</u></strong>, obligando a realizar <u>cálculos dinámicos</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-calculator icon text-blue-700"></i>Los <strong><u>métodos de cálculo admitidos</u></strong> en la <span class="doc-pill">IAPF 2007</span> son los siguientes:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-meteor icon text-gray-500"></i><strong><u>Coeficiente de impacto</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-shoe-prints icon text-gray-500"></i><strong><u>Impronta dinámica</u></strong>: <u>cálculo dinámico sin integración en el tiempo</u>, obteniendo la <u>respuesta dinámica máxima</u> en función de la <u>impronta del tren</u> y la <u>línea de influencia dinámica del puente</u>, siendo aplicable para <u>puentes isostáticos</u>.</p></li>
+                                    <li><p><i class="fas fa-hourglass-half icon text-gray-500"></i><strong><u>Cálculo dinámico por integración en el tiempo</u></strong>: sirve para <u>casos más generales</u>, en los que el <u>puente no sea un tramo isostático simple</u>, la resolución puede hacerse a través de <u>programas de elementos finitos</u> o similares.</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Cálculo dinámico por integración en el tiempo con interacción vehículo-estructura</u></strong>: en <u>casos excepcionales</u> puede ser de utilidad para <u>afinar el cálculo</u>, pero tienen una <u>complejidad excesiva</u> para <u>cálculos ordinarios de proyecto</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-chart-pie icon text-green-600"></i>En cualquiera de los casos, el <strong><u>resultado del cálculo dinámico</u></strong> puede interpretarse que da lugar al <strong><u>coeficiente dinámico <span class="formula-pill">φ′</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-plus-circle icon text-orange-600"></i>Al que se añade el <strong><u>efecto de las irregularidades de vía</u></strong> mediante un <strong><u>coeficiente <span class="formula-pill">φ′′</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-square-root-alt icon text-teal-600"></i>Que se aplicaría de la manera siguiente: <span class="formula-pill"><strong>(1+ φ′)·(1+ φ′′/2)</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-check-double icon text-blue-800"></i>Los <strong>resultados de los cálculos dinámicos</strong> serán aplicados para <strong><u>verificar no sólo los estados límite últimos (ELU)</u></strong>, sino también los <strong><u>estados límite de servicio (ELS)</u></strong> relacionados con:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i><u>Deformaciones</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-tachometer-alt-fast icon text-gray-500"></i>Y <strong><u>limitación de aceleraciones máximas</u></strong>, siendo ésta una de las <u>condiciones que pueden resultar más exigentes</u> para determinados <u>puentes de luces cortas</u>.</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-less-than-equal icon text-red-400"></i><span class="formula-pill"><strong>≤ 0,35g</strong></span> en <u>puentes con balasto</u>.</p></li>
+                                                <li><p><i class="fas fa-less-than-equal icon text-red-400"></i><span class="formula-pill"><strong>≤ 0,50g</strong></span> para <u>vía en placa</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-random icon text-purple-700"></i>Por último, para el caso de <strong>puentes de dos vías</strong>, los <strong><u>efectos dinámicos máximos absolutos</u></strong> generados por la componente <span class="formula-pill">φ′</span> <strong><u>no deberán sumarse</u></strong> para las dos vías.</p></li>
+                        <li><p><i class="fas fa-calculator icon text-cyan-700"></i>Sino <strong><u>combinarse</u></strong> mediante la <u>regla de la raíz cuadrada de la suma de los cuadrados</u>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
