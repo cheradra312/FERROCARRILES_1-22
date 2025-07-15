@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Electrificación ferroviaria</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-bolt"></i> MEB2T12. Electrificación ferroviaria <i class="fas fa-plug"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Sistemas de sustentación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-broadcast-tower"></i></div>
+                <h2>1. Electrificación ferroviaria: Sistemas de sustentación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>línea de contacto</u></strong> puede adoptar <strong><u>dos sistemas</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-minus icon text-purple-600"></i>Por <span class="definition-pill"><strong>tercer carril</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-cogs icon text-gray-500"></i>Este sistema consiste en utilizar un <strong><u>conductor en forma de perfil de acero laminado</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i><strong><u>Paralelo a la vía</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-map-pin icon text-gray-500"></i>Colocado sobre <strong><u>apoyos aislados</u></strong>, los cuales reposan en las <u>traviesas de la vía</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-network-wired icon text-orange-600"></i>Y por <span class="definition-pill"><strong>catenaria</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-plug icon text-gray-500"></i>Que es una <strong><u>línea de contacto aérea</u></strong> que consta de un <strong><u>hilo portador (sustentador)</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-link icon text-gray-500"></i>Del cual está <strong><u>suspendido</u></strong>, gracias a unos elementos intermedios (<span class="definition-pill">péndolas</span>), el <strong><u>hilo de contacto</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-ruler-vertical icon text-gray-500"></i>A una <strong><u>altura de <span class="pill-blue">5,30 m</span></u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-green-600"></i>Los <strong><u>elementos principales de la catenaria</u></strong> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-monument icon text-gray-500"></i><u>Postes</u>.</p></li>
+                                <li><p><i class="fas fa-project-diagram icon text-gray-500"></i><u>Ménsulas</u>.</p></li>
+                                <li><p><i class="fas fa-grip-lines-vertical icon text-gray-500"></i><u>Sustentadores</u>.</p></li>
+                                <li><p><i class="fas fa-link icon text-gray-500"></i><u>Péndolas</u>.</p></li>
+                                <li><p><i class="fas fa-plug icon text-gray-500"></i><u>Hilos de contacto</u>.</p></li>
+                                <li><p><i class="fas fa-draw-polygon icon text-gray-500"></i><u>Brazos de atirantado</u> (para <strong><u>impedir el desplazamiento transversal</u></strong> de los hilos de contacto, dando a la catenaria <u>forma poligonal</u>).</p></li>
+                                <li><p><i class="fas fa-toggle-off icon text-gray-500"></i>Y <u>aisladores</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-plus-circle icon text-cyan-600"></i>En las <strong>inmediaciones de las subestaciones</strong>, lugares con <u>mayor densidad de corriente</u>, se añade a la catenaria unos <strong><u>conductores o <span class="definition-pill">feeders</span></u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i><strong><u>Paralelos a la catenaria</u></strong>, pero <u>sin contacto con el pantógrafo</u>.</p></li>
+                                <li><p><i class="fas fa-bolt icon text-gray-500"></i>Para <strong><u>transportar amperios</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-chart-bar icon text-indigo-600"></i>La <span class="definition-pill"><strong>RFIG</strong></span> cuenta con unos <span class="pill-blue"><strong>10.000 km</strong></span> de <strong><u>líneas electrificadas</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-purple-600"></i>Siendo parte de estas líneas de <strong><u>vía doble</u></strong>.</p></li>
+                                <li><p><i class="fas fa-ruler-horizontal icon text-orange-600"></i>Lo que supone <strong><u>más de <span class="pill-blue">15.000 km</span></u></strong> de <u>línea aérea de contacto</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Tipologías de catenarias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-stream"></i></div>
+                <h2>2. Tipologías de catenarias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>En primer lugar, se puede distinguir entre <strong><u>dos tipos generales</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-wave-square icon text-purple-600"></i><span class="definition-pill"><strong>Catenaria flexible</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-check icon text-gray-400"></i>Son las <strong><u>más comúnmente usadas</u></strong> hasta hace poco tiempo en <u>todo tipo de líneas</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-ruler-horizontal icon text-orange-600"></i><span class="definition-pill"><strong>Catenaria rígida</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-euro-sign icon text-gray-400"></i>Aún con un <strong><u>mayor coste</u></strong>, va <strong><u>ganando posiciones</u></strong> en el mercado.</p></li>
+                                            <li><p><i class="fas fa-map-marker-alt icon text-gray-400"></i>En <strong><u>líneas de cercanías</u></strong> de mucho tráfico o en <strong><u>túneles</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-thumbs-up icon text-gray-400"></i>Debido a su <strong><u>menor mantenimiento</u></strong> y <strong><u>mayor durabilidad</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-wave-square icon text-purple-600"></i>Catenaria flexible sin compensar</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-history icon text-blue-600"></i><strong><u>Inicialmente</u></strong> la catenaria que se instaló en las <u>líneas convencionales</u> era para velocidad máxima de <span class="pill-blue"><strong>100-110 Km/h</strong></span>.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-cyan-600"></i>Y <strong><u>consistía</u></strong> en un <u>hilo de contacto de <span class="pill-blue">107 mm²</span> de cobre</u> sujeto a un <u>sustentador</u> soportado en <u>apoyos metálicos</u> separados <span class="pill-blue">60 m</span> como media.</p></li>
+                        <li><p><i class="fas fa-road icon text-green-600"></i>Instalados a lo largo de los trayectos <strong><u>divididos en cantones</u></strong> con longitudes entre <span class="pill-blue"><strong>900</strong></span> y <span class="pill-blue"><strong>1.200 m</strong></span>.</p></li>
+                        <li><p><i class="fas fa-anchor icon text-orange-600"></i>Los <u>hilos de contacto</u> y sus <u>sustentadores</u> estaban <strong><u>anclados a unos tensores</u></strong> al final y principio de los cantones.</p></li>
+                        <li><p><i class="fas fa-tools icon text-indigo-600"></i>De forma que se podía <strong><u>regular la tensión y la longitud</u></strong> en <u>verano e invierno</u>.</p></li>
+                        <li><p><i class="fas fa-arrows-alt-v icon text-red-600"></i>Con este tipo de catenaria el <strong><u>pantógrafo iba subiendo y bajando</u></strong>, adaptándose al <u>perfil vertical</u> de los hilos de contacto.</p></li>
+                        <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Al <strong><u>incrementar la velocidad</u></strong> de los trenes, ya era <strong><u>imposible que el pantógrafo respondiera</u></strong> acomodándose a las <u>flechas entre péndolas</u> de esta catenaria, produciendo <u>desgastes no uniformes</u> y <u>enganchones</u>.</p></li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-balance-scale icon text-green-700"></i>Catenaria flexible compensada</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-bullseye icon text-red-600"></i>Para <strong><u>evitar las regulaciones manuales</u></strong> de los cantones en la catenaria sin compensar, y para poder <strong><u>aumentar la velocidad</u></strong> de las circulaciones.</p></li>
+                        <li><p><i class="fas fa-cogs icon text-blue-600"></i>Se instalaron <strong><u>aparatos de compensación automática</u></strong>, uno para el <u>sustentador</u> y otro para el <u>hilo de contacto</u>.</p></li>
+                        <li><p><i class="fas fa-compact-disc icon text-purple-600"></i>Cada uno con un <strong><u>juego de poleas concéntricas</u></strong> para los <u>cables</u> y los <u>contrapesos</u>, de <strong><u>relación <span class="formula-pill">1:5</span></u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-ruler-horizontal icon text-orange-700"></i>Catenaria Rígida</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El sistema de <span class="definition-pill">catenaria rígida</span> permite la <strong><u>electrificación en puntos de gálibo reducido</u></strong> como pueden ser los <u>túneles</u> (gálibo mínimo <span class="pill-blue">5,2 m</span>).</p></li>
+                        <li><p><i class="fas fa-tasks icon text-purple-600"></i>Para ello se <strong><u>prescinde del cable sustentador</u></strong> y se utiliza un <strong><u>perfil de aluminio</u></strong>.</p></li>
+                        <li><p><i class="fas fa-check-circle icon text-green-600"></i>Que con la <strong><u>rigidez suficiente</u></strong> soporta un <u>hilo de contacto</u>, permitiendo la <u>captación de corriente</u> por el pantógrafo.</p></li>
+                        <li><p><i class="fas fa-tools icon text-cyan-600"></i>En las catenarias rígidas tanto el <u>hilo</u> como el <u>perfil metálico</u> son <strong><u>montados sin fuerza de tracción</u></strong> y por tal motivo ambos están <u>menos expuestos</u> que una línea de contacto convencional.</p></li>
+                        <li><p><i class="fas fa-shapes icon text-orange-600"></i>Para lograr un <strong><u>máximo de relación rigidez peso propio</u></strong>, la sección en apariencia óptima es la de un <strong><u>perfil de aluminio de sección pentagonal</u></strong>, <u>abierto por el vértice inferior</u>.</p></li>
+                        <li><p><i class="fas fa-bolt-slash icon text-indigo-600"></i>Gracias a la <strong><u>gran sección transversal del perfil metálico</u></strong> es posible <strong><u>prescindir de otras líneas auxiliares</u></strong> como <span class="definition-pill">feeder</span> de acompañamiento.</p></li>
+                        <li><p><i class="fas fa-link icon text-blue-700"></i>El <strong><u>hilo de contacto va ajustado</u></strong> en el perfil de aluminio, que en su extremo inferior tiene <u>forma de tenaza</u>.</p></li>
+                        <li><p><i class="fas fa-sync-alt icon text-red-700"></i><strong><u>Introduciéndose o extrayéndose</u></strong> cuando está muy gastado, por medio de un <u>carro</u> que se hace correr a lo largo de este perfil y que lo <u>abre para introducir y manejar</u> el hilo de contacto.</p></li>
+                        <li><p><i class="fas fa-ruler-vertical icon text-teal-600"></i>El perfil está <strong><u>fabricado en longitudes máximas y normales</u></strong> de <span class="pill-blue">14</span> y <span class="pill-blue">12 m</span>.</p></li>
+                        <li><p><i class="fas fa-atom icon text-red-800"></i>El <strong><u>aluminio y el cobre</u></strong> solo pueden ser combinados de manera conductora en una <strong><u>atmósfera libre de electrolitos</u></strong> para que no exista <u>corrosión</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Dado que no es el caso en la práctica, para <strong>impedirlo</strong> se han adoptado las siguientes <strong>medidas</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-wind icon text-gray-500"></i>El perfil tiene <strong><u>orificios</u></strong> para que el <u>agua de condensación</u> dentro del perfil pueda ser <u>evacuada por la aireación</u>.</p></li>
+                                    <li><p><i class="fas fa-oil-can icon text-gray-500"></i>El hilo de contacto va <strong><u>lubricado con una grasa especial</u></strong> con <u>función protectora</u> que <u>favorece el flujo de corriente</u> entre el aluminio y el cobre <u>evitando fenómenos de corrosión por electrólisis</u>.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>En <strong><u>zonas de gran proximidad a la obra civil</u></strong> donde el <u>aislamiento de aire es insuficiente</u> (<span class="formula-pill">e<150 mm</span>) y en <u>zonas de humedad</u> el perfil se protege con una <strong><u>cubierta plástica dieléctrica</u></strong> resistente al alto voltaje.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-thumbtack icon text-blue-800"></i>La <strong><u>forma de sujeción</u></strong> de este sistema de catenaria rígida sobre las vías consta de los siguientes <strong>elementos</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-project-diagram icon text-gray-500"></i><strong><u>Herraje de perfil laminado</u></strong> que soporta un <u>aislador cilíndrico</u> (al conjunto se le denomina <span class="definition-pill">soporte unificado</span>) y que a su vez soporta el <u>perfil de aluminio</u>.</p></li>
+                                    <li><p><i class="fas fa-lock icon text-gray-500"></i>Los herrajes se <strong><u>sujetan a la bóveda del túnel</u></strong> por medio de <u>fijaciones roscadas</u>, que permiten una <u>regulación exacta de la altura</u> respecto de las vías.</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i>En los <strong><u>seccionamientos</u></strong>, los <span class="definition-pill">soportes unificados</span> se dispondrán de tal forma que <strong><u>sujete a los dos perfiles de aluminio</u></strong>, mediante una <u>sujeción no blocante</u> que permita su <u>dilatación</u>.</p></li>
+                                    <li><p><i class="fas fa-random icon text-gray-500"></i>Las <strong><u>agujas aéreas</u></strong> se constituirán <strong><u>solapando un tramo de catenaria rígida</u></strong> a la catenaria de la vía a la que se dé continuidad.</p></li>
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>Los <strong><u>extremos de un perfil de catenaria rígida</u></strong>, tanto en agujas como en seccionamientos, serán <strong><u>en rampa</u></strong>, para que el <u>contacto con el pantógrafo</u> sea <u>suave y progresivo</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-plug icon text-green-800"></i>Aparatos de toma de corriente</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Son <strong><u>equipos instalados en las locomotoras</u></strong> eléctricas, duales o híbridas para la <strong><u>toma de corriente</u></strong> proveniente de un <u>hilo de contacto</u>.</p></li>
+                        <li><p><i class="fas fa-broadcast-tower icon text-purple-600"></i>Para las <strong>líneas aéreas de contacto</strong> el aparato de toma de corriente empleado es el <span class="definition-pill"><strong>pantógrafo</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-orange-600"></i>Que un <strong><u>dispositivo articulado</u></strong> que permite el <u>desplazamiento vertical de su cabeza</u> y consta de las siguientes <strong>partes</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-square-full icon text-gray-500"></i><span class="definition-pill"><strong>Bastidor base</strong></span>: <u>parte fija</u> del pantógrafo que <u>soporta el bastidor</u> y va montada sobre <u>aisladores fijados al techo</u> del vehículo.</p></li>
+                                    <li><p><i class="fas fa-sitemap icon text-gray-500"></i><span class="definition-pill"><strong>Bastidor</strong></span>: <u>estructura articulada</u> que permite que el <u>cabezal colector se mueva en dirección vertical</u> con respecto al bastidor base del pantógrafo.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-heading icon text-gray-500"></i><span class="definition-pill"><strong>Cabezal colector</strong></span>: <u>parte del pantógrafo soportada por el bastidor</u> que incluye:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-grip-lines-vertical icon text-blue-400"></i>El <span class="definition-pill"><strong>frotador</strong></span> (<u>tira de contacto sustituible</u> por el desgaste que constituyen la <u>interfaz con la línea aérea</u>).</p></li>
+                                                <li><p><i class="fas fa-exchange-alt icon text-green-400"></i>Y los <span class="definition-pill"><strong>trocadores</strong></span> (<u>extremos del cabezal colector</u> que aseguran un <u>paso suave al hilo de contacto</u>).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Tensiones de funcionamiento -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-power-off"></i></div>
+                <h2>3. Tensiones de funcionamiento</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-stream icon text-blue-600"></i>Corriente continua</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-map-marker-alt icon text-purple-600"></i>En <strong><u>España</u></strong> con <strong><u>tensión de <span class="pill-blue">3.000 V</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-plus-circle icon text-green-600"></i>La tracción con este tipo de electrificación tenía la <strong><u>ventaja</u></strong> de la <strong><u>simplicidad de la regulación de la velocidad</u></strong> de los <u>motores de tracción</u>.</p></li>
+                        <li><p><i class="fas fa-minus-circle icon text-red-600"></i>Presenta el <strong><u>inconveniente</u></strong> de que es preciso <strong><u>convertir la corriente alterna</u></strong> que llega a las subestaciones en <u>corriente continua</u> para alimentar el elemento conductor.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-wave-square icon text-orange-600"></i>Corriente alterna</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-map-marker-alt icon text-purple-600"></i>En <strong><u>España</u></strong> con <strong><u>tensión de <span class="pill-blue">25.000 V</span> a <span class="pill-blue">50 Hz</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-plus-circle icon text-green-600"></i>La tracción con este tipo de electrificación presenta la <strong><u>ventaja</u></strong> de <strong><u>no necesitar la conversión</u></strong> de la corriente alterna de las líneas comerciales en las subestaciones.</p></li>
+                        <li><p><i class="fas fa-rocket icon text-red-600"></i>Permitiendo la consecución de <strong><u>potencias más elevadas</u></strong> al funcionar con un <u>voltaje superior</u>.</p></li>
+                        <li><p><i class="fas fa-minus-circle icon text-red-600"></i>El <strong><u>inconveniente principal</u></strong> residía en la <strong><u>dificultad de regular la velocidad</u></strong> en los motores de tracción.</p></li>
+                        <li><p><i class="fas fa-check-double icon text-teal-600"></i>Si bien la <strong><u>tecnología de tiristores</u></strong> (<u>componentes electrónicos</u> constituidos por <u>elementos semiconductores</u> que utilizan <u>realimentación interna</u> para producir una <u>conmutación</u>) ha <strong><u>solventado totalmente esta dificultad</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-ruler-horizontal icon text-cyan-700"></i>Grosor del hilo conductor</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Un <strong><u>punto decisivo</u></strong> en el que incide un tipo de electrificación u otro es el <strong><u>grosor del hilo conductor</u></strong>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-stream icon text-blue-500"></i>Aquellas que funcionan con <strong><u>corriente continua</u></strong> precisan un <strong><u>conductor de mayor sección</u></strong> que las de corriente alterna por trabajar con un <u>voltaje menor</u>.</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-ruler-combined icon text-gray-400"></i>Mientras que una catenaria de <strong><u>corriente continua</u></strong> precisa una sección de <span class="pill-blue"><strong>300 mm²</strong></span> casi siempre con <u>dos hilos de contacto</u>.</p></li>
+                                                <li><p><i class="fas fa-ruler-combined icon text-gray-400"></i>En <strong><u>corriente alterna</u></strong> son suficientes <span class="pill-blue"><strong>120 mm²</strong></span> con un <u>solo hilo</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-plus-circle icon text-green-500"></i>Presentando como <strong><u>ventajas</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-weight-hanging icon text-gray-400"></i>Catenarias <strong><u>más ligeras</u></strong> (con <u>ahorro en todos los elementos de sustentación</u>).</p></li>
+                                                <li><p><i class="fas fa-tachometer-alt-slow icon text-gray-400"></i><strong><u>Menores caídas de tensión</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-broadcast-tower icon text-gray-400"></i>Y <strong><u>subestaciones más separadas</u></strong>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-rocket icon text-red-700"></i>Por lo que respecta a las <strong><u>líneas ferroviarias de alta velocidad</u></strong>, la <strong><u>corriente alterna</u></strong> plantea una <strong><u>ventaja adicional</u></strong> que ha conducido a su <strong><u>adopción en casi todas ellas</u></strong> (excepto Italia).</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-plug icon text-purple-500"></i>El <strong><u>pantógrafo produce una deformación</u></strong> en la catenaria que genera una <strong><u>onda que avanza por delante</u></strong> de éste.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Si la <strong><u>velocidad del tren es elevada</u></strong> el pantógrafo puede <strong><u>alcanzar su propia onda</u></strong>, produciéndose un <strong><u>efecto de choque</u></strong> tanto <u>mayor cuanto más pesada sea la catenaria</u>.</p></li>
+                                    <li><p><i class="fas fa-feather-alt icon text-green-500"></i>Razón por la que es <strong><u>fundamental buscar la ligereza</u></strong> en las líneas de contacto de líneas de alta velocidad.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-random icon text-indigo-700"></i>Zona neutra</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Se denomina <span class="definition-pill"><strong>zona neutra</strong></span> a la <strong><u>zona de transición</u></strong> entre <u>líneas o tramos de línea</u> con <u>tipos de electrificación diferentes</u>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Otros sistemas de alimentación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-power-off"></i></div>
+                <h2>4. Otros sistemas de alimentación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Una <strong><u>alternativa</u></strong> a la captación de corriente de un <u>hilo de contacto elevado</u>, es el <span class="definition-pill"><strong>sistema de tercer carril</strong></span>, constituido por un <strong><u>perfil metálico</u></strong> que discurre <strong><u>paralelo a la vía</u></strong>, convenientemente <u>aislado</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-thumbs-up icon text-green-600"></i>Sus <strong>ventajas</strong> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i><strong><u>Gran rigidez</u></strong> que hace que no experimente deformaciones sensibles al paso del tiempo.</p></li>
+                                <li><p><i class="fas fa-euro-sign icon text-gray-500"></i><strong><u>Menor coste</u></strong> que el de la catenaria.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-minus-circle icon text-red-600"></i>Y sus <strong>inconvenientes</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-skull-crossbones icon text-gray-500"></i><strong><u>Riesgo de electrocución</u></strong> para las <u>personas y animales</u>.</p></li>
+                                <li><p><i class="fas fa-traffic-light icon text-gray-500"></i><strong><u>Estorbo</u></strong> en las <u>estaciones</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-unlink icon text-gray-500"></i><strong><u>Necesidad de interrumpir el tercer carril</u></strong> en los <u>pasos a nivel</u> y <u>aparatos de vía</u>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-tools icon text-cyan-400"></i>Que se <strong><u>soluciona</u></strong> dotando al vehículo de <strong><u>varios brazos frotadores</u></strong> (los que toman la corriente, equivalentes al pantógrafo).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-bolt-slash icon text-gray-500"></i><strong><u>Imposibilidad de aplicarlo</u></strong> al caso de <strong><u>corriente alterna</u></strong> porque no admite una <u>tensión de funcionamiento tan alta</u>.</p></li>
+                                <li><p><i class="fas fa-snowflake icon text-gray-500"></i>En invierno le influyen <strong><u>agentes atmosféricos</u></strong> tales como la <u>nieve</u> y el <u>hielo</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-times-circle icon text-red-700"></i>Por todos estos importantes inconvenientes el <span class="definition-pill">tercer carril</span> ha <strong><u>caído en desuso</u></strong>, <strong>salvo</strong> en el caso de algunas <strong><u>líneas metropolitanas</u></strong>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Normativa de aplicación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-balance-scale"></i></div>
+                <h2>5. Normativa de aplicación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-globe-europe icon text-blue-600"></i>A <strong><u>nivel europeo</u></strong>, existe el <span class="doc-pill"><strong>Reglamento UE 1301/2014</strong></span> de la <span class="actor-pill">Comisión</span> sobre las <u>especificaciones técnicas de interoperabilidad</u> del <u>subsistema de energía</u> del sistema ferroviario de la Unión.</p></li>
+                    <li><p><i class="fas fa-industry icon text-red-600"></i>Al ser la catenaria una <strong><u>instalación de alta tensión</u></strong>, debe cumplir las disposiciones del <span class="law-pill"><strong>Reglamento de Alta Tensión</strong></span> del <span class="actor-pill">Ministerio de Industria</span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-indigo-600"></i>Además, <span class="actor-pill"><strong>ADIF</strong></span> y <span class="actor-pill"><strong>ADIF-AV</strong></span> disponen de una serie de normas relativas a Electrificación (<span class="doc-pill"><strong>NAE-Normas Adif Electrificación</strong></span>):</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i><span class="doc-pill"><strong>NAE 107</strong></span>. Definición y medida de <u>parámetros geométricos</u> de la LAC (línea aérea de contacto).</p></li>
+                                <li><p><i class="fas fa-random icon text-gray-500"></i><span class="doc-pill"><strong>NAE 115</strong></span>. Montaje de <u>agujas aéreas</u>, catenaria de <span class="formula-pill">3kV C.C.</span></p></li>
+                                <li><p><i class="fas fa-link icon text-gray-500"></i><span class="doc-pill"><strong>NAE 116</strong></span>. Cálculo y montaje de <u>pendolado</u> para LAC de <span class="formula-pill">C.C.</span></p></li>
+                                <li><p><i class="fas fa-layer-group icon text-gray-500"></i><span class="doc-pill"><strong>NAE 117</strong></span>. LAC para <u>vías con tres carriles</u> electrificadas en <span class="formula-pill">C.C.</span></p></li>
+                                <li><p><i class="fas fa-drafting-compass icon text-gray-500"></i><span class="doc-pill"><strong>NAE 300</strong></span>. Diseño funcional de la LAC tipo <span class="formula-pill">CA 160/3kV</span></p></li>
+                                <li><p><i class="fas fa-drafting-compass icon text-gray-500"></i><span class="doc-pill"><strong>NAE 301</strong></span>. Diseño funcional de la LAC tipo <span class="formula-pill">CA 220/3kV</span></p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-file-alt icon text-purple-600"></i>Y también <span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> tienen una serie de <strong><u>especificaciones técnicas</u></strong> sobre:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-satellite-dish icon text-gray-500"></i><strong><u>Telemandos de energía</u></strong>.</p></li>
+                                <li><p><i class="fas fa-network-wired icon text-gray-500"></i>Y <strong><u>protocolos de comunicaciones</u></strong> entre <u>centro de control</u> y <u>remotas</u>, tanto en <u>líneas convencionales</u>, como en <u>líneas de Alta Velocidad</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-check-circle icon text-green-700"></i>En <span class="pill-blue"><strong>2023</strong></span> se ha aprobado la <span class="doc-pill"><strong>instrucción ferroviaria para el proyecto y construcción del subsistema de energía (IFE)</strong></span>.</p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
