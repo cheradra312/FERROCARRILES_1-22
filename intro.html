@@ -11,7 +11,12 @@
     <style>
         /* Estilos generales del cuerpo de la página */
         body {
-            background-color: #dae2e5; /* Color de fondo gris claro original */
+            /* Imagen de fondo de la estación de tren */
+            background-image: url('fondo-estacion-ferrocarril_1284-22044.avif');
+            background-color: #dae2e5; /* Color de fondo si la imagen no carga */
+            background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -24,8 +29,8 @@
         /* Contenedor para las vías del tren */
         .tracks {
             position: absolute;
-            /* Se revierte la posición de las vías al centro */
-            bottom: calc(50% - 160px); 
+            /* Se ajusta la posición de las vías para que coincida con el fondo */
+            bottom: 15%; 
             width: 100%;
             height: 50px;
             z-index: 2;
@@ -70,6 +75,8 @@
             justify-content: center;
             align-items: center;
             z-index: 3; /* Asegura que el tren esté sobre las vías */
+            /* Se ajusta la posición vertical para que el tren esté sobre las vías */
+            margin-bottom: -15%;
         }
 
         /* Estilo de la imagen del vagón */
@@ -103,11 +110,31 @@
         .graffiti-main { fill: #FFA500; stroke: #C66A00; stroke-width: 8; }
         .graffiti-inner { fill: #FFD700; stroke: #FFA500; stroke-width: 3; }
         .graffiti-highlight { fill: #FFFFE0; stroke: none; }
+        
+        /* Estilo para el botón de saltar intro */
+        #skip-intro-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+
+        #skip-intro-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
 
         /* Media query para ajustar la posición en pantallas más grandes */
         @media (min-width: 1040px) {
             .graffiti-layer { font-size: 100px; }
-            .tracks { bottom: calc(50% - 190px); }
         }
     </style>
 </head>
@@ -142,10 +169,23 @@
         </svg>
     </div>
 
+    <!-- Botón para saltar la intro -->
+    <button id="skip-intro-button">Saltar Intro</button>
+
     <!-- Inclusión de las librerías GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            const skipButton = document.getElementById('skip-intro-button');
+            
+            // Función para redirigir
+            function redirectToMainPage() {
+                window.location.href = 'index.html';
+            }
+
+            // Event listener para el botón
+            skipButton.addEventListener('click', redirectToMainPage);
 
             function animateScene() {
                 const train = ".train-canvas";
@@ -154,12 +194,9 @@
 
                 // Línea de tiempo maestra para toda la secuencia
                 const masterTl = gsap.timeline({
-                    // MODIFICACIÓN: Al finalizar la animación, redirige a index.html
                     onComplete: function() {
-                        // Espera un breve momento antes de redirigir para que la salida sea suave
-                        gsap.delayedCall(0.5, () => {
-                            window.location.href = 'index.html';
-                        });
+                        // Al finalizar, redirige a index.html
+                        gsap.delayedCall(0.5, redirectToMainPage);
                     }
                 });
 
