@@ -20,7 +20,7 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end; /* Se alinea al final (abajo) para un mejor control de la posición */
             margin: 0;
             font-family: 'Inter', sans-serif;
             overflow: hidden; /* Oculta los elementos que se salen de la pantalla */
@@ -30,7 +30,7 @@
         .tracks {
             position: absolute;
             /* Se ajusta la posición de las vías para que coincida con el fondo */
-            bottom: 15%; 
+            bottom: 28%; 
             width: 100%;
             height: 50px;
             z-index: 2;
@@ -76,7 +76,7 @@
             align-items: center;
             z-index: 3; /* Asegura que el tren esté sobre las vías */
             /* Se ajusta la posición vertical para que el tren esté sobre las vías */
-            margin-bottom: -15%;
+            margin-bottom: 21%;
         }
 
         /* Estilo de la imagen del vagón */
