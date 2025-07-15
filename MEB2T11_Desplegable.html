@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Instalaciones de servicio ferroviarias</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-concierge-bell"></i> MEB2T11. Instalaciones de servicio ferroviarias <i class="fas fa-cogs"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Instalaciones de servicio ferroviarias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-industry"></i></div>
+                <h2>1. Instalaciones de servicio ferroviarias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="law-pill"><strong>Ley 38/2015 del Sector Ferroviario</strong></span> considera <span class="definition-pill"><strong>instalaciones de servicio</strong></span> las siguientes:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-store-alt icon text-blue-500"></i>Las <strong><u>estaciones de transporte de viajeros</u></strong>, así como:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-building icon text-gray-400"></i>Sus <u>edificios e instalaciones conexas</u>.</p></li>
+                                            <li><p><i class="fas fa-info-circle icon text-gray-400"></i>Incluidos los <u>paneles de información sobre viajes</u>.</p></li>
+                                            <li><p><i class="fas fa-ticket-alt icon text-gray-400"></i>Y un <u>emplazamiento adecuado</u> para los <u>servicios de venta de billetes</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-truck-loading icon text-purple-500"></i>Las <strong><u>terminales de carga</u></strong>.</p></li>
+                                <li><p><i class="fas fa-sort-amount-down icon text-orange-500"></i>Las <strong><u>estaciones de clasificación</u></strong> y las <strong><u>instalaciones de formación de trenes</u></strong>, incluidas las <u>instalaciones para maniobras</u>.</p></li>
+                                <li><p><i class="fas fa-code-branch icon text-cyan-500"></i>Las <strong><u>vías de apartado</u></strong>, incluyendo las <u>vías ubicadas en estaciones de viajeros</u> cuando se utilicen para tal fin.</p></li>
+                                <li><p><i class="fas fa-tools icon text-green-500"></i>Las <strong><u>instalaciones de mantenimiento</u></strong> de los <u>vehículos ferroviarios</u>.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-indigo-500"></i><strong><u>Otras instalaciones técnicas</u></strong>, tales como las <u>instalaciones de lavado y limpieza</u>.</p></li>
+                                <li><p><i class="fas fa-anchor icon text-teal-500"></i>Las <strong><u>instalaciones portuarias</u></strong> vinculadas a <u>actividades ferroviarias</u>.</p></li>
+                                <li><p><i class="fas fa-life-ring icon text-red-500"></i>Las <strong><u>instalaciones de socorro</u></strong>.</p></li>
+                                <li><p><i class="fas fa-gas-pump icon text-yellow-500"></i>Las <strong><u>instalaciones de aprovisionamiento y suministro de combustible</u></strong> en dichas instalaciones.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-blue-400"></i>Los <strong><u>cambiadores de ejes</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Tipologías -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-sitemap"></i></div>
+                <h2>2. Tipologías: viajeros, mercancías y técnicas</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-friends icon text-blue-600"></i>Estaciones de viajeros</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-red-600"></i>Su <strong>misión</strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i><strong><u>Atender los trenes de viajeros</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-exchange-alt icon text-gray-500"></i>Y la <strong><u>transferencia de viajeros</u></strong> entre el <u>ferrocarril</u> y <u>otros medios de transporte</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-building icon text-purple-600"></i>Están <strong>formadas por</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>El <span class="definition-pill"><strong>sector ferroviario</strong></span> (<u>vías</u>, <u>andenes</u> y sus <u>instalaciones</u>).</p></li>
+                                    <li><p><i class="fas fa-concierge-bell icon text-gray-500"></i><span class="definition-pill"><strong>Edificio de servicio</strong></span> (dedicado a la <u>atención del viajero</u>, <u>información</u>, <u>restaurantes</u>, <u>zonas comerciales</u> y <u>zonas dedicadas al transporte de equipaje</u>).</p></li>
+                                    <li><p><i class="fas fa-plus-circle icon text-gray-500"></i>E <span class="definition-pill"><strong>instalaciones complementarias</strong></span> (<u>accesos</u> y <u>aparcamientos</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-city icon text-cyan-600"></i>Suelen requerir estar <strong><u>dentro de las ciudades</u></strong> para <u>mejorar la accesibilidad</u> de los viajeros.</p></li>
+                        <li><p><i class="fas fa-link icon text-green-600"></i>Las <strong><u>conexiones</u></strong> de la terminal con otros medios de transporte público y privado deben permitir <strong><u>intercambios modales rápidos y cómodos</u></strong> (<u>metro</u>, <u>autobuses</u>, <u>taxis</u>, <u>aparcamientos</u>).</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-orange-600"></i>Las terminales de viajeros, <strong>según el tráfico</strong>, pueden ser:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-subway icon text-gray-500"></i>De <strong><u>cercanías</u></strong> (para distancias <span class="pill-blue"><75 km</span>).</p></li>
+                                    <li><p><i class="fas fa-map-marked-alt icon text-gray-500"></i><strong><u>Regionales</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-route icon text-gray-500"></i>Y de <strong><u>larga distancia</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-truck-loading icon text-green-700"></i>Estaciones de mercancías</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-red-600"></i>Su <strong>misión</strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i><strong><u>Atender los trenes de mercancías</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-people-carry icon text-gray-500"></i>Así como el <strong><u>transbordo de las mismas</u></strong> desde los <u>vagones a otros medios</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Es de <strong><u>gran importancia</u></strong> que los <strong><u>accesos a estas terminales sean rápidos y cómodos</u></strong> para otros medios de transporte (<u>carretera</u>, <u>marítima</u>).</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-building icon text-purple-600"></i>Están <strong>formadas por</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-parking icon text-gray-500"></i><strong><u>Parques de recepción, expedición y estacionamiento</u></strong> de material, <strong><u>ordenación, formación y descomposición</u></strong> de trenes.</p></li>
+                                    <li><p><i class="fas fa-warehouse icon text-gray-500"></i><strong><u>Edificios, muelles y otros departamentos</u></strong> necesarios para la <u>explotación comercial</u>.</p></li>
+                                    <li><p><i class="fas fa-car-side icon text-gray-500"></i><strong><u>Accesos a la terminal y aparcamientos</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-orange-600"></i>Los <strong>tipos</strong>, según las mercancías, pueden ser:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-route icon text-gray-500"></i>De <strong><u>trenes directos</u></strong> (circulan <u>regularmente</u> con <u>origen, destino y horarios fijos</u>).</p></li>
+                                    <li><p><i class="fas fa-box icon text-gray-500"></i>De <strong><u>detalle</u></strong> (<u>paquetería</u>, <u>servicios de correos</u> y <u>equipajes sin sus propietarios</u>).</p></li>
+                                    <li><p><i class="fas fa-container-storage icon text-gray-500"></i>E <strong><u>intermodal</u></strong> (para el <u>transporte de contenedores</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-random icon text-cyan-700"></i>Estaciones de tráfico mixto</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i><strong><u>Combinación</u></strong> de las dos anteriores.</p></li>
+                        <li><p><i class="fas fa-times-circle icon text-red-600"></i><strong><u>No frecuentes, ni demasiado útiles</u></strong> por las <u>dificultades de aunar los objetivos diferentes</u> de las terminales de viajeros y mercancías.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tools icon text-indigo-700"></i>Estaciones técnicas</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Pueden ser:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train-tram icon text-purple-500"></i><strong><u>Estaciones de tratamiento técnico de trenes de viajeros</u></strong> donde se realizan las <u>operaciones de mantenimiento y preparación</u> de los trenes de viajeros.</p></li>
+                                    <li><p><i class="fas fa-sort-amount-down icon text-orange-500"></i><strong><u>Estaciones de clasificación y ordenación</u></strong> de trenes de mercancías.</p></li>
+                                    <li><p><i class="fas fa-code-branch icon text-green-500"></i>Y <strong><u>apartaderos técnicos</u></strong> que sirven para <u>regular la circulación de trenes</u> en las líneas.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Necesidades funcionales ferroviarias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-sitemap"></i></div>
+                <h2>3. Necesidades funcionales ferroviarias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>estructura de las instalaciones</u></strong> de una estación, es <strong><u>función de su programa de explotación</u></strong>.</p></li>
+                    <li><p><i class="fas fa-clipboard-list icon text-purple-600"></i>A continuación, se muestran algunos <strong><u>esquemas y características de las terminales</u></strong>, en relación con sus <strong><u>principales funciones</u></strong>:</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-route icon text-cyan-600"></i>Estaciones intermedias</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Pueden atender a líneas con:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-road icon text-orange-500"></i><strong><u>Vía única</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-layer-group icon text-gray-400"></i>Están constituidas por una <strong><u>vía directa</u></strong> y <strong><u>una o más de cruce</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-plus-circle icon text-gray-400"></i>Aunque, eventualmente, pueden existir <strong><u>más vías secundarias</u></strong> para diversas funciones.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-road-barrier icon text-green-500"></i><strong><u>Vía doble</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-stream icon text-gray-400"></i>El tipo más simple es <strong><u>sin vías de adelantamiento</u></strong> y dotado sólo de <u>escapes</u>.</p></li>
+                                                <li><p><i class="fas fa-code-branch icon text-gray-400"></i>Las estaciones con <strong><u>única vía de adelantamiento</u></strong> utilizable en los dos sentidos de marcha, presentan la opción de colocar ésta, en <u>posición lateral</u> o bien <u>intermedia</u>.</p></li>
+                                                <li><p><i class="fas fa-check-circle icon text-gray-400"></i>La solución de la <strong><u>vía intermedia</u></strong> suele ser la <strong><u>más adecuada</u></strong>, al no tener que atravesar la otra vía de la línea en la maniobra.</p></li>
+                                                <li><p><i class="fas fa-check-double icon text-gray-400"></i>Las estaciones con <strong><u>doble vía de adelantamiento lateral</u></strong> son, lógicamente, dentro de este tipo, las <strong><u>más completas</u></strong>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-train-tram icon text-indigo-600"></i>Los <span class="definition-pill"><strong>apeaderos</strong></span> son una <strong><u>clase especial de estaciones intermedias</u></strong>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-walking icon text-gray-500"></i>Donde sólo se permite la <strong><u>subida y bajada de viajeros</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-building icon text-gray-500"></i>Las instalaciones <strong><u>no son complejas</u></strong>, bastando con <u>uno o dos andenes</u> si es vía doble.</p></li>
+                                    <li><p><i class="fas fa-truck-loading icon text-gray-500"></i>Cuando un apeadero desarrolla también <strong><u>tráfico de mercancías</u></strong>, está dotado de una <strong><u>playa para la carga y descarga</u></strong> y <u>almacenamientos intermedios</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-friends icon text-blue-700"></i>Terminales de viajeros</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>En ellas se pueden llevar a cabo <strong><u>medidas tendentes a mejorar el servicio</u></strong> como:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-retweet icon text-gray-500"></i>La utilización en el <strong><u>servicio de cercanías</u></strong> de <strong><u>composiciones dotadas de inversión de marcha</u></strong> (<u>cabinas y vehículos motores en ambos extremos</u>).</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Instalaciones para facilitar y compatibilizar</u></strong> el <u>mayor número de servicios simultáneos</u>.</p></li>
+                                    <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i><strong><u>Mayor velocidad</u></strong> de los <u>vehículos tractores de maniobras</u>.</p></li>
+                                    <li><p><i class="fas fa-hourglass-end icon text-gray-500"></i>Y <strong><u>reducción de tiempos muertos</u></strong> provocados por las <u>señales</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-truck-loading icon text-green-800"></i>Terminales de mercancías</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>En estas terminales pueden ser <strong><u>necesarios los siguientes servicios</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-stamp icon text-gray-500"></i><strong><u>Aduanas</u></strong> para <u>transporte internacional</u> (en caso de que la terminal lo realice).</p></li>
+                                    <li><p><i class="fas fa-plus-circle icon text-gray-500"></i><strong><u>Servicios de valor añadido</u></strong> (<u>consolidación de cargas</u>, <u>paquetería</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-warehouse icon text-purple-600"></i>Además, las <strong><u>terminales generales para vagón completo</u></strong>, deben tener para su correcta explotación, unas <strong><u>vías o haces de vía</u></strong> (cuando el tráfico lo requiera), para:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-dolly-flatbed icon text-gray-500"></i>La <strong><u>carga y descarga directa</u></strong> (incluyendo una <u>playa de, al menos, <span class="pill-blue">20 m</span> de anchura</u>).</p></li>
+                                    <li><p><i class="fas fa-parking icon text-gray-500"></i>Y otras para <strong><u>depósito de vagones y maniobras</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-ruler-horizontal icon text-orange-600"></i>La <strong><u>longitud de los haces de vías</u></strong> puede llegar hasta los <span class="pill-blue"><strong>750 m</strong></span>, lo que permite albergar trenes de <span class="pill-blue">600 m</span>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Condicionantes de diseño y dimensionamiento -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tasks"></i></div>
+                <h2>4. Condicionantes de diseño y dimensionamiento</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Los <strong><u>aspectos más importantes</u></strong> a tener en cuenta al realizar el <strong><u>proyecto de una estación</u></strong> son los siguientes:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-cogs icon text-purple-600"></i>En la <strong><u>infraestructura</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>La <strong><u>longitud de una estación</u></strong> está <strong><u>condicionada por el tren más largo</u></strong> que pueda detenerse en sus vías.</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-subway icon text-blue-400"></i>La longitud de los <strong><u>trenes de cercanías</u></strong> oscila entre <span class="pill-blue">90</span> y <span class="pill-blue">120 m</span>.</p></li>
+                                                        <li><p><i class="fas fa-route icon text-green-400"></i>Y la longitud de los <strong><u>trenes de larga distancia</u></strong> varía entre <span class="pill-blue">200 m</span> en <u>composición simple</u> y <span class="pill-blue">400 m</span> en <u>composición doble</u>.</p></li>
+                                                        <li><p><i class="fas fa-truck-loading icon text-orange-400"></i>En <strong><u>mercancías</u></strong> la longitud máxima de los trenes llega hasta <span class="pill-blue">600 m</span>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li><p><i class="fas fa-list-ol icon text-gray-500"></i>El <strong><u>número de vías</u></strong> depende del <u>número de trenes previstos</u> en la estación <u>simultáneamente</u>.</p></li>
+                                            <li><p><i class="fas fa-sort-amount-up icon text-gray-500"></i>Y la <strong><u>pendiente máxima</u></strong> permitida en la estación es el <span class="formula-pill"><strong>2,5º/oo</strong></span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-road icon text-orange-600"></i>En la <strong><u>vía</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info icon text-gray-500"></i>Sus <strong><u>elementos son similares</u></strong> al resto de la vía.</p></li>
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-plus-circle icon text-gray-500"></i>Aunque en ocasiones se recurre al empleo de:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-layer-group icon text-blue-400"></i><strong><u>Vía en placa</u></strong>.</p></li>
+                                                        <li><p><i class="fas fa-random icon text-purple-400"></i>Y a <span class="definition-pill"><strong>breteles</strong></span>, <u>aparatos de vía</u> para <u>conectar en ambos sentidos</u> y en un <u>reducido espacio</u> dos <u>vías paralelas</u> (<span class="pill-blue">~100 m</span>).</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-signal icon text-red-600"></i>En la <strong><u>señalización</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-bullseye icon text-gray-500"></i>Buscar el <strong><u>máximo de seguridad</u></strong> señalizando adecuadamente los <u>haces de vías de recepción y expedición</u>, o los <u>tramos de vía que tienen algún fin especial</u>, con <u>enclavamientos</u>, <u>semáforos</u> u <u>otros sistemas</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-bolt icon text-yellow-600"></i>En la <strong><u>electrificación</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-tasks icon text-gray-500"></i>Toda terminal situada en una zona electrificada debe <strong><u>contemplar</u></strong>:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-stream icon text-blue-400"></i>El <strong><u>haz de vías completo</u></strong>.</p></li>
+                                                        <li><p><i class="fas fa-route icon text-green-400"></i><strong><u>Vías de paso de locomotoras</u></strong> y de <strong><u>enlace con el haz</u></strong>.</p></li>
+                                                        <li><p><i class="fas fa-exchange-alt icon text-orange-400"></i>Así como el <strong><u>cambio de corriente</u></strong> para los diferentes <u>sistemas de tracción eléctrica</u>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-ellipsis-h icon text-cyan-600"></i><strong><u>Otros aspectos</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-lightbulb icon text-gray-500"></i><u>Alumbrado</u>.</p></li>
+                                            <li><p><i class="fas fa-thermometer-half icon text-gray-500"></i><u>Climatización</u>.</p></li>
+                                            <li><p><i class="fas fa-file-medical-alt icon text-gray-500"></i><u>Planes de emergencia</u>, etc.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Andenes -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-shoe-prints"></i></div>
+                <h2>5. Andenes</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ruler-horizontal icon text-blue-600"></i>La <strong><u>longitud de los andenes</u></strong> depende del <strong><u>tipo de trenes</u></strong> que vaya a recibir la estación.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-info-circle icon text-purple-500"></i>Es <strong><u>habitual disponer una longitud suficiente</u></strong> para acoger <u>dos trenes en composición simple</u> o <u>un tren en composición doble</u> por vía.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-ruler-vertical icon text-orange-500"></i>Lo que supone:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-subway icon text-gray-400"></i><span class="pill-blue"><strong>240 m</strong></span> en <strong><u>cercanías</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-route icon text-gray-400"></i>Y <span class="pill-blue"><strong>400 m</strong></span> en <strong><u>larga distancia</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-arrows-alt-h icon text-cyan-600"></i>Con <strong><u>anchura</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-users icon text-gray-500"></i><span class="pill-blue"><strong>7 m</strong></span> en <strong><u>andenes centrales</u></strong> (entre dos vías).</p></li>
+                                <li><p><i class="fas fa-user icon text-gray-500"></i><span class="pill-blue"><strong>4 m</strong></span> en <strong><u>andenes laterales</u></strong> que pueden llegar a un <strong><u>mínimo absoluto de <span class="pill-blue">3 m</span></u></strong>, por ejemplo, donde desembarca una escalera mecánica.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ban icon text-red-600"></i><strong><u>Nunca se dispone</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-gray-500"></i><strong><u>Vía única</u></strong> entre 2 andenes.</p></li>
+                                <li><p><i class="fas fa-person-running icon text-gray-500"></i>Ni <strong><u>andén al lado de una vía de paso directa</u></strong> por el <u>riesgo de succión de viajeros</u> al paso de los trenes a elevada velocidad.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-arrows-alt-v icon text-indigo-600"></i>La <strong><u>altura de andenes</u></strong>, según la <span class="doc-pill">Declaración sobre la red de ADIF y ADIF-AV</span>, es:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train-tram icon text-gray-500"></i><span class="pill-blue"><strong>0,55 m</strong></span> para <strong><u>tráfico convencional</u></strong>.</p></li>
+                                <li><p><i class="fas fa-subway icon text-gray-500"></i><span class="pill-blue"><strong>0,68 m</strong></span> para <strong><u>cercanías</u></strong>.</p></li>
+                                <li><p><i class="fas fa-rocket icon text-gray-500"></i>Y <span class="pill-blue"><strong>0,76 m</strong></span> para <strong><u>Alta Velocidad</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-sort-amount-up icon text-green-700"></i>Y deben tener una <strong><u>inclinación uniforme máxima del <span class="formula-pill">3º/oo</span></u></strong>.</p></li>
+                    <li><p><i class="fas fa-tint icon text-blue-700"></i>Que por <strong><u>cuestiones de drenaje</u></strong> debe ser <strong><u>superior en cualquier caso al <span class="formula-pill">2º/oo</span></u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-plus-circle icon text-orange-700"></i>Además, deben disponer de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-link icon text-gray-500"></i><strong><u>Conexiones entre ellos</u></strong> y que, <u>salvo excepciones</u> deben realizarse a <strong><u>distinto nivel</u></strong> mediante <u>pasos superiores o inferiores</u>.</p></li>
+                                <li><p><i class="fas fa-layer-group icon text-gray-500"></i>Sus <strong><u>pavimentos</u></strong> deben ser <strong><u>resistentes de tipo industrial</u></strong>.</p></li>
+                                <li><p><i class="fas fa-cloud-sun icon text-gray-500"></i>Y lo habitual es colocar <strong><u>marquesinas para cubrirlos</u></strong> aumentando su <u>confort para los viajeros</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 6: Accesibilidad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-info-circle"></i></div>
+                <h2>6. Accesibilidad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-bullseye icon text-red-600"></i>Con el fin de <strong><u>facilitar el tránsito por las estaciones a todos los viajeros</u></strong> y, en especial, a aquellos con <u>discapacidad o movilidad reducida</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-indigo-600"></i><span class="actor-pill"><strong>ADIF</strong></span> y <span class="actor-pill"><strong>ADIF-AV</strong></span> ha desarrollado un <strong><u>conjunto de servicios</u></strong> para lograr la <span class="definition-pill">accesibilidad universal</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-volume-up icon text-blue-500"></i>Servicio de <span class="definition-pill"><strong>audioguías</strong></span>, para <u>personas con discapacidad visual</u>.</p></li>
+                                <li><p><i class="fas fa-hands-helping icon text-green-500"></i>Servicio <span class="definition-pill"><strong>acerca</strong></span> (antes atendo), para <u>viajeros con movilidad reducida</u>.</p></li>
+                                <li><p><i class="fas fa-comments icon text-purple-500"></i>Y servicio <span class="definition-pill"><strong>dialoga</strong></span>, destinado a <u>personas sordas y con discapacidad auditiva</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-orange-600"></i>Entre las <strong><u>actuaciones realizadas</u></strong> por <span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> para la <strong><u>mejora de la accesibilidad</u></strong> de las estaciones se pueden citar:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-desktop icon text-gray-500"></i><strong><u>Nuevos sistemas visuales y auditivos</u></strong> de información al viajero.</p></li>
+                                <li><p><i class="fas fa-road icon text-gray-500"></i><strong><u>Rampas de acceso</u></strong> a <u>andenes y vestíbulos</u>.</p></li>
+                                <li><p><i class="fas fa-parking icon text-gray-500"></i><strong><u>Aparcamientos accesibles y reservados</u></strong> a personas con discapacidad.</p></li>
+                                <li><p><i class="fas fa-route icon text-gray-500"></i><strong><u>Itinerarios accesibles</u></strong>.</p></li>
+                                <li><p><i class="fas fa-arrows-alt-v icon text-gray-500"></i><strong><u>Recrecido y prolongación de andenes</u></strong> para facilitar el acceso de los viajeros a los trenes.</p></li>
+                                <li><p><i class="fas fa-eye-slash icon text-gray-500"></i>Instalación de <strong><u>bandas de proximidad y franjas amarillas</u></strong> en el borde de andén para ser detectadas por los viajeros con <u>deficiencias visuales</u>.</p></li>
+                                <li><p><i class="fas fa-shoe-prints icon text-gray-500"></i><strong><u>Pasos de caucho antideslizante</u></strong> entre andenes.</p></li>
+                                <li><p><i class="fas fa-stairs icon text-gray-500"></i><strong><u>Adaptación a normativa</u></strong> de <u>escaleras y barandillas</u>.</p></li>
+                                <li><p><i class="fas fa-elevator icon text-gray-500"></i>Instalación de <strong><u>rampas y ascensores</u></strong> en andenes.</p></li>
+                                <li><p><i class="fas fa-lightbulb icon text-gray-500"></i><strong><u>Mejoras en la iluminación</u></strong>.</p></li>
+                                <li><p><i class="fas fa-restroom icon text-gray-500"></i>Y <strong><u>aseos adaptados</u></strong> a personas con discapacidad.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-sitemap icon text-cyan-700"></i>Además, <span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> lleva a cabo una <span class="plan-pill"><strong>estrategia de movilidad</strong></span> en el entorno de las estaciones de viajeros.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-sort-amount-down icon text-red-600"></i>Que <strong>busca reordenar la jerarquía</strong> de los actores de la movilidad urbana, <strong><u>priorizando al peatón</u></strong> y situando después, por este orden, a:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bicycle icon text-gray-500"></i><u>Bicicletas</u>, <u>patinetes</u> y <u>motocicletas</u>.</p></li>
+                                <li><p><i class="fas fa-bus icon text-gray-500"></i><u>Transporte colectivo masivo</u>.</p></li>
+                                <li><p><i class="fas fa-taxi icon text-gray-500"></i><u>Taxis y VTC</u>.</p></li>
+                                <li><p><i class="fas fa-share-alt icon text-gray-500"></i>Y <u>vehículos compartidos</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-car icon text-red-700"></i>En <strong><u>último lugar</u></strong> aparecería el <strong><u>coche privado</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-leaf icon text-green-700"></i>Todo ello <strong><u>contribuirá a impulsar y desarrollar</u></strong> el <span class="plan-pill"><strong>proyecto Ecomilla</strong></span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-info-circle icon text-blue-500"></i>Que consiste en la <strong><u>creación de áreas de cero emisiones</u></strong> en torno a las <u>estaciones de tren</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 7: Autopistas ferroviarias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-train"></i></div>
+                <h2>7. Autopistas ferroviarias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Las <span class="definition-pill"><strong>autopistas ferroviarias</strong></span> están constituidas por <strong><u>servicios de transporte ferroviario de mercancías</u></strong> sobre <u>líneas existentes</u> de la red ferroviaria.</p></li>
+                    <li><p><i class="fas fa-truck-moving icon text-purple-600"></i>Que <strong><u>transportan camiones o semirremolques</u></strong> utilizando <u>vagones especializados</u>.</p></li>
+                    <li><p><i class="fas fa-random icon text-orange-600"></i>Son un <strong><u>segmento del transporte combinado ferrocarril-carretera</u></strong> adicional al de <u>contenedores marítimos</u> y <u>cajas móviles</u>.</p></li>
+                    <li><p><i class="fas fa-road icon text-cyan-600"></i>Estos servicios entran, especialmente, en <strong><u>competencia directa</u></strong> con el <u>transporte de mercancías por carretera</u>.</p></li>
+                    <li><p><i class="fas fa-check-circle icon text-green-600"></i>En la medida en que su uso por los <span class="actor-pill">cargadores</span> <strong><u>no requiere obligatoriamente</u></strong> de una <u>adaptación específica de los camiones</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-handshake icon text-indigo-600"></i><span class="actor-pill"><strong>España</strong></span> y <span class="actor-pill"><strong>Francia</strong></span> <strong><u>colaboran</u></strong> en el marco de un <u>grupo de trabajo conjunto</u>, constituido en <span class="pill-blue">2015</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tasks icon text-blue-500"></i>Para la <strong><u>realización de los estudios y las acciones comunes</u></strong> necesarias para el <u>establecimiento de servicios internacionales</u> de autopistas ferroviarias de <u>larga distancia</u>.</p></li>
+                                <li><p><i class="fas fa-globe-europe icon text-sky-600"></i>Sobre los <strong><u>ejes Atlántico y Mediterráneo</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-map-signs icon text-purple-700"></i>Dentro de los trabajos previstos en la <span class="plan-pill"><strong>"Hoja de ruta"</strong></span> aprobada, se acordó en <span class="pill-blue">2017</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-bullhorn icon text-orange-500"></i>La realización de sendas <strong><u>convocatorias conjuntas de manifestaciones de interés</u></strong> dirigidas:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-drafting-compass icon text-gray-400"></i>Por un lado, a los <strong><u>diseñadores y fabricantes</u></strong> de <u>material rodante</u>.</p></li>
+                                            <li><p><i class="fas fa-user-tie icon text-gray-400"></i>Y, por otro, a los <strong><u>interesados en la explotación</u></strong> de servicios de autopistas ferroviarias en <u>ambos ejes</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-blue-800"></i>Además, el <span class="actor-pill"><strong>MITMS</strong></span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-ribbon icon text-green-500"></i>Ha <strong><u>inaugurado en <span class="pill-blue">2024</span></u></strong> la autopista ferroviaria <strong><u>Valencia-Madrid</u></strong>.</p></li>
+                                <li><p><i class="fas fa-rocket icon text-red-500"></i>Y está <strong><u>impulsando</u></strong> la autopista ferroviaria <strong><u>Algeciras-Madrid-Zaragoza</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
