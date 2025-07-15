@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Pasos a nivel</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-traffic-light"></i> MEB2T10. Pasos a nivel <i class="fas fa-exclamation-triangle"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Pasos a nivel. Marco legal. Definición y clasificación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>1. Pasos a nivel. Marco legal. Definición y clasificación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-book-open icon text-purple-600"></i>El <strong><u>marco legal</u></strong> viene recogido en:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-balance-scale icon text-gray-500"></i>La <span class="law-pill"><strong>Ley 38/2015 del Sector Ferroviario</strong></span>.</p></li>
+                                <li><p><i class="fas fa-balance-scale icon text-gray-500"></i>En el <span class="law-pill"><strong>Reglamento del Sector Ferroviario (RD 2387/04)</strong></span>.</p></li>
+                                <li><p><i class="fas fa-balance-scale icon text-gray-500"></i>Y en el <span class="law-pill"><strong>RD 929/2020 sobre seguridad operacional e interoperabilidad ferroviarias (RDSOIF)</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-blue-700"></i>En estas <strong>normas se establece</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-info-circle icon text-cyan-500"></i>Se considera <span class="definition-pill"><strong>paso a nivel</strong></span> cualquier <strong><u>intersección a nivel</u></strong> entre una <u>carretera o camino</u> y una <u>línea férrea</u>, <strong><u>reconocida</u></strong> por el <span class="actor-pill">administrador de infraestructuras ferroviarias</span> y <strong><u>abierta</u></strong> a <u>usuarios públicos o privados</u>.</p></li>
+                                <li><p><i class="fas fa-level-up-alt icon text-green-500"></i>Los <strong><u>cruces de vías de comunicación con líneas férreas</u></strong> que se produzcan por el <u>establecimiento o la modificación</u> de ellas, deberán realizarse <strong><u>a distinto nivel</u></strong>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-user-lock icon text-red-600"></i>Los <strong><u>pasos a nivel de particulares existentes</u></strong> se regirán por las <strong><u>condiciones fijadas en su autorización</u></strong>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-ban icon text-red-400"></i>Quedando <strong><u>prohibida su utilización</u></strong> para fines diferentes de los comprendidos en ella.</p></li>
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-times-circle icon text-red-400"></i>El <span class="actor-pill">administrador de infraestructuras ferroviarias</span> podrá acordar su <strong><u>clausura</u></strong> cuando:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-file-signature icon text-gray-300"></i>Sus <u>titulares no respeten</u> las condiciones de la autorización.</p></li>
+                                                        <li><p><i class="fas fa-tools icon text-gray-300"></i>O <u>no atiendan debidamente</u> a su conservación, protección y señalización.</p></li>
+                                                        <li><p><i class="fas fa-random icon text-gray-300"></i>O cuando el cruce de la vía pueda realizarse por <u>otros pasos cercanos</u>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-trash-alt icon text-orange-600"></i>Los <strong><u>pasos a nivel existentes deben ser suprimidos</u></strong> cuando:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-calculator icon text-blue-400"></i>Su <strong><u>momento de circulación</u></strong>, producto del <u>número de circulaciones ferroviarias al día (T)</u> por la <u>IMD del camino o carretera (A)</u>, sea <strong><u>mayor o igual que <span class="pill-blue">1.500</span></u></strong>.</p></li>
+                                            <li><p><i class="fas fa-tachometer-alt icon text-red-400"></i>Y con <strong><u>velocidades ferroviarias ≥ <span class="pill-blue">160 km/h</span></u></strong> o <strong><u>duplicación de la vía</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-euro-sign icon text-yellow-600"></i>El <strong><u>coste de la supresión</u></strong>, su <u>reordenación</u> o la <u>instalación de los sistemas de protección</u> será por cuenta de:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-road icon text-gray-400"></i>Los <strong><u>organismos titulares de las carreteras</u></strong> si <span class="formula-pill">A ≥ 250</span>.</p></li>
+                                            <li><p><i class="fas fa-train icon text-gray-400"></i>Y de los <strong><u>organismos titulares de la infraestructura ferroviaria</u></strong> si <span class="formula-pill">T ≥ 6</span>.</p></li>
+                                            <li><p><i class="fas fa-balance-scale icon text-gray-400"></i>En caso de darse ambos, el coste se <strong><u>repartirá al <span class="pill-blue">50%</span></u></strong>.</p></li>
+                                            <li><p><i class="fas fa-rocket icon text-red-400"></i>Cuando sobre ellos se establezcan circulaciones ferroviarias a <strong><u>velocidad ≥ <span class="pill-blue">160 km/h</span></u></strong> se financiarán con cargo a las <u>entidades que tengan a su cargo la infraestructura ferroviaria</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-database icon text-indigo-500"></i>Las entidades que tengan a su cargo las infraestructuras ferroviarias <strong><u>mantendrán actualizado un inventario</u></strong> de todos los pasos a nivel, tanto de <u>titularidad pública como privada</u>, existentes en las líneas ferroviarias que administren.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-compress-arrows-alt icon text-purple-600"></i>La <strong><u>obligatoriedad (o sugerencia) de concentrar</u></strong>, con la supresión de algún paso, los <strong><u>pasos colindantes</u></strong> situados a <u>menos de <span class="pill-blue">500 m</span> (o <span class="pill-blue">1.000 m</span>)</u>, medidos a lo largo de la vía, <u>enlazándolos mediante caminos paralelos</u> a la vía férrea, según lo permitan las <u>disponibilidades presupuestarias</u>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-times icon text-red-400"></i>Aunque este procedimiento generalmente <strong><u>no ha sido viable</u></strong> por la <u>negativa de los ayuntamientos</u> a limitar la accesibilidad de su red viaria.</p></li>
+                                            <li><p><i class="fas fa-arrow-up icon text-orange-400"></i>Además, si el tráfico que soporta un paso a nivel se encamina a otro, el tráfico de este último aumenta, y con ello su momento de circulación, pudiéndose dar el caso de que resulte <strong><u>obligado proceder a su supresión</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-chart-bar icon text-green-700"></i>A pesar de los últimos planes de supresión de pasos a nivel, aún <strong><u>existen unos <span class="pill-blue">3.000</span> pasos a nivel</u></strong> en las vías públicas españolas.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-percentage icon text-cyan-700"></i>De los cuales:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-landmark icon text-gray-500"></i><strong><u>Menos del <span class="pill-blue">1%</span></u></strong> corresponden a <u>carreteras del Estado</u>.</p></li>
+                                <li><p><i class="fas fa-map icon text-gray-500"></i><strong><u>Menos del <span class="pill-blue">10%</span></u></strong> a <u>carreteras autonómicas</u>.</p></li>
+                                <li><p><i class="fas fa-city icon text-gray-500"></i>Y el resto, <strong><u>casi el <span class="pill-blue">90%</span></u></strong>, a <u>carreteras de Ayuntamientos</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Tipología de protecciones -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-list-ol"></i></div>
+                <h2>2. Tipología de protecciones</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>El <span class="law-pill"><strong>RD 929/2020</strong></span> sobre <u>seguridad operacional e interoperabilidad ferroviarias</u> establece las siguientes <strong><u>clases de protección de pasos a nivel</u></strong>, ordenadas en función <u>creciente del nivel de protección</u> al usuario de la carretera o camino:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-eye-slash icon text-red-600"></i><span class="definition-pill"><strong>Clase P</strong></span>: <strong><u>Pasos a nivel con protección pasiva</u></strong>, es decir, que <u>no disponen de ningún sistema de aviso o protección</u> que advierta al usuario (conductor o peatón) de la llegada del tren.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-bell icon text-green-600"></i><span class="definition-pill"><strong>Clase A</strong></span>: <strong><u>Pasos a nivel con protección activa</u></strong>, es decir, que <u>disponen de un sistema de aviso y/o protección</u> que advierte al usuario (conductor o peatón) de la llegada del tren. Dentro de este grupo se distinguen:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-user-clock icon text-blue-400"></i><span class="definition-pill"><strong>Clase A1 (protección manual)</strong></span>:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-cogs icon text-gray-300"></i>El <u>aviso o la protección</u> al usuario son <u>activados o realizados manualmente</u> por <span class="actor-pill">personal ferroviario</span>.</p></li>
+                                                        <li><p><i class="fas fa-file-alt icon text-gray-300"></i>Se regulan mediante <span class="doc-pill">Consigna</span> del <span class="actor-pill">administrador de infraestructuras</span>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-volume-up icon text-cyan-400"></i><span class="definition-pill"><strong>Clase A2 (protección automática con aviso del lado del usuario)</strong></span>:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-robot icon text-gray-300"></i>El <u>aviso al usuario es activado automáticamente</u> por el <u>tren que se aproxima</u> o como consecuencia del <u>establecimiento de un itinerario</u> que afecte al paso.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-traffic-light icon text-yellow-400"></i><span class="definition-pill"><strong>Clase A3 (protección automática con protección del lado del usuario)</strong></span>:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-robot icon text-gray-300"></i>La <u>protección al usuario es activada de forma automática</u> por el <u>tren que se aproxima</u> o como consecuencia del <u>establecimiento de un itinerario</u> que afecte al paso.</p></li>
+                                                        <li><p><i class="fas fa-plus-circle icon text-gray-300"></i>Quedan comprendidos en esta clase los pasos a nivel que, <u>además de la protección</u>, dispongan de <u>dispositivos de aviso al usuario</u>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-road-barrier icon text-red-400"></i><span class="definition-pill"><strong>Clase A4 (protección automática con protección del lado de la vía)</strong></span>:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-sign icon text-gray-300"></i>Una <u>señal</u> o un <u>sistema de protección de tren</u> le permiten <u>franquear normalmente el paso a nivel</u>.</p></li>
+                                                        <li><p><i class="fas fa-check-double icon text-gray-300"></i>Tras <strong><u>comprobar</u></strong> que este se encuentra <u>completamente protegido por el lado del usuario</u> y está <u>libre de obstáculos</u>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-purple-600"></i>Los <strong><u>criterios para definir la clase de protección mínima</u></strong> asociada a cada paso a nivel son <strong><u>función de los siguientes factores</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-car icon text-gray-500"></i>El <strong><u>tipo de uso</u></strong> (<u>vehículos o peatones</u>).</p></li>
+                                <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i>La <strong><u>velocidad máxima del tren</u></strong> en el paso a nivel.</p></li>
+                                <li><p><i class="fas fa-map-marker-alt icon text-gray-500"></i>La <strong><u>ubicación</u></strong> (en <u>plena vía</u> o en <u>estación</u>).</p></li>
+                                <li><p><i class="fas fa-traffic-light icon text-gray-500"></i>El <strong><u>tráfico</u></strong> (de <u>vehículos</u> o de <u>peatones</u>).</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>El <strong><u>número de circulaciones ferroviarias</u></strong>.</p></li>
+                                <li><p><i class="fas fa-eye icon text-gray-500"></i>Y las <strong><u>distancias de visibilidad real y técnica</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-book icon text-amber-700"></i>Todo ello, según lo regulado en el <span class="law-pill"><strong>anexo VII del RD 929/2020</strong></span> de seguridad operacional e interoperabilidad ferroviarias.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-indigo-700"></i>Donde también se establecen los <strong><u>equipamientos a disponer</u></strong> en cada una de las clases de protección, que consisten en:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sign icon text-gray-500"></i><u>Señales fijas</u>.</p></li>
+                                <li><p><i class="fas fa-lightbulb icon text-gray-500"></i><u>Luminosas</u>.</p></li>
+                                <li><p><i class="fas fa-volume-down icon text-gray-500"></i><u>Acústicas</u>.</p></li>
+                                <li><p><i class="fas fa-road-barrier icon text-gray-500"></i><u>Barreras</u>.</p></li>
+                                <li><p><i class="fas fa-hard-hat icon text-gray-500"></i>Y <span class="actor-pill">personal ferroviario habilitado</span> a pie de paso, según los casos.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Alternativas de supresión -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-sitemap"></i></div>
+                <h2>3. Alternativas de supresión</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Las <strong><u>alternativas para suprimir un paso a nivel</u></strong> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bridge icon text-purple-600"></i>Por medio de una <strong><u>estructura de paso sobre o bajo la vía</u></strong>.</p></li>
+                                <li><p><i class="fas fa-road icon text-orange-600"></i>O por medio de <strong><u>caminos paralelos a la vía</u></strong> que conecten con <u>pasos superiores o inferiores</u> nuevos o existentes.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-search icon text-cyan-600"></i>Para la <strong>supresión de pasos a nivel</strong> se comienza con un <span class="doc-pill"><strong>estudio de alternativas</strong></span> para varios pasos cercanos.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullseye icon text-red-500"></i>En el que con el <strong><u>menor número de estructuras</u></strong> se pretende <strong><u>eliminar el mayor número posible</u></strong> de pasos a nivel.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-indigo-700"></i>Entre las <strong>principales actuaciones</strong> que se realizan para las <strong><u>estructuras de paso sobre o bajo la línea de ferrocarril</u></strong> están:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-arrow-up icon text-green-500"></i>Los <span class="definition-pill"><strong>pasos superiores</strong></span> mediante <u>estructuras isostáticas e hiperestáticas</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-arrow-down icon text-blue-500"></i>Y los <span class="definition-pill"><strong>pasos inferiores</strong></span> mediante:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-box icon text-gray-400"></i><u>Cajones construidos in situ</u>.</p></li>
+                                            <li><p><i class="fas fa-dolly icon text-gray-400"></i>Y <u>cajones “hincados”</u> bajo las vías.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-route icon text-amber-700"></i>Para los <strong><u>pasos de menor importancia</u></strong> o incluso en el caso de <strong><u>imposibilidad de construir una estructura</u></strong> por condicionantes externos en un paso importante:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>Se opta por la <strong><u>definición y construcción de caminos o carreteras de conexión</u></strong> con las estructuras de paso superior o inferior cercanas.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Que <strong><u>limitan la accesibilidad y permeabilidad</u></strong> de las poblaciones a ambos lados de la vía.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-tasks icon text-blue-500"></i>Por lo que deben <strong><u>plantearse</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-arrows-alt-h icon text-gray-400"></i>Con <strong><u>recorridos que no incrementen demasiado la distancia</u></strong> de cruce.</p></li>
+                                            <li><p><i class="fas fa-walking icon text-gray-400"></i>Diseñando <strong><u>pasarelas peatonales</u></strong> para permitir la <u>permeabilidad de peatones o ciclistas</u>.</p></li>
+                                            <li><p><i class="fas fa-plus icon text-gray-400"></i>Y <strong><u>otras medidas</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: Procedimientos constructivos singulares -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tools"></i></div>
+                <h2>4. Procedimientos constructivos singulares</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-dolly-flatbed icon text-blue-600"></i>Pasos inferiores empujados (cajones hincados)</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-purple-600"></i>El <strong><u>procedimiento consiste</u></strong> en la <strong><u>construcción de la estructura</u></strong> en algún lugar <u>cercano a su emplazamiento definitivo</u>.</p></li>
+                        <li><p><i class="fas fa-arrow-right icon text-orange-600"></i>Para después <strong><u>situarla en él empujándola</u></strong> con una <u>batería de gatos hidráulicos</u>.</p></li>
+                        <li><p><i class="fas fa-building icon text-cyan-600"></i>El método constructivo conduce a la necesidad de una <strong><u>estructura de gran rigidez</u></strong> con tipología de <strong><u>marco de hormigón armado</u></strong>.</p></li>
+                        <li><p><i class="fas fa-vector-square icon text-green-600"></i>Generalmente de <strong><u>un solo vano</u></strong>, aunque puede ser de <u>dos o más</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-ruler-combined icon text-indigo-600"></i>Se han realizado <strong>obras</strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>Hasta <span class="pill-blue"><strong>24 m</strong></span> de <strong><u>anchura</u></strong> con <u>un vano</u>.</p></li>
+                                    <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>Y hasta <span class="pill-blue"><strong>37 m</strong></span> con <u>dos vanos</u>.</p></li>
+                                    <li><p><i class="fas fa-weight-hanging icon text-gray-500"></i>Y se han <strong><u>empujado cajones</u></strong> de hasta <span class="pill-blue"><strong>12.500 t</strong></span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-blue-700"></i>La <strong>traslación</strong> de la estructura <strong><u>requiere</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>Un <strong><u>plano de deslizamiento</u></strong> (<span class="definition-pill">solera de deslizamiento</span>).</p></li>
+                                    <li><p><i class="fas fa-compress-alt icon text-gray-500"></i>Un <strong><u>apoyo para los gatos hidráulicos</u></strong> que realizan el empuje (<span class="definition-pill">muro de reacción</span>).</p></li>
+                                    <li><p><i class="fas fa-archway icon text-gray-500"></i>Y un <strong><u>sistema de apeos</u></strong> que garanticen la <u>integridad de la vía</u> durante toda la operación.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-traffic-light icon text-orange-700"></i>Pasos inferiores in situ manteniendo parcialmente el tráfico</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>En casos de <strong><u>vía doble</u></strong> se puede <strong><u>construir el paso por fases</u></strong>.</p></li>
+                        <li><p><i class="fas fa-retweet icon text-purple-600"></i><strong><u>Manteniendo la circulación de trenes</u></strong> por una de las vías <u>alternativamente</u> con las <u>debias precauciones</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-ol icon text-green-600"></i><strong>Fases</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-stream icon text-gray-500"></i>Ejecución de <strong><u>pantalla de micropilotes</u></strong> en eje de plataforma.</p></li>
+                                    <li><p><i class="fas fa-sign-out-alt icon text-gray-500"></i>Ejecución de <strong><u>escapes en ambos lados</u></strong> del punto donde se situará el paso inferior para <u>dar paso alternativo</u> por la vía que quede en cada momento en servicio.</p></li>
+                                    <li><p><i class="fas fa-mountain icon text-gray-500"></i><strong><u>Vaciado de las tierras</u></strong> de uno de los lados de la plataforma, dando <u>paso alternativo al tráfico</u> por la vía que queda sin desmontar.</p></li>
+                                    <li><p><i class="fas fa-hammer icon text-gray-500"></i><strong><u>Construcción de la mitad del paso inferior</u></strong> en la zona desmontada dejando prevista la <u>unión con la segunda mitad</u> mediante esperas.</p></li>
+                                    <li><p><i class="fas fa-undo icon text-gray-500"></i><strong><u>Reposición de las tierras y vía desmontada</u></strong> sobre el <u>semipaso inferior ya construido</u>.</p></li>
+                                    <li><p><i class="fas fa-random icon text-gray-500"></i><strong><u>Paso alternativo</u></strong> por la <u>nueva vía sobre la mitad del paso inferior</u>.</p></li>
+                                    <li><p><i class="fas fa-mountain icon text-gray-500"></i><strong><u>Vaciado del otro lado</u></strong> de la plataforma.</p></li>
+                                    <li><p><i class="fas fa-trash-alt icon text-gray-500"></i><strong><u>Demolición</u></strong> de los <u>micropilotes</u>.</p></li>
+                                    <li><p><i class="fas fa-plus-square icon text-gray-500"></i><strong><u>Construcción de la segunda mitad de cajón</u></strong> uniéndolo <u>estructuralmente a la primera mitad</u> ya realizada.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-gray-500"></i><strong><u>Reposición de la vía</u></strong> y <strong><u>terminación</u></strong> del paso.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Otros cruces a nivel y pasos entre andenes -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-traffic-light"></i></div>
+                <h2>5. Otros cruces a nivel y pasos entre andenes</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-industry icon text-blue-700"></i>Otros cruces a nivel</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-gavel icon text-amber-800"></i>Según la <span class="law-pill"><strong>Ley 38/2015 del Sector Ferroviario</strong></span>, <strong><u>no tendrán la consideración de pasos a nivel</u></strong> las <u>intersecciones de caminos o vías de comunicación con líneas ferroviarias</u> cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-map-marker-alt icon text-purple-500"></i>Aquéllas se produzcan <u>dentro de zonas industriales o portuarias</u> o en los <u>accesos a las mismas</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-tasks icon text-blue-500"></i>Y siempre que se den <strong><u>conjuntamente</u></strong> las siguientes <strong>circunstancias</strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-handshake icon text-green-400"></i>Que la <span class="actor-pill">entidad explotadora de dichas líneas ferroviarias</span> <strong><u>comparta</u></strong> con la <span class="actor-pill">responsable de la carretera</span> la <strong><u>ordenación de los tráficos</u></strong> en los puntos de cruce.</p></li>
+                                                <li><p><i class="fas fa-check-circle icon text-purple-400"></i>Que la <strong><u>preferencia en dichos puntos quede fijada</u></strong> en cada momento con arreglo al referido <u>sistema de ordenación de los tráficos</u>, pudiendo llegar a <strong><u>compartir la plataforma</u></strong> de la línea ferroviaria con el <u>tráfico viario</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-shield-alt icon text-red-500"></i>Dichas intersecciones habrán de contar con la <strong><u>protección que corresponda</u></strong> conforme a lo que se determine <u>reglamentariamente</u>.</p></li>
+                                    <li><p><i class="fas fa-tachometer-alt icon text-orange-500"></i>Y los trenes deberán <strong><u>limitar su velocidad máxima</u></strong> de circulación por aquéllas a <span class="pill-blue"><strong>40 km/h</strong></span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-cyan-700"></i>Igualmente, <strong><u>no tendrán la consideración de pasos a nivel</u></strong> las <strong><u>intersecciones de viales</u></strong>, tanto los destinados al <u>tráfico rodado como al peatonal</u>, con las <u>líneas ferroviarias integradas en la RFIG</u> que sean susceptibles de ser utilizados:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>No solamente para la circulación de <strong><u>trenes y otros vehículos ferroviarios convencionales</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-subway icon text-gray-500"></i>Sino también para la de <strong><u>tranvías, metros ligeros, u otros medios de transporte sobre raíles</u></strong> diferentes del ferrocarril convencional.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-teal-500"></i>Siempre que la <strong><u>configuración física y los sistemas de control de tráfico</u></strong> de la línea ferroviaria sean los <strong><u>propios de las líneas destinadas a la circulación</u></strong> de <u>tranvías</u>, <u>metros ligeros</u> o <u>vehículos análogos</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-walking icon text-indigo-600"></i>Pasos entre andenes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>Respecto a los pasos entre andenes, el <span class="law-pill"><strong>RD 929/2020 sobre seguridad e interoperabilidad ferroviarias</strong></span> define como <span class="definition-pill"><strong>cruces entre andenes</strong></span> a las <u>intersecciones al mismo nivel</u> entre un <u>ferrocarril</u> y los <u>itinerarios expresamente dispuestos en estaciones y apeaderos</u> para el <u>acceso peatonal a los andenes</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-ban icon text-red-600"></i><strong><u>No se consideran</u></strong> cruces entre andenes:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-hard-hat icon text-gray-500"></i>Los destinados al <strong><u>uso exclusivo de la actividad ferroviaria</u></strong> o de los <u>servicios de emergencia</u>.</p></li>
+                                    <li><p><i class="fas fa-tram icon text-gray-500"></i>Los situados en <strong><u>líneas o tramos con explotación tranviaria</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-store-slash icon text-gray-500"></i>Y los ubicados en <strong><u>estaciones o apeaderos sin uso comercial de viajeros</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-plus-circle icon text-green-700"></i>Solo podrán realizarse <strong><u>nuevos cruces permanentes entre andenes</u></strong> en estaciones o apeaderos cuando se <strong><u>cumplan todas las condiciones siguientes</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tachometer-alt icon text-orange-500"></i>La <strong><u>velocidad máxima</u></strong> de circulación de los trenes al paso por el cruce sea <span class="formula-pill"><strong>≤ 40 km/h</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-eye icon text-blue-500"></i>La <strong><u>distancia de visibilidad real</u></strong> en el cruce sea <span class="formula-pill"><strong>≥ distancia de visibilidad técnica</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-users icon text-purple-500"></i>Tengan un <strong><u>tráfico de viajeros <span class="pill-blue">≤ 1.000 viajeros/día</span></u></strong>, de media anual, sumando los <u>subidos</u> y los <u>bajados</u>.</p></li>
+                                    <li><p><i class="fas fa-city icon text-red-500"></i>Y <strong><u>no estén situados en capitales de provincia</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-check icon text-teal-600"></i>Los <span class="actor-pill">administradores de infraestructuras</span> <strong><u>autorizarán formalmente su entrada en servicio</u></strong>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-file-signature icon text-indigo-500"></i><strong><u>Acreditando ante la <span class="actor-pill">AESF</span></u></strong> que han realizado el <u>proceso de gestión del riesgo asociado</u> y han tomado las <u>necesarias medidas de protección y mitigación de riesgos</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-trash-alt icon text-red-700"></i>Los <strong><u>pasos entre andenes se suprimirán</u></strong> si:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-rocket icon text-gray-500"></i>La <strong><u>velocidad máxima</u></strong> de circulación de los trenes es <span class="formula-pill"><strong>≥ 160 km/h</strong></span>.</p></li>
+                                    <li><p><i class="fas fa-times-circle icon text-gray-500"></i>O si <strong><u>no son necesarios</u></strong> y existen <u>cruces alternativos a distinto nivel</u> accesibles a <u>personas con discapacidad o movilidad reducida</u>.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-gray-500"></i>O cuando sus <strong><u>características lo aconsejen</u></strong> por <u>razones de seguridad</u> (<u>número medio de usuarios</u>, <u>número de circulaciones</u>, <u>riesgo existente</u>, etc.).</p></li>
+                                    <li><p><i class="fas fa-book-open icon text-gray-500"></i>O cuando la <strong><u>normativa técnica así lo prescriba</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
