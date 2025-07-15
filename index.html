@@ -42,21 +42,21 @@
 		#edit-mode-toggle:checked::after { transform: translateX(1rem); }
 		#edit-mode-toggle::after { content: ''; display: inline-block; width: 1rem; height: 1rem; border-radius: 50%; background: white; transition: transform 0.2s ease-in-out; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 		.modal-overlay { transition: opacity 0.3s ease-in-out; }
-       .dragging { opacity: 0.5; background: #e0f2fe; }
-       #resizer {
+        .dragging { opacity: 0.5; background: #e0f2fe; }
+        #resizer {
             background-color: #e5e7eb;
             cursor: col-resize;
             width: 8px;
             flex-shrink: 0;
             border-radius: 9999px;
             transition: background-color 0.2s ease-in-out;
-       }
-       #resizer:hover, #resizer.resizing {
+        }
+        #resizer:hover, #resizer.resizing {
             background-color: #3b82f6;
-       }
-       .side-panel {
+        }
+        .side-panel {
             flex-shrink: 0;
-       }
+        }
 	</style>
 </head>
 <body class="bg-orange-50 p-2 md:p-4">
@@ -115,7 +115,7 @@
                        <i class="fas fa-question-circle"></i><span class="hidden sm:inline">Preguntas Oral</span>
                    </button>
 					<button id="toggle-pdf-button" class="bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-600 flex items-center gap-2">
-                       <i class="fas fa-file-pdf"></i><span class="hidden sm:inline">Ver PDF</span>
+                        <i class="fas fa-file-pdf"></i><span class="hidden sm:inline">Ver PDF</span>
                    </button>
 					<div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg shadow-md">
 						<label for="edit-mode-toggle" class="text-sm font-medium text-gray-700">Editar</label>
@@ -131,8 +131,8 @@
 						<button id="forward-button" title="Adelantar 3s" class="text-gray-600 hover:bg-gray-200 rounded-full w-10 h-10 flex-shrink-0 flex items-center justify-center transition"><i class="fas fa-redo-alt"></i></button>
 						<div class="flex items-center gap-2 text-xs text-gray-500"><span id="current-time">00:00</span><input type="range" id="timeline-slider" class="w-24 md:w-32" value="0" step="1"><span id="total-duration">00:00</span></div>
 						<div class="flex items-center gap-3">
-                           <button id="play-selection-button" title="Reproducir Selección" class="text-gray-500 hover:bg-gray-200 rounded-full w-9 h-9 flex-shrink-0 transition-colors"><i class="fas fa-play-circle"></i></button>
-                           <button id="play-x3-button" title="Reproducir cada epígrafe 3 veces" class="text-gray-500 hover:bg-gray-200 rounded-full w-9 h-9 flex-shrink-0 transition-colors"><i class="fas fa-layer-group"></i></button>
+                            <button id="play-selection-button" title="Reproducir Selección" class="text-gray-500 hover:bg-gray-200 rounded-full w-9 h-9 flex-shrink-0 transition-colors"><i class="fas fa-play-circle"></i></button>
+                            <button id="play-x3-button" title="Reproducir cada epígrafe 3 veces" class="text-gray-500 hover:bg-gray-200 rounded-full w-9 h-9 flex-shrink-0 transition-colors"><i class="fas fa-layer-group"></i></button>
 							<button id="loop-button" class="text-gray-500 hover:bg-gray-200 rounded-full w-9 h-9 flex-shrink-0 transition-colors"><i class="fas fa-retweet"></i></button>
 							<button id="speed-button" class="text-xs font-bold text-blue-500 bg-blue-100 hover:bg-blue-200 rounded-full w-9 h-9 flex-shrink-0">1x</button>
 						</div>
@@ -211,15 +211,15 @@
 			</div>
 		</div>
 
-       <!-- MODAL DE SESIÓN -->
-       <div id="session-modal-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 modal-overlay">
-           <div class="bg-white p-6 rounded-lg shadow-2xl w-full max-w-sm text-center">
-               <h2 class="text-lg font-bold mb-4">ID de Sesión</h2>
-               <p class="text-sm text-gray-600 mb-2">Introduce un ID para sincronizar tus datos entre dispositivos. Usa el mismo ID en todos tus aparatos.</p>
-               <input type="text" id="session-id-input" class="w-full border border-gray-300 p-2 rounded-md mb-2" value="cheradra">
-               <button id="start-session-button" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Comenzar</button>
-           </div>
-       </div>
+        <!-- MODAL DE SESIÓN -->
+        <div id="session-modal-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 modal-overlay">
+            <div class="bg-white p-6 rounded-lg shadow-2xl w-full max-w-sm text-center">
+                <h2 class="text-lg font-bold mb-4">ID de Sesión</h2>
+                <p class="text-sm text-gray-600 mb-2">Introduce un ID para sincronizar tus datos entre dispositivos. Usa el mismo ID en todos tus aparatos.</p>
+                <input type="text" id="session-id-input" class="w-full border border-gray-300 p-2 rounded-md mb-2" value="cheradra">
+                <button id="start-session-button" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Comenzar</button>
+            </div>
+        </div>
 
 		<div id="password-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal-overlay">
 			<div class="bg-white p-6 rounded-lg shadow-2xl w-full max-w-sm">
@@ -269,20 +269,20 @@
 		import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 		document.addEventListener('DOMContentLoaded', async function () {
-           pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
+            pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
 
 			let db, auth;
             let currentTopic, localUserId;
 			let currentChapterEndTime=null, currentChapterStartTime=null, editedChapters=[];
 			let userCustomChapters = {};
-           let pdfDoc = null, currentPageNum = 1;
-           let oralPdfDoc = null, oralCurrentPageNum = 1;
-           let oralViewState = 0;
-           let selectedChapters = [];
-           let x3LoopState = { active: false, queue: [], currentIndex: 0, playCount: 0 };
-           let indexToDelete = -1;
-           const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-           let pdfToOpen = null;
+            let pdfDoc = null, currentPageNum = 1;
+            let oralPdfDoc = null, oralCurrentPageNum = 1;
+            let oralViewState = 0;
+            let selectedChapters = [];
+            let x3LoopState = { active: false, queue: [], currentIndex: 0, playCount: 0 };
+            let indexToDelete = -1;
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            let pdfToOpen = null;
 
 			async function initializeAndAuthFirebase() {
 				try {
@@ -326,19 +326,19 @@
                 document.getElementById('save-text').textContent = "Guardado deshabilitado";
             }
 
-           function handleSession() {
-               const sessionId = localStorage.getItem('sessionId_MEB2');
-               if (sessionId) {
-                   localUserId = sessionId;
-                   document.getElementById('session-modal-overlay').classList.add('hidden');
-                   if (db && auth.currentUser) {
-                       loadAllCustomChapters();
-                   }
-               } else {
-                   document.getElementById('session-modal-overlay').classList.remove('hidden');
-                   disableFirestoreFeatures();
-               }
-           }
+            function handleSession() {
+                const sessionId = localStorage.getItem('sessionId_MEB2');
+                if (sessionId) {
+                    localUserId = sessionId;
+                    document.getElementById('session-modal-overlay').classList.add('hidden');
+                    if (db && auth.currentUser) {
+                        loadAllCustomChapters();
+                    }
+                } else {
+                    document.getElementById('session-modal-overlay').classList.remove('hidden');
+                    disableFirestoreFeatures();
+                }
+            }
 
 			async function loadAllCustomChapters() {
 				if (!localUserId || !db) return;
@@ -346,11 +346,11 @@
 				try {
 					const docSnap = await getDoc(userDocRef);
 					if (docSnap.exists()) {
-                       userCustomChapters = docSnap.data();
-                   } else {
-                       console.log("No se encontró un documento de capítulos personalizados. Se creará uno nuevo al guardar.");
-                       userCustomChapters = {};
-                   }
+                        userCustomChapters = docSnap.data();
+                    } else {
+                        console.log("No se encontró un documento de capítulos personalizados. Se creará uno nuevo al guardar.");
+                        userCustomChapters = {};
+                    }
 				} catch (error) {
 					console.error("Error al cargar los capítulos personalizados:", error);
                     disableFirestoreFeatures();
@@ -575,10 +575,10 @@
                 }
             ];
 
- 			const colorPalette={blue:{normal:"bg-blue-100 text-blue-800",buttonBg:"bg-blue-50",icon:"text-blue-500"},cyan:{normal:"bg-cyan-100 text-cyan-800",buttonBg:"bg-cyan-50",icon:"text-cyan-500"},sky:{normal:"bg-sky-100 text-sky-800",buttonBg:"bg-sky-50",icon:"text-sky-500"},indigo:{normal:"bg-indigo-100 text-indigo-800",buttonBg:"bg-indigo-50",icon:"text-indigo-500"},green:{normal:"bg-green-100 text-green-800",buttonBg:"bg-green-50",icon:"text-green-500"},emerald:{normal:"bg-emerald-100 text-emerald-800",buttonBg:"bg-emerald-50",icon:"text-emerald-500"},teal:{normal:"bg-teal-100 text-teal-800",buttonBg:"bg-teal-50",icon:"text-teal-500"},lime:{normal:"bg-lime-100 text-lime-800",buttonBg:"bg-lime-50",icon:"text-lime-500"},yellow:{normal:"bg-yellow-100 text-yellow-800",buttonBg:"bg-yellow-50",icon:"text-yellow-500"},amber:{normal:"bg-amber-100 text-amber-800",buttonBg:"bg-amber-50",icon:"text-amber-500"},orange:{normal:"bg-orange-100 text-orange-800",buttonBg:"bg-orange-50",icon:"text-orange-500"},red:{normal:"bg-red-100 text-red-800",buttonBg:"bg-red-50",icon:"text-red-500"},rose:{normal:"bg-rose-100 text-rose-800",buttonBg:"bg-rose-50",icon:"text-rose-500"},pink:{normal:"bg-pink-100 text-pink-800",buttonBg:"bg-pink-50",icon:"text-pink-500"},fuchsia:{normal:"bg-fuchsia-100 text-fuchsia-800",buttonBg:"bg-fuchsia-50",icon:"text-fuchsia-500"},purple:{normal:"bg-purple-100 text-purple-800",buttonBg:"bg-purple-50",icon:"text-purple-500"},violet:{normal:"bg-violet-100 text-violet-800",buttonBg:"bg-violet-50",icon:"text-violet-500"},gray:{normal:"bg-gray-100 text-gray-800",buttonBg:"bg-gray-50",icon:"text-gray-500"},slate:{normal:"bg-slate-100 text-slate-800",buttonBg:"bg-slate-50",icon:"text-slate-500"},zinc:{normal:"bg-zinc-100 text-zinc-800",buttonBg:"bg-zinc-50",icon:"text-zinc-500"}};
- 			const gridContainer=document.getElementById("topics-grid"),mainMenuView=document.getElementById("main-menu-view"),mapViewerVIew=document.getElementById("map-viewer-view"),backButton=document.getElementById("back-button"),topControlBar=document.getElementById("top-control-bar"),chaptersMenuContainer=document.getElementById("chapters-menu-container"),chaptersButton=document.getElementById("chapters-button"),chaptersDropdown=document.getElementById("chapters-dropdown"),topicAudio=document.getElementById("topic-audio"),playPauseButton=document.getElementById("play-pause-button"),playPauseIcon=document.getElementById("play-pause-icon"),rewindButton=document.getElementById("rewind-button"),forwardButton=document.getElementById("forward-button"),timelineSlider=document.getElementById("timeline-slider"),currentTimeEl=document.getElementById("current-time"),totalDurationEl=document.getElementById("total-duration"),speedButton=document.getElementById("speed-button"),loopButton=document.getElementById("loop-button"),editorPanel=document.getElementById("editor-panel"),editorList=document.getElementById("editor-list"),editModeToggle=document.getElementById("edit-mode-toggle"),saveDataButton=document.getElementById("save-data-button"),saveIcon=document.getElementById("save-icon"),saveText=document.getElementById("save-text"),saveNotification=document.getElementById("save-notification"),addChapterButton = document.getElementById("add-chapter-button"),passwordModalOverlay=document.getElementById("password-modal-overlay"),passwordInput=document.getElementById("password-input"),confirmEditButton=document.getElementById("confirm-edit-button"),cancelEditButton=document.getElementById("cancel-edit-button"),passwordError=document.getElementById("password-error"),newChapterTitleInput=document.getElementById("new-chapter-title-input"),restoreDefaultsButton = document.getElementById("restore-defaults-button");
+			const colorPalette={blue:{normal:"bg-blue-100 text-blue-800",buttonBg:"bg-blue-50",icon:"text-blue-500"},cyan:{normal:"bg-cyan-100 text-cyan-800",buttonBg:"bg-cyan-50",icon:"text-cyan-500"},sky:{normal:"bg-sky-100 text-sky-800",buttonBg:"bg-sky-50",icon:"text-sky-500"},indigo:{normal:"bg-indigo-100 text-indigo-800",buttonBg:"bg-indigo-50",icon:"text-indigo-500"},green:{normal:"bg-green-100 text-green-800",buttonBg:"bg-green-50",icon:"text-green-500"},emerald:{normal:"bg-emerald-100 text-emerald-800",buttonBg:"bg-emerald-50",icon:"text-emerald-500"},teal:{normal:"bg-teal-100 text-teal-800",buttonBg:"bg-teal-50",icon:"text-teal-500"},lime:{normal:"bg-lime-100 text-lime-800",buttonBg:"bg-lime-50",icon:"text-lime-500"},yellow:{normal:"bg-yellow-100 text-yellow-800",buttonBg:"bg-yellow-50",icon:"text-yellow-500"},amber:{normal:"bg-amber-100 text-amber-800",buttonBg:"bg-amber-50",icon:"text-amber-500"},orange:{normal:"bg-orange-100 text-orange-800",buttonBg:"bg-orange-50",icon:"text-orange-500"},red:{normal:"bg-red-100 text-red-800",buttonBg:"bg-red-50",icon:"text-red-500"},rose:{normal:"bg-rose-100 text-rose-800",buttonBg:"bg-rose-50",icon:"text-rose-500"},pink:{normal:"bg-pink-100 text-pink-800",buttonBg:"bg-pink-50",icon:"text-pink-500"},fuchsia:{normal:"bg-fuchsia-100 text-fuchsia-800",buttonBg:"bg-fuchsia-50",icon:"text-fuchsia-500"},purple:{normal:"bg-purple-100 text-purple-800",buttonBg:"bg-purple-50",icon:"text-purple-500"},violet:{normal:"bg-violet-100 text-violet-800",buttonBg:"bg-violet-50",icon:"text-violet-500"},gray:{normal:"bg-gray-100 text-gray-800",buttonBg:"bg-gray-50",icon:"text-gray-500"},slate:{normal:"bg-slate-100 text-slate-800",buttonBg:"bg-slate-50",icon:"text-slate-500"},zinc:{normal:"bg-zinc-100 text-zinc-800",buttonBg:"bg-zinc-50",icon:"text-zinc-500"}};
+			const gridContainer=document.getElementById("topics-grid"),mainMenuView=document.getElementById("main-menu-view"),mapViewerVIew=document.getElementById("map-viewer-view"),backButton=document.getElementById("back-button"),topControlBar=document.getElementById("top-control-bar"),chaptersMenuContainer=document.getElementById("chapters-menu-container"),chaptersButton=document.getElementById("chapters-button"),chaptersDropdown=document.getElementById("chapters-dropdown"),topicAudio=document.getElementById("topic-audio"),playPauseButton=document.getElementById("play-pause-button"),playPauseIcon=document.getElementById("play-pause-icon"),rewindButton=document.getElementById("rewind-button"),forwardButton=document.getElementById("forward-button"),timelineSlider=document.getElementById("timeline-slider"),currentTimeEl=document.getElementById("current-time"),totalDurationEl=document.getElementById("total-duration"),speedButton=document.getElementById("speed-button"),loopButton=document.getElementById("loop-button"),editorPanel=document.getElementById("editor-panel"),editorList=document.getElementById("editor-list"),editModeToggle=document.getElementById("edit-mode-toggle"),saveDataButton=document.getElementById("save-data-button"),saveIcon=document.getElementById("save-icon"),saveText=document.getElementById("save-text"),saveNotification=document.getElementById("save-notification"),addChapterButton = document.getElementById("add-chapter-button"),passwordModalOverlay=document.getElementById("password-modal-overlay"),passwordInput=document.getElementById("password-input"),confirmEditButton=document.getElementById("confirm-edit-button"),cancelEditButton=document.getElementById("cancel-edit-button"),passwordError=document.getElementById("password-error"),newChapterTitleInput=document.getElementById("new-chapter-title-input"),restoreDefaultsButton = document.getElementById("restore-defaults-button");
             const sideSelectModal = document.getElementById('side-select-modal'), openLeftBtn = document.getElementById('open-left-btn'), openRightBtn = document.getElementById('open-right-btn'), cancelSideSelectBtn = document.getElementById('cancel-side-select-btn');
- 			const pdfViewerContainer = document.getElementById('pdf-viewer-container'), pdfCanvas = document.getElementById('pdf-canvas'), pageNumEl = document.getElementById('page-num'), pageCountEl = document.getElementById('page-count'), prevPageBtn = document.getElementById('prev-page'), nextPageBtn = document.getElementById('next-page'), pdfLoadingOverlay = document.getElementById('pdf-loading-overlay'), loadingText = document.getElementById('loading-text'), togglePdfButton = document.getElementById('toggle-pdf-button'), contentContainer = document.getElementById('content-container'), contentFrame = document.getElementById('content-frame'), mainViewerArea = document.getElementById('main-viewer-area');
+			const pdfViewerContainer = document.getElementById('pdf-viewer-container'), pdfCanvas = document.getElementById('pdf-canvas'), pageNumEl = document.getElementById('page-num'), pageCountEl = document.getElementById('page-count'), prevPageBtn = document.getElementById('prev-page'), nextPageBtn = document.getElementById('next-page'), pdfLoadingOverlay = document.getElementById('pdf-loading-overlay'), loadingText = document.getElementById('loading-text'), togglePdfButton = document.getElementById('toggle-pdf-button'), contentContainer = document.getElementById('content-container'), contentFrame = document.getElementById('content-frame'), mainViewerArea = document.getElementById('main-viewer-area');
             const toggleVideoButton = document.getElementById('toggle-video-button'), videoDropdown = document.getElementById('video-dropdown'), changeSessionButton = document.getElementById('change-session-button'), sessionModalOverlay = document.getElementById('session-modal-overlay'), sessionIdInput = document.getElementById('session-id-input'), startSessionButton = document.getElementById('start-session-button');
             const toggleOralButton = document.getElementById('toggle-oral-button'), oralPdfViewerContainer = document.getElementById('oral-pdf-viewer-container'), flashcardsFrame = document.getElementById('flashcards-frame'), playSelectionButton = document.getElementById('play-selection-button'), playX3Button = document.getElementById('play-x3-button'), deleteConfirmModal = document.getElementById('delete-confirm-modal'), confirmDeleteBtn = document.getElementById('confirm-delete-btn'), cancelDeleteBtn = document.getElementById('cancel-delete-btn');
             const toggleLectorButton = document.getElementById('toggle-lector-button'), lectorPanel = document.getElementById('lector-panel'), lectorFrame = document.getElementById('lector-frame'), resizer = document.getElementById('resizer');
@@ -587,47 +587,47 @@
             const flashcardsWrapper = document.getElementById('flashcards-wrapper');
             const oralPrevPageBtn = document.getElementById('oral-prev-page'), oralNextPageBtn = document.getElementById('oral-next-page');
 
- 			topics.forEach((e,t)=>{
- 				const o=document.createElement("button"),n=colorPalette[e.color];
- 				o.className=`topic-button ${n.buttonBg}`,o.dataset.index=t;
+			topics.forEach((e,t)=>{
+				const o=document.createElement("button"),n=colorPalette[e.color];
+				o.className=`topic-button ${n.buttonBg}`,o.dataset.index=t;
                 o.innerHTML=`<span class="topic-number ${n.normal}">${t+1}</span><i class="fas ${e.icon} topic-icon ${n.icon}"></i><span class="topic-title">${e.title}</span>`;
                 gridContainer.appendChild(o);
- 			});
+			});
 
- 			function updateChapters(chapters) {
- 				const chaptersToShow = chapters || [];
- 				chaptersDropdown.innerHTML = '';
- 				if (chaptersToShow.length > 0) {
- 					chaptersToShow.forEach(chapter => {
- 						const chapterButton = document.createElement('div');
+			function updateChapters(chapters) {
+				const chaptersToShow = chapters || [];
+				chaptersDropdown.innerHTML = '';
+				if (chaptersToShow.length > 0) {
+					chaptersToShow.forEach(chapter => {
+						const chapterButton = document.createElement('div');
                         chapterButton.className = 'flex items-center p-2 rounded hover:bg-gray-100';
- 						chapterButton.innerHTML = `
+						chapterButton.innerHTML = `
                             <input type="checkbox" class="chapter-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3" data-start="${chapter.start}" data-end="${chapter.end}">
                             <span class="chapter-title flex-grow text-sm cursor-pointer">${chapter.title}</span>
                         `;
- 						chaptersDropdown.appendChild(chapterButton);
- 					});
- 					chaptersMenuContainer.classList.remove('hidden');
- 				} else {
- 					chaptersMenuContainer.classList.add('hidden');
- 				}
- 			}
+						chaptersDropdown.appendChild(chapterButton);
+					});
+					chaptersMenuContainer.classList.remove('hidden');
+				} else {
+					chaptersMenuContainer.classList.add('hidden');
+				}
+			}
 
- 			function updateEditor(chapters){
- 				const chaptersToEdit = chapters || [];
- 				editedChapters=JSON.parse(JSON.stringify(chaptersToEdit));
- 				renderEditorList();
- 			}
+			function updateEditor(chapters){
+				const chaptersToEdit = chapters || [];
+				editedChapters=JSON.parse(JSON.stringify(chaptersToEdit));
+				renderEditorList();
+			}
 
- 			function renderEditorList() {
- 				editorList.innerHTML = "";
- 				if(editedChapters.length > 0) {
- 					editedChapters.forEach((chapter, index) => {
- 						const item = document.createElement("div");
+			function renderEditorList() {
+				editorList.innerHTML = "";
+				if(editedChapters.length > 0) {
+					editedChapters.forEach((chapter, index) => {
+						const item = document.createElement("div");
                         item.className = "edit-chapter-item p-2 border-b flex items-center";
                         item.draggable = true;
                         item.dataset.index = index;
- 						item.innerHTML = `
+						item.innerHTML = `
                             <i class="fas fa-grip-vertical text-gray-400 mr-3 cursor-move"></i>
                             <div class="flex-grow">
                                 <input type="text" value="${chapter.title.replace(/"/g, '&quot;')}" class="w-full font-semibold text-sm bg-gray-100 p-1 rounded border" data-index="${index}">
@@ -644,13 +644,13 @@
                             </div>
                             <button data-index="${index}" class="delete-chapter-button text-red-500 hover:text-red-700 p-1 ml-2"><i class="fas fa-trash-alt"></i></button>
                         `;
- 						editorList.appendChild(item);
- 					});
- 				} else {
- 					editorList.innerHTML='<p class="text-gray-500 text-sm">Este tema no tiene epígrafes. Añade uno para empezar.</p>';
- 				}
+						editorList.appendChild(item);
+					});
+				} else {
+					editorList.innerHTML='<p class="text-gray-500 text-sm">Este tema no tiene epígrafes. Añade uno para empezar.</p>';
+				}
                 setupDragAndDrop();
- 			}
+			}
 
             async function renderPage(num, pdfInstance, canvas, pageNumEl, prevBtn, nextBtn) {
                 if (!pdfInstance) return;
@@ -705,42 +705,42 @@
                 }
             }
 
- 			function showMapView(button){
- 				playPauseButton.disabled = false;
- 				playPauseIcon.className = "fas fa-play";
- 				const topicIndex = button.dataset.index;
- 				const baseTopic = topics[topicIndex];
- 				const topicId = baseTopic.file.replace(/_Desplegable\.html$/i, '');
+			function showMapView(button){
+				playPauseButton.disabled = false;
+				playPauseIcon.className = "fas fa-play";
+				const topicIndex = button.dataset.index;
+				const baseTopic = topics[topicIndex];
+				const topicId = baseTopic.file.replace(/_Desplegable\.html$/i, '');
 
- 				const chaptersToLoad = userCustomChapters[topicId] || (baseTopic.chapters ? JSON.parse(JSON.stringify(baseTopic.chapters)) : []);
+				const chaptersToLoad = userCustomChapters[topicId] || (baseTopic.chapters ? JSON.parse(JSON.stringify(baseTopic.chapters)) : []);
 
- 				currentTopic = { ...baseTopic, chapters: chaptersToLoad };
+				currentTopic = { ...baseTopic, chapters: chaptersToLoad };
 
- 				mainMenuView.classList.add("hidden");
- 				mapViewerVIew.classList.remove("hidden");
+				mainMenuView.classList.add("hidden");
+				mapViewerVIew.classList.remove("hidden");
 
- 				contentFrame.src = currentTopic.file;
+				contentFrame.src = currentTopic.file;
                 const audioSrc = `audio/${currentTopic.file.replace(/_Desplegable\.html$/i, ".mp3")}`;
                 console.log("Intentando cargar audio desde:", audioSrc);
- 				topicAudio.src = audioSrc;
+				topicAudio.src = audioSrc;
 
- 				updateChapters(chaptersToLoad);
- 				updateEditor(chaptersToLoad);
+				updateChapters(chaptersToLoad);
+				updateEditor(chaptersToLoad);
 
- 				topControlBar.style.display="flex";
- 				setTimeout(()=>topControlBar.style.opacity=1,10)
- 			}
+				topControlBar.style.display="flex";
+				setTimeout(()=>topControlBar.style.opacity=1,10)
+			}
 
- 			function showMainMenu(){
- 				mapViewerVIew.classList.add("hidden");
+			function showMainMenu(){
+				mapViewerVIew.classList.add("hidden");
                 mainMenuView.classList.remove("hidden");
                 topicAudio.pause();
                 resetLayout();
- 			}
- 			gridContainer.addEventListener("click",(e=>e.target.closest(".topic-button")&&showMapView(e.target.closest(".topic-button")))),backButton.addEventListener("click",showMainMenu);
+			}
+			gridContainer.addEventListener("click",(e=>e.target.closest(".topic-button")&&showMapView(e.target.closest(".topic-button")))),backButton.addEventListener("click",showMainMenu);
 
- 			const formatTime=e=>isNaN(e)?"00:00":`${String(Math.floor(e/60)).padStart(2,"0")}:${String(Math.floor(e%60)).padStart(2,"0")}`;
- 			topicAudio.addEventListener("loadedmetadata",()=>{totalDurationEl.textContent=formatTime(topicAudio.duration),timelineSlider.max=topicAudio.duration}),
+			const formatTime=e=>isNaN(e)?"00:00":`${String(Math.floor(e/60)).padStart(2,"0")}:${String(Math.floor(e%60)).padStart(2,"0")}`;
+			topicAudio.addEventListener("loadedmetadata",()=>{totalDurationEl.textContent=formatTime(topicAudio.duration),timelineSlider.max=topicAudio.duration}),
             topicAudio.addEventListener("error", (e) => {
                 console.error("Error al cargar el audio:", e);
                 console.error("Código de error de audio:", topicAudio.error.code);
@@ -758,7 +758,7 @@
                 }
                 alert(errorMessage);
             }),
-            playPauseButton.addEventListener("click",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.paused?topicAudio.play():topicAudio.pause()}),topicAudio.addEventListener("play",()=>playPauseIcon.classList.replace("fa-play","fa-pause")),topicAudio.addEventListener("pause",()=>playPauseIcon.classList.replace("fa-pause","fa-play")),topicAudio.addEventListener("ended",()=>{
+            topicAudio.addEventListener("ended",()=>{
                 if (x3LoopState.active) {
                     topicAudio.dispatchEvent(new Event('timeupdate'));
                     return;
@@ -768,7 +768,7 @@
                     playPauseIcon.classList.replace("fa-pause","fa-play");
                 }
             }),topicAudio.addEventListener("timeupdate",()=>{
- 				if(timelineSlider.value=topicAudio.currentTime,currentTimeEl.textContent=formatTime(topicAudio.currentTime),currentChapterEndTime&&topicAudio.currentTime>=currentChapterEndTime) {
+				if(timelineSlider.value=topicAudio.currentTime,currentTimeEl.textContent=formatTime(topicAudio.currentTime),currentChapterEndTime&&topicAudio.currentTime>=currentChapterEndTime) {
                     if (x3LoopState.active) {
                         x3LoopState.playCount++;
                         if (x3LoopState.playCount < 3) {
@@ -798,13 +798,13 @@
                         }
                         topicAudio.play();
                     } else {
- 					    topicAudio.pause(),currentChapterEndTime=null,currentChapterStartTime=null;
- 					    const e=document.querySelector(".chapter-button.playing");
- 					    e&&e.classList.remove("playing")
- 				    }
+					    topicAudio.pause(),currentChapterEndTime=null,currentChapterStartTime=null;
+					    const e=document.querySelector(".chapter-button.playing");
+					    e&&e.classList.remove("playing")
+				    }
                 }
- 			}),timelineSlider.addEventListener("input",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.currentTime=timelineSlider.value}),chaptersButton.addEventListener("click",e=>{e.stopPropagation(),chaptersDropdown.classList.toggle("hidden")}),chaptersDropdown.addEventListener("click",e=>{
- 				if (e.target.classList.contains('chapter-title')) {
+			}),timelineSlider.addEventListener("input",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.currentTime=timelineSlider.value}),chaptersButton.addEventListener("click",e=>{e.stopPropagation(),chaptersDropdown.classList.toggle("hidden")}),chaptersDropdown.addEventListener("click",e=>{
+				if (e.target.classList.contains('chapter-title')) {
                     const chapterDiv = e.target.closest('div');
                     const checkbox = chapterDiv.querySelector('.chapter-checkbox');
                     const start = parseFloat(checkbox.dataset.start);
@@ -827,35 +827,35 @@
                     });
                     selectedChapters.sort((a, b) => a.start - b.start);
                 }
- 			});
+			});
 
- 			rewindButton.addEventListener('click', () => {
- 				topicAudio.currentTime = Math.max(0, topicAudio.currentTime - 3);
- 			});
+			rewindButton.addEventListener('click', () => {
+				topicAudio.currentTime = Math.max(0, topicAudio.currentTime - 3);
+			});
 
- 			forwardButton.addEventListener('click', () => {
- 				topicAudio.currentTime = Math.min(topicAudio.duration, topicAudio.currentTime + 3);
- 			});
+			forwardButton.addEventListener('click', () => {
+				topicAudio.currentTime = Math.min(topicAudio.duration, topicAudio.currentTime + 3);
+			});
 
- 			const speeds=[1,1.25,1.5,2];
- 			let currentSpeedIndex=0;
- 			speedButton.addEventListener("click",()=>{currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;const e=speeds[currentSpeedIndex];topicAudio.playbackRate=e,speedButton.textContent=`${e}x`});
- 			loopButton.addEventListener("click",()=>{loopButton.classList.toggle("active")});
- 			document.addEventListener("click",e=>{
+			const speeds=[1,1.25,1.5,2];
+			let currentSpeedIndex=0;
+			speedButton.addEventListener("click",()=>{currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;const e=speeds[currentSpeedIndex];topicAudio.playbackRate=e,speedButton.textContent=`${e}x`});
+			loopButton.addEventListener("click",()=>{loopButton.classList.toggle("active")});
+			document.addEventListener("click",e=>{
                 chaptersMenuContainer.contains(e.target)||chaptersDropdown.classList.add("hidden");
                 if (!toggleVideoButton.contains(e.target) && !videoDropdown.contains(e.target)) {
                     videoDropdown.classList.add('hidden');
                 }
             });
 
- 			editModeToggle.addEventListener("change",()=>{
- 				if (editModeToggle.checked) {
+			editModeToggle.addEventListener("change",()=>{
+				if (editModeToggle.checked) {
                     resetLayout();
                     passwordModalOverlay.classList.remove('hidden');
- 				} else {
- 					resetLayout();
- 				}
- 			});
+				} else {
+					resetLayout();
+				}
+			});
 
             toggleLectorButton.addEventListener('click', () => {
                 if (lectorPanel.style.display === 'block') {
@@ -868,38 +868,38 @@
                 }
             });
 
- 			function enterEditMode() {
+			function enterEditMode() {
                 resetLayout(editorPanel);
- 				passwordModalOverlay.classList.add('hidden');
- 				passwordInput.value = '';
- 				passwordError.classList.add('hidden');
- 			}
+				passwordModalOverlay.classList.add('hidden');
+				passwordInput.value = '';
+				passwordError.classList.add('hidden');
+			}
 
- 			function closePasswordModal() {
- 				passwordModalOverlay.classList.add('hidden');
- 				editModeToggle.checked = false;
- 				passwordInput.value = '';
- 				passwordError.classList.add('hidden');
+			function closePasswordModal() {
+				passwordModalOverlay.classList.add('hidden');
+				editModeToggle.checked = false;
+				passwordInput.value = '';
+				passwordError.classList.add('hidden');
                 resetLayout();
- 			}
+			}
 
- 			confirmEditButton.addEventListener('click', () => {
- 				if (passwordInput.value === "1234") {
- 					enterEditMode();
- 				} else {
- 					passwordError.classList.remove('hidden');
- 				}
- 			});
- 			cancelEditButton.addEventListener('click', closePasswordModal);
- 			passwordModalOverlay.addEventListener('click', (e) => {
- 				if (e.target === passwordModalOverlay) {
- 					closePasswordModal();
- 				}
- 			});
+			confirmEditButton.addEventListener('click', () => {
+				if (passwordInput.value === "1234") {
+					enterEditMode();
+				} else {
+					passwordError.classList.remove('hidden');
+				}
+			});
+			cancelEditButton.addEventListener('click', closePasswordModal);
+			passwordModalOverlay.addEventListener('click', (e) => {
+				if (e.target === passwordModalOverlay) {
+					closePasswordModal();
+				}
+			});
 
- 			editorList.addEventListener("click",e=>{
- 				const t=e.target.closest(".mark-button, .delete-chapter-button");
- 				if(!t) return;
+			editorList.addEventListener("click",e=>{
+				const t=e.target.closest(".mark-button, .delete-chapter-button");
+				if(!t) return;
 
                 const index = t.dataset.index;
 
@@ -912,7 +912,7 @@
                     editedChapters[index][type] = currentTime;
                     document.getElementById(`${type}-time-${index}`).textContent = formatTime(currentTime);
                 }
- 			});
+			});
 
             confirmDeleteBtn.addEventListener('click', () => {
                 if (indexToDelete > -1) {
@@ -927,87 +927,87 @@
                 indexToDelete = -1;
             });
 
- 			editorList.addEventListener('input', e => {
- 				if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
- 					const index = e.target.dataset.index;
- 					editedChapters[index].title = e.target.value;
- 				}
- 			});
+			editorList.addEventListener('input', e => {
+				if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
+					const index = e.target.dataset.index;
+					editedChapters[index].title = e.target.value;
+				}
+			});
 
- 			addChapterButton.addEventListener('click', () => {
- 				const newTitle = newChapterTitleInput.value.trim();
- 				if (newTitle) {
- 					editedChapters.push({ title: newTitle, start: 0, end: 0 });
- 					renderEditorList();
- 					newChapterTitleInput.value = '';
- 				}
- 			});
+			addChapterButton.addEventListener('click', () => {
+				const newTitle = newChapterTitleInput.value.trim();
+				if (newTitle) {
+					editedChapters.push({ title: newTitle, start: 0, end: 0 });
+					renderEditorList();
+					newChapterTitleInput.value = '';
+				}
+			});
 
- 			saveDataButton.addEventListener("click",async()=>{
+			saveDataButton.addEventListener("click",async()=>{
                 if (!db || !localUserId) {
                     alert("La conexión con la base de datos no está disponible. No se puede guardar.");
                     return;
                 }
- 				const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
+				const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
                 userCustomChapters[topicId] = editedChapters;
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sessions', localUserId);
- 				const dataToSave = { ...userCustomChapters };
+				const dataToSave = { ...userCustomChapters };
 
- 				saveIcon.className = "fas fa-spinner fa-spin";
- 				saveText.textContent = "Guardando...";
+				saveIcon.className = "fas fa-spinner fa-spin";
+				saveText.textContent = "Guardando...";
 
- 				try {
- 					await setDoc(docRef, dataToSave, { merge: true });
- 					currentTopic.chapters = JSON.parse(JSON.stringify(editedChapters));
- 					updateChapters(currentTopic.chapters);
+				try {
+					await setDoc(docRef, dataToSave, { merge: true });
+					currentTopic.chapters = JSON.parse(JSON.stringify(editedChapters));
+					updateChapters(currentTopic.chapters);
 
- 					saveNotification.textContent = "¡Guardado!";
- 					saveNotification.style.opacity=1;
- 					setTimeout(()=>{ saveNotification.style.opacity=0 }, 2000);
- 				} catch (error) {
- 					console.error("Error al guardar en Firestore: ", error);
+					saveNotification.textContent = "¡Guardado!";
+					saveNotification.style.opacity=1;
+					setTimeout(()=>{ saveNotification.style.opacity=0 }, 2000);
+				} catch (error) {
+					console.error("Error al guardar en Firestore: ", error);
                     alert("Error al guardar. Comprueba la consola para más detalles.");
- 				} finally {
- 					saveIcon.className = "fas fa-cloud-upload-alt";
- 					saveText.textContent = "Guardar en la Nube";
- 				}
- 			});
+				} finally {
+					saveIcon.className = "fas fa-cloud-upload-alt";
+					saveText.textContent = "Guardar en la Nube";
+				}
+			});
 
- 			restoreDefaultsButton.addEventListener('click', async () => {
- 				if (!currentTopic || !db || !localUserId) return;
+			restoreDefaultsButton.addEventListener('click', async () => {
+				if (!currentTopic || !db || !localUserId) return;
 
- 				const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
- 				const originalTopic = topics.find(t => t.file === currentTopic.file);
- 				if (!originalTopic) return;
+				const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
+				const originalTopic = topics.find(t => t.file === currentTopic.file);
+				if (!originalTopic) return;
 
- 				const defaultChapters = originalTopic.chapters ? JSON.parse(JSON.stringify(originalTopic.chapters)) : [];
+				const defaultChapters = originalTopic.chapters ? JSON.parse(JSON.stringify(originalTopic.chapters)) : [];
 
- 				updateEditor(defaultChapters);
- 				updateChapters(defaultChapters);
+				updateEditor(defaultChapters);
+				updateChapters(defaultChapters);
 
                 userCustomChapters[topicId] = defaultChapters;
- 				const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sessions', localUserId);
- 				const dataToSave = { ...userCustomChapters };
+				const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sessions', localUserId);
+				const dataToSave = { ...userCustomChapters };
 
- 				const originalButtonText = restoreDefaultsButton.innerHTML;
- 				restoreDefaultsButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Restaurando...`;
- 				restoreDefaultsButton.disabled = true;
+				const originalButtonText = restoreDefaultsButton.innerHTML;
+				restoreDefaultsButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Restaurando...`;
+				restoreDefaultsButton.disabled = true;
 
- 				try {
- 					await setDoc(docRef, dataToSave, { merge: true });
- 					currentTopic.chapters = defaultChapters;
+				try {
+					await setDoc(docRef, dataToSave, { merge: true });
+					currentTopic.chapters = defaultChapters;
 
- 					saveNotification.textContent = "¡Valores por defecto restaurados!";
- 					saveNotification.style.opacity = 1;
- 					setTimeout(() => { saveNotification.style.opacity = 0 }, 2000);
+					saveNotification.textContent = "¡Valores por defecto restaurados!";
+					saveNotification.style.opacity = 1;
+					setTimeout(() => { saveNotification.style.opacity = 0 }, 2000);
 
- 				} catch (error) {
- 					console.error("Error restoring defaults to Firestore: ", error);
- 				} finally {
- 					restoreDefaultsButton.innerHTML = originalButtonText;
- 					restoreDefaultsButton.disabled = false;
- 				}
- 			});
+				} catch (error) {
+					console.error("Error restoring defaults to Firestore: ", error);
+				} finally {
+					restoreDefaultsButton.innerHTML = originalButtonText;
+					restoreDefaultsButton.disabled = false;
+				}
+			});
 
             prevPageBtn.addEventListener('click', () => {
                 if (currentPageNum <= 1) return;
@@ -1102,7 +1102,7 @@
 
             toggleOralButton.addEventListener('click', () => {
                  if (oralPdfViewerWrapper.style.display === 'block') {
-                     resetLayout();
+                      resetLayout();
                  } else {
                     pdfToOpen = 'oral';
                     sideSelectModal.classList.remove('hidden');
