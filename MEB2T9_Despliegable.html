@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Ejecución de obras ferroviarias y mantenimiento de la red</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-hard-hat"></i> MEB2T9. Ejecución de obras ferroviarias y mantenimiento de la red <i class="fas fa-wrench"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Conceptos básicos de la ejecución de obras ferroviarias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>1. Conceptos básicos de la ejecución de obras ferroviarias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>ejecución de la superestructura</u></strong> consta de una serie de <strong><u>operaciones principales</u></strong>, que habitualmente se realizan de la siguiente manera:</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-layer-group icon text-orange-600"></i>Subbalasto</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-truck icon text-purple-600"></i>El <strong><u>transporte desde cantera a obra</u></strong> se realiza en <u>camiones volquete</u>, evitando en lo posible la circulación por la plataforma para no dañarla.</p></li>
+                        <li><p><i class="fas fa-road icon text-cyan-600"></i>El <strong><u>extendido</u></strong> se hace con <u>motoniveladora</u>.</p></li>
+                        <li><p><i class="fas fa-compress-arrows-alt icon text-green-600"></i>Y la <strong><u>compactación</u></strong> con <u>rodillo vibrante</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-cubes icon text-amber-700"></i>Balasto</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-layer-group icon text-blue-600"></i>El balasto se <strong><u>coloca en obra en dos capas</u></strong>.</p></li>
+                        <li><p><i class="fas fa-road icon text-purple-600"></i>El <strong><u>extendido de la primera capa</u></strong> se puede hacer con <u>extendedora</u> o con <u>motoniveladora</u>.</p></li>
+                        <li><p><i class="fas fa-compress-arrows-alt icon text-green-600"></i>Una vez extendido, se <strong><u>compacta</u></strong> con un <u>rodillo autopropulsado estático</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-train-tram icon text-indigo-700"></i>Montaje de vía</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Las <strong><u>principales operaciones</u></strong> relacionadas con el montaje de vía son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-road icon text-orange-500"></i><strong><u>Vía auxiliar</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-truck-loading icon text-gray-400"></i>Los <u>carriles y traviesas</u> llegan <strong><u>cargados sobre vagón</u></strong> hasta el tajo a través de una <u>vía auxiliar</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-train icon text-purple-500"></i><strong><u>Tren carrilero</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-check-circle icon text-gray-400"></i>Con la <u>vía auxiliar ya montada</u>, se da paso a la <strong><u>entrada en obra de los carriles</u></strong> con un <span class="definition-pill">tren carrilero</span>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-cogs icon text-cyan-500"></i><strong><u>Descarga de traviesas, traslado vía auxiliar y montaje de vía</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-download icon text-gray-400"></i>Las traviesas llegan en un <span class="definition-pill">tren travesero</span>, se <strong><u>descargan y colocan</u></strong> sobre la explanación de balasto.</p></li>
+                                                <li><p><i class="fas fa-tools icon text-gray-400"></i>Procediendo después a la <strong><u>colocación de los carriles</u></strong> y a los <strong><u>clips de las sujeciones</u></strong> que se aprietan con un par <u>inferior al <span class="pill-blue">70%</span> del final</u>.</p></li>
+                                                <li><p><i class="fas fa-retweet icon text-gray-400"></i>A la vez que se hace el <strong><u>montaje de la vía definitiva</u></strong> paralela a la auxiliar y en su misma longitud (<span class="definition-pill">vía II</span>), se procederá al <strong><u>levante de la auxiliar</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-upload icon text-gray-400"></i>Cargándola sobre <span class="definition-pill">diplorys</span> situados sobre la vía auxiliar, que se transporta al <u>nuevo punto de empleo</u>, que es la <u>cabeza de la vía auxiliar</u>.</p></li>
+                                                <li><p><i class="fas fa-random icon text-gray-400"></i>De esta manera, se puede <strong><u>montar la vía I</u></strong>, aprovechando la <span class="definition-pill">vía II</span> ya montada como <u>vía auxiliar</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-level-down-alt icon text-green-500"></i><strong><u>Descarga de balasto y primera nivelación</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-download icon text-gray-400"></i><strong><u>Terminada la colocación de la vía</u></strong>, se <strong><u>descarga el balasto de la segunda capa</u></strong> mediante <u>trenes de vagones-tolva</u>, repartiéndolo uniformemente con una <span class="definition-pill">perfiladora</span>.</p></li>
+                                                <li><p><i class="fas fa-sort-amount-up icon text-gray-400"></i>A continuación, se procede al <strong><u>bateo, nivelación y alineación</u></strong>, con la <span class="definition-pill">bateadora autopropulsada</span> sobre los carriles.</p></li>
+                                                <li><p><i class="fas fa-check-double icon text-gray-400"></i>Para en <strong><u>sucesivas pasadas</u></strong> (<span class="definition-pill">bateadora-perfiladora</span>) conseguir dejar la vía en <strong><u>primera nivelación</u></strong>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-link icon text-red-500"></i><strong><u>Soldadura Aluminotérmica</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-check-circle icon text-gray-400"></i><strong><u>Conseguida la primera nivelación</u></strong>, se realiza la <strong><u>soldadura aluminotérmica</u></strong> de los carriles.</p></li>
+                                                <li><p><i class="fas fa-unlink icon text-gray-400"></i><strong><u>Dejando libre alternativamente una soldadura</u></strong> en cada hilo cada <span class="pill-blue">540 m</span> de modo que permita <strong><u>neutralizar la vía</u></strong> mediante la <u>liberación de tensiones</u> en tramos de <span class="pill-blue">1.080 m</span>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-sync-alt icon text-blue-500"></i><strong><u>Estabilización, segunda nivelación, liberación de tensiones y amolado</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-chart-line icon text-gray-400"></i>Antes de realizar la liberación de tensiones, se da paso a la <span class="definition-pill"><strong>estabilizadora dinámica de vía</strong></span> para <strong><u>anticipar los asentamientos iniciales</u></strong> que se producen en la vía por el paso de los trenes, de una manera <u>controlada</u>.</p></li>
+                                                <li><p><i class="fas fa-redo icon text-gray-400"></i>Una vez efectuada la primera estabilización dinámica, se puede iniciar la operación de la <strong><u>segunda nivelación</u></strong> con el mismo equipo de <span class="definition-pill">perfiladora-bateadora</span> de la primera nivelación y una <u>nueva estabilización dinámica</u>.</p></li>
+                                                <li><p><i class="fas fa-lock-open icon text-gray-400"></i>Tras la segunda nivelación, se realiza la <strong><u>liberación de tensiones</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-gem icon text-gray-400"></i>La última tarea es el <strong><u>amolado (o esmerilado) del carril</u></strong>, operación que <u>facilita el mantenimiento</u> de la vía y de los aparatos.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 2: El mantenimiento de la red -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tools"></i></div>
+                <h2>2. El mantenimiento de la red</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-shield-alt icon text-green-600"></i>La <strong><u>conservación</u></strong> de las infraestructuras ferroviarias es una <strong><u>necesidad</u></strong> para la <u>seguridad y comodidad</u> del tráfico ferroviario, ya que están expuestas a un <strong><u>continuo deterioro</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-600"></i>El <strong><u>mantenimiento</u></strong> exige un <strong><u>seguimiento y control</u></strong> de los <u>parámetros más representativos</u>, que con una <strong><u>adecuada programación</u></strong> permite <strong><u>optimizar</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-list-ol icon text-gray-500"></i>El <strong><u>número de intervenciones</u></strong>.</p></li>
+                                <li><p><i class="fas fa-expand-arrows-alt icon text-gray-500"></i>Su <strong><u>alcance</u></strong>.</p></li>
+                                <li><p><i class="fas fa-euro-sign icon text-gray-500"></i>Y su <strong><u>repercusión económica</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-cyan-600"></i>Puede ser:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-calendar-check icon text-green-500"></i><span class="definition-pill"><strong>Preventivo</strong></span>, que consiste en <strong><u>programar las intervenciones</u></strong> según:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-clock icon text-gray-400"></i><u>Intervalos predeterminados de tiempo</u>.</p></li>
+                                            <li><p><i class="fas fa-train icon text-gray-400"></i>Y/o <u>circulaciones de trenes</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-tools icon text-red-500"></i>Y <span class="definition-pill"><strong>correctivo</strong></span>, que se realiza <strong><u>cuando se ha producido algún fallo</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-orange-600"></i>Las <strong><u>operaciones más frecuentes</u></strong> son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-minus icon text-gray-500"></i><strong><u>Sustitución de carriles</u></strong> por <u>desgaste o rotura</u>.</p></li>
+                                <li><p><i class="fas fa-road icon text-gray-500"></i><strong><u>Tratamiento de la superficie de rodadura</u></strong> de los carriles.</p></li>
+                                <li><p><i class="fas fa-equals icon text-gray-500"></i><strong><u>Sustitución de traviesas</u></strong>, <u>sujeciones</u>, y <u>balasto</u>.</p></li>
+                                <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i><strong><u>Conservación de la geometría</u></strong>.</p></li>
+                                <li><p><i class="fas fa-building icon text-gray-500"></i>Y <strong><u>trabajos de infraestructura</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Card 3: Operaciones de auscultación de la vía en servicio -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tasks"></i></div>
+                <h2>3. Operaciones de auscultación de la vía en servicio</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-ruler-combined icon text-blue-600"></i>Auscultación geométrica</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-purple-600"></i>Consiste en la <strong><u>medición de parámetros</u></strong>, que se realiza por medio de equipos que permiten auscultar a más de <span class="pill-blue">70 km/h</span> con mínima interferencia.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-list-ul icon text-gray-500"></i>Los <strong>parámetros</strong> medidos son: <u>nivelación</u>, <u>alineación de la vía</u>, <u>peralte</u>, <u>perfil del carril</u>, y <u>ancho de vía</u>.</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i>Los <strong>medios</strong> utilizados son: <u>acelerómetros</u>, <u>sistemas laser-óptico</u> y <u>giróscopos</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-chart-bar icon text-green-600"></i>Para cada parámetro se establecen <strong><u>dos niveles de calidad</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i><span class="definition-pill"><strong>QN1</strong></span> (valor que implica una <u>puesta en vigilancia</u> de la vía o una <u>operación correctiva programada</u>).</p></li>
+                                                <li><p><i class="fas fa-exclamation-triangle icon text-red-500"></i><span class="definition-pill"><strong>QN2</strong></span> (valor que exige una <u>operación correctiva a corto plazo</u>).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-calculator icon text-indigo-600"></i>Estos valores son <strong><u>función</u></strong> de la <u>desviación típica</u> y el <u>valor máximo</u> en cada intervalo de <span class="pill-blue">200 m</span>.</p></li>
+                                    <li><p><i class="fas fa-balance-scale-right icon text-amber-700"></i>Se <strong><u>comparan con los umbrales</u></strong> de la <span class="doc-pill"><strong>ficha UIC-518</strong></span> que están correlacionados con la <span class="doc-pill"><strong>norma europea EN-14363</strong></span> del <span class="actor-pill">CEN</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-wave-square icon text-purple-700"></i>Auscultación dinámica</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-couch icon text-blue-600"></i>La <strong><u>sensación de confort dinámico</u></strong> de un viajero depende de las <strong><u>aceleraciones que percibe</u></strong>.</p></li>
+                        <li><p><i class="fas fa-tachometer-alt icon text-orange-600"></i>Que se <strong><u>miden en un coche de control</u></strong> por un conjunto de <u>acelerómetros</u> durante un <u>viaje de explotación</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-search-plus icon text-cyan-700"></i>Auscultación ultrasónica</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-unlink icon text-red-600"></i><strong><u>Detecta irregularidades</u></strong> por <u>discontinuidad del carril</u>.</p></li>
+                        <li><p><i class="fas fa-train-tram icon text-green-600"></i>Por medio de un <strong><u>tren que ausculta a <span class="pill-blue">30 km/h</span></u></strong> y las <strong><u>marca con pintura</u></strong> sobre el carril.</p></li>
+                        <li><p><i class="fas fa-random icon text-indigo-600"></i>Para <strong><u>auscultar los aparatos de vía</u></strong> se utilizan <u>equipos portátiles</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-chart-area icon text-green-800"></i>Desgaste ondulatorio</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El <strong><u>vehículo auscultador de desgaste ondulatorio</u></strong> se basa en la <strong><u>medición de flechas</u></strong> por <u>palpación de la superficie del carril</u>.</p></li>
+                        <li><p><i class="fas fa-tachometer-alt icon text-orange-600"></i>A una <strong><u>velocidad de <span class="pill-blue">20 km/h</span></u></strong>, abarcando <strong><u>longitudes de onda</u></strong> entre <span class="pill-blue"><strong>1 cm</strong></span> y <span class="pill-blue"><strong>1,5 m</strong></span>.</p></li>
+                        <li><p><i class="fas fa-gem icon text-purple-600"></i>Su <strong><u>utilización es previa</u></strong> a la del <span class="definition-pill">tren amolador de carril</span> para <strong><u>definir las zonas donde debe actuar</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-digital-tachograph icon text-blue-800"></i>Auscultación digital con bateadora</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Es un <strong><u>sistema de auscultación</u></strong> instalado en las <span class="definition-pill">bateadoras</span>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-ruler-combined icon text-purple-600"></i>Está basado en la <strong><u>medida de flechas en mm</u></strong> para <u>cuerda de <span class="pill-blue">17 metros</span></u>.</p></li>
+                                    <li><p><i class="fas fa-tachometer-alt icon text-orange-600"></i>Circulando a <span class="pill-blue"><strong>30 Km/h</strong></span>, la máquina <strong><u>mide valores de flechas horizontal y vertical</u></strong> cada <u>m de vía</u>.</p></li>
+                                    <li><p><i class="fas fa-search icon text-cyan-600"></i>A partir de los cuales se pueden <strong><u>percibir con claridad algunos defectos geométricos</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Aunque <strong><u>no los de elevada longitud de onda</u></strong> que pueden ser <u>importantes para el viajero</u> en líneas de alta velocidad.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-clipboard-list icon text-teal-700"></i>Seguimiento General</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Consiste en una <strong><u>campaña de revisiones periódicas</u></strong> de las <u>obras de fábrica</u>, <u>trincheras</u>, <u>terraplenes</u>, etc. y de la <u>superestructura</u>: <u>carril</u>, <u>traviesas</u>, <u>sujeciones</u>, <u>balasto</u>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-shoe-prints icon text-green-600"></i>El <strong><u>trabajo de campo</u></strong> consiste principalmente en <strong><u>recorridos a pie</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-database icon text-purple-600"></i>Que se <strong><u>complementa</u></strong> con la <u>elaboración y actualización en gabinete</u> de <strong><u>bases de datos</u></strong>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-tasks icon text-orange-600"></i>Con ellas se <strong><u>determinan</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-sync-alt icon text-gray-500"></i>La <strong><u>necesidad de sustitución o reparación</u></strong> del <u>material deteriorado</u>.</p></li>
+                                                <li><p><i class="fas fa-list-ul icon text-gray-500"></i>O un <strong><u>listado de zonas</u></strong> para <u>análisis más detallado</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Plan de contingencias -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-clipboard-list"></i></div>
+                <h2>4. Plan de contingencias</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-user-cog icon text-slate-700"></i>El <span class="actor-pill"><strong>administrador de infraestructuras ferroviarias</strong></span> dispondrá de un <span class="plan-pill"><strong>plan de contingencias</strong></span> según lo dispuesto en la <span class="law-pill">Ley 38/2015 del Sector Ferroviario</span>.</p></li>
+                    <li><p><i class="fas fa-tasks icon text-blue-600"></i>Para que, en caso de <strong><u>incidencia que perturbe significativamente el tráfico ferroviario</u></strong>, adopte las <strong><u>medidas necesarias</u></strong> para <strong><u>restablecer la situación de normalidad</u></strong> a la mayor brevedad posible.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-bullseye icon text-red-600"></i>Los <strong><u>objetivos</u></strong> de este <span class="plan-pill">Plan</span> serán:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-compress-arrows-alt icon text-gray-500"></i><strong><u>Minimizar las consecuencias</u></strong> de cualquier contingencia que pueda <u>degradar el normal desarrollo</u> del tráfico ferroviario.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-gray-500"></i><strong><u>Restablecer las condiciones de explotación</u></strong> que pueda provocar cualquier <u>incidencia</u>.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-gray-500"></i><strong><u>Identificar los riesgos</u></strong> en la <u>explotación del tráfico ferroviario</u>.</p></li>
+                                <li><p><i class="fas fa-search-location icon text-gray-500"></i><strong><u>Localizar los medios humanos y técnicos</u></strong> disponibles de <u>intervención</u>.</p></li>
+                                <li><p><i class="fas fa-book icon text-gray-500"></i>Disponer de un <strong><u>catálogo de las medidas de gestión</u></strong> de <u>incidencias idóneas</u>.</p></li>
+                                <li><p><i class="fas fa-info-circle icon text-gray-500"></i>Lograr el <span class="principle-pill"><strong>principio de “unidad de información”</strong></span> en todas las fases de la <u>resolución de incidencias</u>.</p></li>
+                                <li><p><i class="fas fa-users icon text-gray-500"></i>Y lograr el <span class="principle-pill"><strong>principio de “unidad de actuación”</strong></span> a través de la <u>coordinación de actuaciones</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Renovaciones y otras operaciones -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tools"></i></div>
+                <h2>5. Renovaciones y otras operaciones</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-clipboard-check icon text-blue-600"></i>Calificación de la vía</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-purple-600"></i><strong><u>Labor previa</u></strong> en función de unos <u>estándares de calidad prefijados</u>.</p></li>
+                        <li><p><i class="fas fa-bullseye icon text-red-600"></i>Para <strong><u>estimar el tipo de actuación necesario</u></strong> a partir de los <u>datos obtenidos de la auscultación</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-wrench icon text-orange-600"></i>Actuaciones de reparación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-tools icon text-cyan-600"></i><strong><u>Sustitución de los elementos deteriorados</u></strong> en <u>zonas muy localizadas</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-undo icon text-green-600"></i>Reparación sistemática</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-road icon text-indigo-600"></i>Se lleva a cabo en <strong><u>tramos largos de vía</u></strong>.</p></li>
+                        <li><p><i class="fas fa-retweet icon text-blue-500"></i>Consiste en la <strong><u>sustitución de un cierto porcentaje</u></strong> de los elementos de la <u>superestructura de la vía</u> en las <u>zonas más deterioradas</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-recycle icon text-teal-600"></i>Rehabilitación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-road-barrier icon text-purple-600"></i>También <strong><u>afecta un tramo completo de vía</u></strong>.</p></li>
+                        <li><p><i class="fas fa-percentage icon text-orange-600"></i>El <strong><u>porcentaje de elementos sustituidos</u></strong> puede <u>variar sustancialmente</u> e incluso llegar al <span class="pill-blue">100%</span> en alguno de ellos.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-redo-alt icon text-blue-700"></i>Renovación parcial</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-cyan-600"></i>Tiene las <strong><u>mismas características</u></strong> de la actuación anterior.</p></li>
+                        <li><p><i class="fas fa-arrow-up icon text-green-600"></i>Pero con <strong><u>mayores porcentajes de sustitución</u></strong>.</p></li>
+                        <li><p><i class="fas fa-star icon text-yellow-600"></i>Y <strong><u>mayor exigencia</u></strong> en el <u>material aprovechable</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-sync icon text-indigo-700"></i>Renovación integral</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Se denomina así a la renovación que tiene por objeto una <strong><u>mejora de la explotación</u></strong> por su <u>adaptación a nuevos incrementos de velocidad</u>.</p></li>
+                        <li><p><i class="fas fa-route icon text-purple-600"></i>Pueden contemplar <strong><u>pequeñas modificaciones del trazado</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-orange-600"></i>Procedimiento:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-truck-loading icon text-gray-500"></i>Se <strong><u>levanta y se lleva a parque de clasificación</u></strong> toda la <u>superestructura</u> (<u>carriles</u> y <u>traviesas</u>).</p></li>
+                                    <li><p><i class="fas fa-tools icon text-gray-500"></i>Se <strong><u>monta superestructura completamente nueva</u></strong> con <u>traviesas</u> y <u>sujeciones</u> que permitan <u>vía sin juntas</u> (<span class="definition-pill">BLS</span>).</p></li>
+                                    <li><p><i class="fas fa-sort-amount-up icon text-gray-500"></i>Se <strong><u>nivela y alinea la vía</u></strong> con <u>parámetros</u> que permitan <u>incrementos notables de velocidad</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-wave-square icon text-gray-500"></i>Con <span class="definition-pill">bateadora pesada</span> se lleva a cabo una <strong><u>sistemática rectificación de alineaciones curvas</u></strong>.</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-plus-circle icon text-green-400"></i>Con <strong><u>aumento de la longitud</u></strong> de las <u>clotoides de transición</u>.</p></li>
+                                                <li><p><i class="fas fa-arrows-alt-h icon text-red-400"></i>Lo que obliga a <strong><u>pequeños “ripados”</u></strong> (movimientos transversales) de la vía.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>Se <strong><u>perfila la banqueta de balasto</u></strong> con <span class="definition-pill">perfiladora mecánica</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-check-double icon text-teal-600"></i>Por supuesto, todo ello:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tasks icon text-gray-500"></i><strong><u>Organizando los trabajos</u></strong> de manera que el <u>impacto a la vía en circulación se minimice</u> al máximo.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Y <strong><u>adoptando las medidas de seguridad</u></strong> pertinentes.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-rocket icon text-red-700"></i>Renovación de vía con mejora de la infraestructura</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-chart-line icon text-green-600"></i>En los últimos tiempos se están consiguiendo en ciertos tramos de la red española a un <strong><u>coste razonable</u></strong>, <strong><u>incrementos de velocidad importantes</u></strong>.</p></li>
+                        <li><p><i class="fas fa-recycle icon text-blue-600"></i><strong><u>Aprovechando en gran parte</u></strong> la <u>infraestructura existente</u>.</p></li>
+                        <li><p><i class="fas fa-arrow-up icon text-purple-600"></i>Los incrementos de velocidad traen consigo un <strong><u>aumento de las solicitaciones</u></strong> de la infraestructura.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-wrench icon text-orange-600"></i>Que requieren cuanto menos una <strong><u>mejora de ésta en dos sentidos</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-building icon text-gray-500"></i>De una parte, su <strong><u>refuerzo estructural</u></strong> con el concurso de <u>capas subyacentes al balasto</u>, de <u>subbalasto</u>, <u>capas de forma</u> o <u>geotextiles</u>.</p></li>
+                                    <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>Por otra parte, <strong><u>dimensional</u></strong>, ya que los aumentos de velocidad por encima de <span class="pill-blue">200 km/h</span> requieren una <u>entrevía mayor</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-plus-circle icon text-cyan-600"></i>También podrían ser <strong><u>necesarias actuaciones</u></strong> sobre:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-water icon text-gray-500"></i>Los <strong><u>elementos de drenaje</u></strong> transversal y longitudinal.</p></li>
+                                    <li><p><i class="fas fa-wave-square icon text-gray-500"></i><strong><u>Rectificación de alineaciones curvas</u></strong> con <u>ripados de hasta <span class="pill-blue">4 m</span></u>.</p></li>
+                                    <li><p><i class="fas fa-route icon text-gray-500"></i>E incluso <strong><u>pequeñas variantes</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-circle icon text-teal-600"></i><strong><u>No solo el material de alta calidad</u></strong> utilizado, sino <strong><u>toda la geometría del tramo</u></strong>, deben permitir una <u>velocidad significativa</u>.</p></li>
+                        <li><p><i class="fas fa-ban icon text-red-800"></i>Si la velocidad supera determinado umbral (en España <span class="pill-blue">160 km/h</span>) se procederá además a la <strong><u>eliminación de todos los pasos a nivel existentes</u></strong>.</p></li>
+                        <li><p><i class="fas fa-sync icon text-indigo-600"></i>Se procede también a una <strong><u>adaptación</u></strong> de la <u>electrificación</u> e <u>instalaciones de seguridad ferroviaria</u> existentes a las <u>nuevas exigencias del tramo</u>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 6: Inspecciones Técnicas en los Puentes de Ferrocarril -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-stethoscope"></i></div>
+                <h2>6. Inspecciones Técnicas en los Puentes de Ferrocarril</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-life-ring icon text-yellow-600"></i>Los <strong><u>puentes de ferrocarril</u></strong> constituyen <strong><u>puntos vitales</u></strong>, por lo que su <u>mantenimiento y conservación</u> requiere una <strong><u>atención especial</u></strong> con:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tasks icon text-blue-500"></i><strong><u>Inspecciones técnicas periódicas</u></strong>.</p></li>
+                                <li><p><i class="fas fa-wrench icon text-orange-500"></i>Así como, en su caso, las <strong><u>reparaciones</u></strong> que procedan.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-bullseye icon text-red-600"></i>Con la <strong>finalidad</strong> de:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-car-crash icon text-gray-500"></i><strong><u>Evitar riesgos</u></strong>, que puedan producir <u>accidentes</u> o <u>interrumpir el servicio</u>.</p></li>
+                                            <li><p><i class="fas fa-check-circle icon text-gray-500"></i>Y <strong><u>mantenerlos en condiciones adecuadas de uso</u></strong> minimizando los <u>costes de conservación</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>Estas necesidades se <strong><u>regulan</u></strong> en la <span class="doc-pill"><strong>Instrucción sobre los registros de la actividad de vigilancia de infraestructuras ferroviarias (REVINFE-23)</strong></span> aprobada por <span class="law-pill">Orden Ministerial</span>, que:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-book-open icon text-purple-600"></i><strong><u>Regula</u></strong> las <u>inspecciones</u> y las <u>pruebas de carga</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-database icon text-indigo-600"></i>Adicionalmente, <strong><u>crea un <span class="doc-pill">Registro de la actividad de vigilancia de las obras de paso</span></u></strong>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info-circle icon text-cyan-500"></i>En el que <strong><u>conste la información</u></strong> relativa a las <u>inspecciones</u>, <u>pruebas</u> y <u>actuaciones de reparación</u> a las que hubieran sido sometidas.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-universal-access icon text-blue-700"></i><strong><u>Afecta a todos los puentes de ferrocarril</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-hard-hat icon text-gray-500"></i>De <strong><u>nueva construcción</u></strong> o <strong><u>en servicio</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-network-wired icon text-gray-500"></i>Que formen parte la <span class="definition-pill"><strong>RFIG</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>Con al menos un <strong><u>vano de luz ≥ <span class="pill-blue">6 m</span></u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-orange-600"></i>Las <strong><u>inspecciones se catalogan en tres tipos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-star icon text-yellow-500"></i><strong><u>Principales</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-calendar-alt icon text-blue-400"></i><strong>Cuándo:</strong> En <u>puentes nuevos</u> dentro del año anterior a su puesta en servicio; en <u>existentes cada <span class="pill-blue">15 años</span></u>; y también tras detectarse <u>daños relevantes</u> en una inspección básica.</p></li>
+                                            <li><p><i class="fas fa-user-tie icon text-slate-400"></i><strong>Quién:</strong> Se llevan a cabo por <u>personal técnico titulado</u> con competencia en <u>patología estructural</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-microscope icon text-cyan-500"></i><strong><u>Especiales</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-calendar-alt icon text-blue-400"></i><strong>Cuándo:</strong> Cuando sean <u>necesarias tras una inspección principal</u> para obtener <u>información adicional</u> o para la <u>subsanación de deficiencias</u>.</p></li>
+                                            <li><p><i class="fas fa-user-tie icon text-slate-400"></i><strong>Quién:</strong> Se llevan a cabo por el <u>mismo tipo de personal</u> que las inspecciones principales.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-eye icon text-green-500"></i><strong><u>Básicas</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-calendar-alt icon text-blue-400"></i><strong>Cuándo:</strong> <u>Anuales</u>.</p></li>
+                                            <li><p><i class="fas fa-user-tie icon text-slate-400"></i><strong>Quién:</strong> Se llevan a cabo por <u>personal de inspección general de la línea</u>, con <u>buen conocimiento práctico</u> de las obras y una <u>formación básica</u> en técnicas de inspección de puentes.</p></li>
+                                            <li><p><i class="fas fa-forward icon text-purple-400"></i><strong>Acción:</strong> En su caso <u>indicarán la necesidad</u> de realizar una <u>inspección principal</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-chart-bar icon text-red-700"></i>En <strong>todas las inspecciones</strong> se analizarán los <strong><u>daños según 4 niveles de gravedad</u></strong>, que van del <span class="pill-blue">1</span> (<u>defectos sin repercusión</u>) al <span class="pill-blue">4</span> (<u>defectos que afectan a la seguridad</u>).</p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
