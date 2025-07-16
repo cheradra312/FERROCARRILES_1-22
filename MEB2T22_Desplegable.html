@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: La gestión de la seguridad operacional</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '�';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-shield-alt"></i> MEB2T22. La gestión de la seguridad operacional <i class="fas fa-sync-alt"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: El Reglamento UE 402/2013 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>1. El Reglamento UE 402/2013</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El <span class="doc-pill"><strong>Reglamento de ejecución 402/2013</strong></span> de la <span class="actor-pill">Comisión</span> establece un <strong><u>método común de seguridad (MCS)</u></strong> revisado para la <u>evaluación y valoración del riesgo</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-bullseye icon text-red-600"></i>El <strong><u>objeto del Reglamento</u></strong> es <strong><u>facilitar el acceso al mercado</u></strong> de los <u>servicios de transporte ferroviario</u> a través de la <strong><u>armonización</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Los <strong><u>procedimientos de gestión del riesgo</u></strong> utilizados para <u>evaluar el impacto de los cambios</u> en los <u>niveles de seguridad</u> y el <u>cumplimiento de los requisitos de seguridad</u>.</p></li>
+                                <li><p><i class="fas fa-exchange-alt icon text-gray-500"></i>El <strong><u>intercambio de información sobre seguridad</u></strong> entre los <u>diferentes agentes del sector ferroviario</u>, a fin de <u>gestionar la seguridad en las diferentes interfaces</u> que puedan existir en este sector.</p></li>
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Las <strong><u>pruebas resultantes</u></strong> de la aplicación de un <u>proceso de gestión del riesgo</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-universal-access icon text-purple-600"></i>El <span class="doc-pill"><strong>Reglamento 402/2013</strong></span> se <strong><u>aplicará al <span class="actor-pill">proponente</span></u></strong>, cuando proceda a <strong><u>cualquier cambio del sistema ferroviario</u></strong> en un <span class="actor-pill">Estado miembro</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-stream icon text-orange-500"></i>Dicho cambio podrá ser <strong><u>técnico, de explotación u organizativo</u></strong>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-sitemap icon text-gray-400"></i>En el caso de los <strong><u>cambios organizativos</u></strong>, solamente se tendrán en cuenta los cambios que pudieran <u>afectar a las condiciones o procesos de explotación o mantenimiento</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-cyan-600"></i>Cuando, partiendo de una <strong><u>evaluación efectuada</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>El cambio se considere <strong><u>significativo</u></strong>, se aplicará el <strong><u>proceso de gestión del riesgo</u></strong>.</p></li>
+                                <li><p><i class="fas fa-times-circle icon text-red-500"></i>El cambio <strong><u>no se considere significativo</u></strong>, bastará con <strong><u>conservar la documentación adecuada</u></strong> que <u>justifique la decisión</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-indigo-600"></i>Este <strong><u>Reglamento se aplicará también a los subsistemas estructurales</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Si las <span class="doc-pill"><strong>especificaciones técnicas de interoperabilidad (ETI)</strong></span> pertinentes requieren una <strong><u>evaluación del riesgo</u></strong>; en este caso, la <span class="doc-pill">ETI</span> especificará, cuando proceda, qué partes del Reglamento son aplicables.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-gray-500"></i>Si el <strong><u>cambio es significativo</u></strong>, el <strong><u>proceso de gestión del riesgo se aplicará</u></strong> en el marco de la <u>puesta en servicio de los subsistemas de carácter estructural</u> para garantizar su <u>integración segura en un sistema existente</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>La aplicación de este Reglamento en el último caso descrito <strong><u>no deberá suponer la imposición de requisitos</u></strong> que <strong><u>contradigan a los establecidos en las <span class="doc-pill">ETIs</span></u></strong> pertinentes.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullhorn icon text-red-400"></i>Si se produjeran contradicciones, el <span class="actor-pill">proponente</span> <strong><u>informará al <span class="actor-pill">Estado miembro</span></u></strong> en cuestión, quien podría decidir <u>solicitar una revisión de la <span class="doc-pill">ETI</span></u> o una <u>excepción</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-ban icon text-red-700"></i>Los <strong><u>sistemas ferroviarios excluidos</u></strong> del ámbito de aplicación de la <span class="doc-pill">Directiva de seguridad</span> están <strong><u>excluidos del ámbito de aplicación de este Reglamento</u></strong>, como los <u>metros</u>, los <u>tranvías</u> y los <u>vehículos ferroviarios ligeros</u>, así como las <u>infraestructuras utilizadas exclusivamente por ellos</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-user-tie icon text-blue-700"></i>El <span class="doc-pill"><strong>Reglamento 402/2013</strong></span> define como <span class="definition-pill"><strong>proponente</strong></span> a:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-building icon text-gray-500"></i>Las <span class="actor-pill">empresas ferroviarias</span> o los <span class="actor-pill">administradores de la infraestructura</span>.</p></li>
+                                <li><p><i class="fas fa-tools icon text-gray-500"></i>Las <span class="actor-pill">entidades encargadas del mantenimiento</span>.</p></li>
+                                <li><p><i class="fas fa-file-signature icon text-gray-500"></i>Las <span class="actor-pill">entidades contratantes</span> o los <span class="actor-pill">fabricantes</span> cuando invitan a un <span class="actor-pill">organismo notificado</span> a aplicar el procedimiento de <u>verificación «CE»</u>.</p></li>
+                                <li><p><i class="fas fa-user-plus icon text-gray-500"></i>O el <span class="actor-pill">solicitante</span> de una <u>autorización para la puesta en servicio</u> de subsistemas estructurales.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Concepto de cambio significativo -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-question-circle"></i></div>
+                <h2>2. Concepto de cambio significativo</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>Si en un <span class="actor-pill">Estado miembro</span> <strong><u>no existe una norma nacional notificada</u></strong> para definir si un cambio es significativo o no, el <span class="actor-pill">proponente</span> deberá <strong><u>considerar inicialmente el impacto potencial</u></strong> del cambio en cuestión para la <u>seguridad del sistema ferroviario</u>.</p></li>
+                    <li><p><i class="fas fa-check-circle icon text-green-600"></i>Si el <strong><u>cambio propuesto no repercute en la seguridad</u></strong>, <strong><u>no será necesario aplicar</u></strong> el <u>proceso de gestión del riesgo</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-exclamation-triangle icon text-red-600"></i>Si, por el contrario, el <strong><u>cambio propuesto repercute en la seguridad</u></strong>, el <span class="actor-pill">proponente</span> <strong><u>decidirá</u></strong>, basándose en el <u>juicio de expertos</u>, la <strong><u>importancia del cambio</u></strong>, determinando si es significativo o no lo es, en función de los siguientes <strong>criterios</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-skull-crossbones icon text-gray-500"></i><span class="definition-pill"><strong>Consecuencias en caso de fallo</strong></span>: <u>hipótesis verosímil más pesimista</u> en caso de que falle el sistema objeto de evaluación, teniendo en cuenta la existencia de <u>barreras de seguridad fuera del sistema</u> objeto de evaluación.</p></li>
+                                <li><p><i class="fas fa-lightbulb icon text-gray-500"></i><span class="definition-pill"><strong>Innovación empleada</strong></span> en la realización del cambio; se refiere tanto a lo que es <u>innovador en el sector ferroviario</u>, como a lo que es <u>novedoso para la organización</u> que introduce el cambio.</p></li>
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i><span class="definition-pill"><strong>Complejidad del cambio</strong></span>.</p></li>
+                                <li><p><i class="fas fa-eye-slash icon text-gray-500"></i><span class="definition-pill"><strong>Supervisión</strong></span>: la <u>incapacidad de supervisar el cambio</u> introducido durante todo el <u>ciclo vital del sistema</u> y de <u>intervenir adecuadamente</u>.</p></li>
+                                <li><p><i class="fas fa-undo-alt icon text-gray-500"></i><span class="definition-pill"><strong>Reversibilidad</strong></span>: la <u>incapacidad de volver a la situación del sistema</u> antes del cambio.</p></li>
+                                <li><p><i class="fas fa-plus-circle icon text-gray-500"></i><span class="definition-pill"><strong>Adicionalidad</strong></span>: <u>evaluación de la importancia del cambio</u> teniendo en cuenta todas las <u>modificaciones recientes relativas a la seguridad</u> en el sistema evaluado y que <u>no se consideraron significativas</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-file-archive icon text-purple-600"></i>El <span class="actor-pill">proponente</span> <strong><u>conservará la documentación adecuada</u></strong> para <u>justificar su decisión</u>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Fases del proceso de gestión del riesgo -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-sitemap"></i></div>
+                <h2>3. Fases del proceso de gestión del riesgo</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-user-tie icon text-blue-600"></i>El <span class="actor-pill"><strong>proponente</strong></span> será <strong><u>responsable</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-search icon text-gray-500"></i>La <strong><u>evaluación de la importancia del cambio</u></strong>, decidiendo si es <u>significativo o no</u> lo es.</p></li>
+                                <li><p><i class="fas fa-directions icon text-gray-500"></i>Y de <strong><u>dirigir el proceso de gestión del riesgo</u></strong>.</p></li>
+                                <li><p><i class="fas fa-users-cog icon text-gray-500"></i><strong><u>Velando</u></strong> por que se gestionen también los <u>riesgos introducidos por los proveedores y los prestadores de servicios</u>, incluidos sus <u>subcontratistas</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-purple-600"></i>El <strong><u>proceso de gestión del riesgo</u></strong> comprenderá las <strong><u>actividades siguientes</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-tasks icon text-orange-500"></i>El <strong><u>proceso de evaluación del riesgo</u></strong>, que determinará:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-exclamation-triangle icon text-gray-400"></i>Los <u>peligros</u>.</p></li>
+                                            <li><p><i class="fas fa-balance-scale icon text-gray-400"></i>Los <u>riesgos</u>.</p></li>
+                                            <li><p><i class="fas fa-shield-alt icon text-gray-400"></i>Las <u>medidas de seguridad asociadas</u>.</p></li>
+                                            <li><p><i class="fas fa-list-ul icon text-gray-400"></i>Y los <u>requisitos de seguridad resultantes</u> que deberá cumplir el sistema evaluado.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-check-double icon text-green-500"></i>La <strong><u>demostración</u></strong> de que el sistema <u>cumple los requisitos de seguridad</u> indicados.</p></li>
+                                <li><p><i class="fas fa-tools icon text-cyan-500"></i>La <strong><u>gestión de todos los peligros determinados</u></strong> y de las <u>medidas de seguridad asociadas</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-sync-alt icon text-indigo-600"></i>Este proceso de gestión del riesgo es <strong><u>iterativo</u></strong> y <strong><u>finaliza</u></strong> cuando se demuestra que el sistema <u>cumple todos los requisitos de seguridad</u> necesarios para <u>aceptar los riesgos</u> asociados a los peligros determinados.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-check icon text-teal-700"></i>Organismos de evaluación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Realizarán una <strong><u>evaluación independiente</u></strong> de la <u>idoneidad de la aplicación del proceso de gestión del riesgo</u> y de sus <u>resultados</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-purple-600"></i>Para lo que deberán:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-lightbulb icon text-gray-500"></i><strong><u>Asegurar que comprenden el cambio significativo</u></strong> a partir de la <u>documentación facilitada</u> por el <span class="actor-pill">proponente</span>.</p></li>
+                                    <li><p><i class="fas fa-search-plus icon text-gray-500"></i><strong><u>Efectuar una evaluación</u></strong> de los <u>procesos seguidos</u> y su <u>aplicación</u> en la <u>gestión de la seguridad y la calidad</u> durante el <u>diseño y la aplicación</u> de un cambio significativo.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-file-alt icon text-orange-600"></i>Una vez realizada la evaluación el <span class="actor-pill">organismo de evaluación</span> proporcionará al <span class="actor-pill">proponente</span> un <span class="doc-pill"><strong>informe de evaluación de la seguridad</strong></span>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-tie icon text-gray-500"></i>El <span class="actor-pill"><strong>proponente</strong></span> será <strong><u>responsable de determinar</u></strong> si deben tenerse en cuenta, y de qué manera, las <u>conclusiones del informe</u> para la <u>aceptación del cambio evaluado</u>, desde el punto de vista de la seguridad.</p></li>
+                                    <li><p><i class="fas fa-file-signature icon text-gray-500"></i>El <span class="actor-pill">proponente</span> <strong><u>justificará y documentará</u></strong> la parte del informe de evaluación de la seguridad con la que, eventualmente, <u>no estuviera de acuerdo</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-graduate icon text-green-700"></i>El <span class="actor-pill">organismo de evaluación</span> deberá tener <strong><u>competencia</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i>En la <strong><u>gestión del riesgo</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-sitemap icon text-gray-500"></i>Para la <strong><u>evaluación de partes del sistema ferroviario</u></strong> afectadas por los cambios.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-gray-500"></i>Y en la <strong><u>correcta aplicación de los sistemas de gestión de la seguridad y la calidad</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stamp icon text-indigo-600"></i>El <span class="actor-pill">organismo de evaluación</span> deberá ser <strong><u>acreditado</u></strong> para:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-project-diagram icon text-gray-500"></i>Evaluar la <strong><u>coherencia global de la gestión del riesgo</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-link icon text-gray-500"></i>Y la <strong><u>integración segura</u></strong> del sistema objeto de evaluación en el <u>sistema ferroviario en su conjunto</u>, incluyendo la <u>competencia</u> del organismo de evaluación a la hora de <u>verificar la organización</u>, la <u>metodología</u>, y los <u>aspectos técnicos</u> necesarios.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Declaración del proponente -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-file-signature"></i></div>
+                <h2>4. Declaración del proponente</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Sobre la <strong><u>base de los resultados</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-gavel icon text-gray-500"></i>La aplicación del <strong><u>Reglamento</u></strong>.</p></li>
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Y del <strong><u>informe de evaluación de la seguridad</u></strong> elaborado por el <span class="actor-pill">organismo de evaluación</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-tie icon text-purple-600"></i>El <span class="actor-pill"><strong>proponente</strong></span> realizará una <strong><u>declaración por escrito</u></strong>.</p></li>
+                    <li><p><i class="fas fa-bullhorn icon text-green-600"></i><strong><u>Manifestando</u></strong> que todos los <u>peligros identificados</u> y sus <u>riesgos asociados</u> se encuentran a un <strong><u>nivel adecuado de control</u></strong>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Integración segura -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-link"></i></div>
+                <h2>5. Integración segura</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-600"></i>La <span class="definition-pill"><strong>integración segura</strong></span> de un cambio que se introduce en el sistema ferroviario se <strong><u>interpreta, a veces erróneamente</u></strong>, únicamente como la <u>demostración de la compatibilidad técnica</u> y de la <u>correcta conexión entre subsistemas</u>.</p></li>
+                    <li><p><i class="fas fa-expand-arrows-alt icon text-blue-600"></i>Sin embargo, la <span class="definition-pill">integración segura</span> tiene un <strong><u>significado más amplio</u></strong> y va <strong><u>más allá</u></strong> de las dos comprobaciones anteriores.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-layer-group icon text-purple-600"></i>Se <strong><u>aplica a diferentes niveles</u></strong> y al <strong><u>ciclo de vida completo</u></strong> de cualquier parte del sistema ferroviario:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i><strong>Niveles:</strong> <u>sistema ferroviario global</u>, <u>subsistema</u>, <u>componente de interoperabilidad</u>.</p></li>
+                                <li><p><i class="fas fa-recycle icon text-gray-500"></i><strong>Ciclo de vida:</strong> <u>diseño</u>, <u>operación</u>, <u>mantenimiento</u> y <u>eliminación/desmantelamiento</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-green-600"></i>La <strong><u>integración segura debe comprobar</u></strong> que:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-drafting-compass icon text-gray-500"></i>El elemento nuevo o modificado está <strong><u>diseñado de forma segura</u></strong> y <strong><u>cumple todos los objetivos funcionales y técnicos</u></strong> previstos.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>El elemento nuevo o modificado sea <strong><u>técnicamente compatible</u></strong> y, por tanto, <strong><u>interactúe correctamente</u></strong> con las demás partes del sistema en el que se introduce.</p></li>
+                                <li><p><i class="fas fa-users-cog icon text-gray-500"></i>Cuando proceda, los <strong><u>impactos de los aspectos humanos y organizativos</u></strong> en el <u>funcionamiento y mantenimiento</u> de ese elemento y en el sistema, se <strong><u>evalúan y abordan adecuadamente</u></strong>.</p></li>
+                                <li><p><i class="fas fa-ban icon text-gray-500"></i>La introducción de ese elemento nuevo o modificado en su contexto <u>físico, funcional, ambiental, operacional y de mantenimiento</u>, <strong><u>no tiene efectos no deseados, adversos e inaceptables</u></strong> sobre la <u>seguridad del sistema resultante</u> en el que se está incorporando.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-shield-alt icon text-indigo-700"></i>Por ello, la <strong><u>integración segura</u></strong> es una <strong><u>parte inherente a la gestión de riesgos</u></strong> que realiza el <span class="actor-pill">proponente</span> del cambio a introducir en el sistema ferroviario.</p></li>
+                    <li><p><i class="fas fa-user-friends icon text-orange-600"></i><strong><u>Todo actor ferroviario</u></strong> que participe en el <u>diseño, la explotación, el mantenimiento o la eliminación/desmantelamiento</u> de cualquier parte del sistema ferroviario, también es <strong><u>responsable de la integración segura</u></strong> en el sistema ferroviario de la parte bajo su responsabilidad.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-user-tag icon text-cyan-600"></i>Por tanto, puede ser de <strong><u>aplicación</u></strong> a:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-industry icon text-gray-500"></i>Un <span class="actor-pill"><strong>fabricante</strong></span> para el <u>diseño y la comercialización</u> de un <u>componente de interoperabilidad</u>, un <u>subsistema estructural</u> o cualquier otro <u>equipo técnico</u>.</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>Una <span class="actor-pill"><strong>empresa ferroviaria</strong></span> para la <u>puesta en funcionamiento de un nuevo tipo de vehículo</u> o el <u>desarrollo de procedimientos</u> del <span class="doc-pill">sistema de gestión de la seguridad</span>.</p></li>
+                                <li><p><i class="fas fa-road icon text-gray-500"></i>Un <span class="actor-pill"><strong>administrador de infraestructuras</strong></span> para el <u>diseño de nuevas líneas</u> o la <u>modificación de las líneas existentes</u>.</p></li>
+                                <li><p><i class="fas fa-tools icon text-gray-500"></i>Y una <span class="actor-pill"><strong>entidad encargada del mantenimiento</strong></span> para el <u>desarrollo de los procesos y procedimientos</u> de su <span class="doc-pill">sistema de mantenimiento</span> o para la <u>gestión segura de la obsolescencia</u> de los repuestos.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+�
