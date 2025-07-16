@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: La Interoperabilidad Ferroviaria (I)</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-link"></i> MEB2T17. La Interoperabilidad Ferroviaria (I) <i class="fas fa-globe-europe"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: La interoperabilidad ferroviaria -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>1. La interoperabilidad ferroviaria en la Directiva 2016/797/UE y en el RDSOIF 929/2020</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>Directiva 2016/797</strong></span> sobre la <u>interoperabilidad del sistema ferroviario</u> dentro de la Unión Europea, transpuesta por el <span class="law-pill"><strong>RD 929/2020</strong></span> sobre <u>seguridad operacional e interoperabilidad ferroviarias</u>, <strong><u>establece las condiciones</u></strong> que deben cumplirse para lograr la <span class="definition-pill">interoperabilidad</span> del sistema ferroviario de la Unión.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-double icon text-green-500"></i>De modo <strong><u>compatible</u></strong> con la <span class="doc-pill"><strong>Directiva 2016/798 de seguridad</strong></span>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-tasks icon text-purple-600"></i>Dichas <strong><u>condiciones se refieren</u></strong> a:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i>El <strong><u>proyecto, construcción, entrada en servicio, rehabilitación, renovación, explotación y mantenimiento</u></strong> de los <u>elementos de dicho sistema</u>.</p></li>
+                                            <li><p><i class="fas fa-users icon text-gray-400"></i>Así como a las <strong><u>cualificaciones profesionales</u></strong> y a las <strong><u>condiciones de salud y seguridad</u></strong> aplicables al <u>personal que contribuye a su explotación y mantenimiento</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Especificaciones técnicas de interoperabilidad (ETIs) -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-file-alt"></i></div>
+                <h2>2. Especificaciones técnicas de interoperabilidad (ETIs)</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>Directiva de interoperabilidad</strong></span> define las <span class="definition-pill"><strong>especificaciones técnicas de interoperabilidad</strong></span> como aquellas de las que son objeto cada <u>subsistema o parte de subsistema</u>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullseye icon text-red-500"></i>Con vistas a <strong><u>satisfacer los requisitos esenciales</u></strong> y <strong><u>garantizar la interoperabilidad</u></strong> del sistema ferroviario de la Unión.</p></li>
+                                <li><p><i class="fas fa-sitemap icon text-purple-500"></i>Cada uno de los <strong><u>subsistemas será objeto de una <span class="doc-pill">ETI</span></u></strong>.</p></li>
+                                <li><p><i class="fas fa-exchange-alt icon text-orange-500"></i>Si fuera necesario, un subsistema podrá ser objeto de <strong><u>varias <span class="doc-pill">ETIs</span></u></strong> y una <span class="doc-pill">ETI</span> podrá <strong><u>abarcar varios subsistemas</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-green-600"></i>Los <strong><u>subsistemas fijos y los vehículos</u></strong> serán <strong><u>conformes con las <span class="doc-pill">ETIs</span></u></strong> y las <span class="law-pill"><strong>normas nacionales</strong></span> vigentes en el momento de la <u>solicitud de autorización para su entrada en servicio</u>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sync-alt icon text-cyan-500"></i>Dicha conformidad deberá <strong><u>mantenerse de forma permanente</u></strong> mientras estén en uso.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-700"></i>Cada <span class="doc-pill"><strong>ETI</strong></span> se <strong><u>desarrollará a partir del examen del subsistema existente</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Fijándose un <strong><u>subsistema objetivo alcanzable</u></strong> de forma <u>progresiva</u> y en un <u>plazo razonable</u>.</p></li>
+                                <li><p><i class="fas fa-chart-line icon text-green-500"></i>De este modo, la <strong><u>adopción de las <span class="doc-pill">ETIs</span></u></strong> y la <strong><u>observancia de las mismas</u></strong> permitirán el <strong><u>logro gradual de la interoperabilidad</u></strong> del sistema ferroviario de la Unión.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-flag icon text-indigo-600"></i>Las <span class="doc-pill"><strong>ETIs</strong></span> <strong><u>preservarán de manera apropiada la compatibilidad</u></strong> del sistema ferroviario existente en cada <span class="actor-pill">Estado miembro</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-list-alt icon text-purple-500"></i>A tal fin, se podrán prever <span class="definition-pill"><strong>casos específicos</strong></span> para cada <span class="doc-pill">ETI</span>, tanto para la <u>red</u> como para los <u>vehículos</u>, atendiendo, en particular, a:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-object-group icon text-gray-400"></i>El <strong><u>gálibo</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-ruler-horizontal icon text-gray-400"></i>Al <strong><u>ancho de vía</u></strong> o a la <strong><u>distancia entre vías</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-globe-americas icon text-gray-400"></i>Y a los <strong><u>vehículos procedentes de terceros países</u></strong> o con destino a los mismos.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Si determinados <strong><u>aspectos técnicos</u></strong> correspondientes a los <u>requisitos esenciales</u> <strong><u>no pueden ser tratados de manera explícita</u></strong> en una <span class="doc-pill">ETI</span>, deberán señalarse claramente como <span class="definition-pill"><strong>puntos pendientes</strong></span> en un <u>anexo</u> a la misma.</p></li>
+                    <li><p><i class="fas fa-ban icon text-red-700"></i>Las <span class="doc-pill"><strong>ETIs</strong></span> <strong><u>no serán obstáculo</u></strong> para que los <span class="actor-pill">Estados miembros</span> adopten <strong><u>decisiones</u></strong> con respecto al <u>uso de las infraestructuras para la circulación de vehículos</u> que ellas mismas no prevean.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-book icon text-orange-700"></i>Las <span class="doc-pill"><strong>ETIs</strong></span> podrán contener una <strong><u>referencia explícita</u></strong>, claramente identificada, a:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-globe icon text-gray-500"></i><strong><u>Normas o especificaciones europeas o internacionales</u></strong>.</p></li>
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>O a <strong><u>documentos técnicos</u></strong> publicados por la <span class="actor-pill">Agencia Ferroviaria de la UE</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-bullseye icon text-blue-600"></i>Cuando ello sea <strong><u>estrictamente necesario</u></strong> para cumplir los <u>objetivos de la directiva de interoperabilidad</u>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-paperclip icon text-green-500"></i>En tales casos, dichas normas o documentos técnicos deberán considerarse como <strong><u>anexas a la <span class="doc-pill">ETI</span></u></strong> en cuestión.</p></li>
+                                <li><p><i class="fas fa-check-circle icon text-purple-500"></i>Y pasarán a ser <strong><u>obligatorias</u></strong> a partir del momento en que la <span class="doc-pill">ETI</span> sea aplicable.</p></li>
+                                <li><p><i class="fas fa-search icon text-cyan-500"></i>Si <strong><u>no existiesen tales normas o documentos técnicos</u></strong>, y en espera de su elaboración, podrá hacerse referencia a <strong><u>otros documentos normativos</u></strong> claramente identificados, fácilmente accesibles y de dominio público.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Normas nacionales (Instrucciones ferroviarias) -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>3. Normas nacionales (Instrucciones ferroviarias)</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>Directiva de interoperabilidad</strong></span> define las <span class="definition-pill"><strong>normas nacionales</strong></span> como las <u>vinculantes elaboradas y aplicables</u> en un <span class="actor-pill">Estado miembro</span> que contengan <u>requisitos técnicos o sobre seguridad ferroviaria</u>, distintos de los establecidos por las normas de la <span class="actor-pill">UE</span> o internacionales.</p></li>
+                    <li><p><i class="fas fa-paper-plane icon text-purple-600"></i>Todas las <span class="law-pill"><strong>normas nacionales</strong></span> deben ser <strong><u>notificadas a la <span class="actor-pill">Comisión Europea</span></u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-orange-600"></i>Las <span class="law-pill"><strong>normas nacionales</strong></span> para el cumplimiento de los <u>requisitos esenciales</u> y, cuando proceda, los <u>medios nacionales aceptables de conformidad</u>, serán de <strong><u>aplicación en los siguientes casos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-puzzle-piece icon text-gray-500"></i>Si las <span class="doc-pill"><strong>ETI</strong></span> <strong><u>no cubren</u></strong>, o no cubren totalmente, determinados <u>aspectos de los requisitos esenciales</u>.</p></li>
+                                <li><p><i class="fas fa-ban icon text-gray-500"></i>Si se ha <strong><u>notificado la no aplicación</u></strong> de una o más <span class="doc-pill">ETI</span>, o de partes de las mismas.</p></li>
+                                <li><p><i class="fas fa-list-alt icon text-gray-500"></i>Si el <span class="definition-pill"><strong>caso específico</strong></span> precisa la aplicación de <u>normas técnicas no recogidas</u> en la <span class="doc-pill">ETI</span> pertinente.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i><span class="law-pill"><strong>Normas nacionales</strong></span> empleadas para <strong><u>especificar sistemas existentes</u></strong>, limitadas al objetivo de <u>evaluar la compatibilidad técnica</u> del vehículo con la red.</p></li>
+                                <li><p><i class="fas fa-network-wired icon text-gray-500"></i><strong><u>Redes y vehículos</u></strong> que <strong><u>no son objeto de las <span class="doc-pill">ETIs</span></u></strong>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Y como <strong><u>medida preventiva temporal de carácter urgente</u></strong>, en particular después de un <u>accidente</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-book-reader icon text-indigo-600"></i>El <span class="actor-pill"><strong>MITMS</strong></span>, a propuesta de la <span class="actor-pill">AESF</span>, podrá aprobar <span class="doc-pill"><strong>Instrucciones Ferroviarias</strong></span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullseye icon text-red-500"></i>Cuya <strong><u>finalidad</u></strong> será el <strong><u>establecimiento o modificación</u></strong> de <span class="law-pill">normas nacionales</span>, o la <strong><u>refundición</u></strong> de las <span class="law-pill">normas nacionales</span> vigentes.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-users icon text-blue-500"></i>En la <strong><u>elaboración</u></strong> de dichas instrucciones se realizarán <strong><u>consultas a los agentes del sector</u></strong>, con participación de <u>expertos cualificados</u> en la materia procedentes de:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-user-cog icon text-gray-400"></i><span class="actor-pill">Administradores de infraestructuras</span>, <span class="actor-pill">empresas ferroviarias</span>.</p></li>
+                                            <li><p><i class="fas fa-industry icon text-gray-400"></i><span class="actor-pill">Fabricantes de material rodante ferroviario</span> y <u>componentes ferroviarios</u>.</p></li>
+                                            <li><p><i class="fas fa-train icon text-gray-400"></i><span class="actor-pill">Poseedores de material rodante</span>, <span class="actor-pill">empresas mantenedoras</span> y demás <u>entidades que operen en el sector</u> ferroviario.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-plus-circle icon text-green-500"></i>Mediante las <span class="doc-pill">Instrucciones Ferroviarias</span> se podrán <strong><u>regular otros requisitos o condiciones técnicas</u></strong> de los subsistemas <u>fuera del objeto y ámbito de la normativa de la Unión Europea</u>.</p></li>
+                                <li><p><i class="fas fa-globe icon text-cyan-500"></i>Las <span class="doc-pill">Instrucciones Ferroviarias</span> se <strong><u>publicarán en la web</u></strong> de la <span class="actor-pill">Agencia Estatal de Seguridad Ferroviaria</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-clipboard-list icon text-purple-700"></i><strong><u>Ejemplos</u></strong> de <span class="doc-pill">instrucciones ferroviarias</span> vigentes son:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-object-group icon text-gray-500"></i>La de <strong><u>Gálibos</u></strong>.</p></li>
+                                <li><p><i class="fas fa-calculator icon text-gray-500"></i>La <span class="doc-pill"><strong>IF-3</strong></span> de <u>cálculo de capas de asiento en vía sobre balasto</u>.</p></li>
+                                <li><p><i class="fas fa-road icon text-gray-500"></i>La <span class="doc-pill"><strong>IFI</strong></span> para el <u>proyecto y construcción del subsistema de infraestructura</u>.</p></li>
+                                <li><p><i class="fas fa-bolt icon text-gray-500"></i>La <span class="doc-pill"><strong>IFE</strong></span> para el <u>proyecto y construcción del subsistema de energía</u>.</p></li>
+                                <li><p><i class="fas fa-train-tram icon text-gray-500"></i>Y las <span class="doc-pill"><strong>Especificaciones técnicas de material rodante ferroviario para la entrada en servicio de unidades autopropulsadas, locomotoras y coches (IF MR ALC-20)</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: Componentes de interoperabilidad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>4. Componentes de interoperabilidad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Los <span class="definition-pill"><strong>componentes de interoperabilidad</strong></span> son los que <strong><u>forman parte de un subsistema</u></strong>, de los que depende <u>directa o indirectamente</u> la interoperabilidad del sistema ferroviario, lo que incluye no solo <u>objetos materiales</u>, sino también <u>inmateriales</u>, como los <u>programas informáticos</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>Los <span class="actor-pill"><strong>Estados miembros</strong></span> <strong><u>adoptarán todas las medidas oportunas</u></strong> para que los <span class="definition-pill">componentes de interoperabilidad</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-shopping-cart icon text-green-500"></i>Solo se <strong><u>pongan en el mercado</u></strong> si permiten la <u>interoperabilidad del sistema ferroviario</u> de la Unión, de conformidad con los <u>requisitos esenciales</u>.</p></li>
+                                <li><p><i class="fas fa-tools icon text-purple-500"></i>Se <strong><u>utilicen</u></strong> en el <u>ámbito para el que estén destinados</u> y se <strong><u>instalen y mantengan adecuadamente</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ban icon text-red-600"></i>Los <span class="actor-pill"><strong>Estados miembros</strong></span> <strong><u>no prohibirán, restringirán o dificultarán</u></strong> en su territorio y al amparo de la <span class="doc-pill">Directiva de interoperabilidad</span>, la <strong><u>puesta en el mercado</u></strong> de <span class="definition-pill">componentes de interoperabilidad</span> para su utilización en el sistema ferroviario de la Unión.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-double icon text-cyan-500"></i>Cuando éstos <strong><u>cumplan con lo dispuesto en la Directiva</u></strong>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-times-circle icon text-orange-500"></i>En particular, <strong><u>no exigirán verificaciones</u></strong> que ya se hayan efectuado:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-file-signature icon text-gray-400"></i>En el marco del procedimiento de expedición de la <span class="doc-pill"><strong>declaración «CE» de verificación</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-globe-europe icon text-gray-400"></i>O en <strong><u>otros Estados miembros</u></strong>, con el fin de <u>comprobar el cumplimiento de requisitos idénticos</u> en <u>condiciones idénticas de funcionamiento</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-check-circle icon text-green-700"></i>La <span class="actor-pill"><strong>Agencia Ferroviaria de la UE</strong></span> y las <span class="actor-pill"><strong>autoridades nacionales de seguridad</strong></span> <strong><u>considerarán conformes</u></strong> con los requisitos esenciales, los <span class="definition-pill">subsistemas de carácter estructural</span> constitutivos del sistema ferroviario de la Unión que:</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stamp icon text-indigo-600"></i>En la <span class="doc-pill"><strong>declaración «CE» de conformidad o de idoneidad para el uso</strong></span> se <strong><u>certificará</u></strong> que los <span class="definition-pill">componentes de interoperabilidad</span> han sido <strong><u>sometidos a los procedimientos</u></strong> establecidos en la <span class="doc-pill">ETI</span> correspondiente destinados a <u>evaluar la conformidad o la idoneidad para el uso</u>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-paperclip icon text-blue-500"></i>Cuando la <span class="doc-pill">ETI</span> así lo precise, la <span class="doc-pill">declaración «CE»</span> se <strong><u>acompañará de</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-certificate icon text-gray-400"></i>Un <strong><u>certificado</u></strong>, expedido por uno o varios <span class="actor-pill">organismos notificados</span>, de la <strong><u>conformidad intrínseca</u></strong> de un <span class="definition-pill">componente de interoperabilidad</span>, considerado <u>aisladamente</u>, con las <u>especificaciones técnicas</u> a las que debe ajustarse.</p></li>
+                                            <li><p><i class="fas fa-certificate icon text-gray-400"></i>Un <strong><u>certificado</u></strong>, expedido por uno o varios <span class="actor-pill">organismos notificados</span>, de la <strong><u>idoneidad para el uso</u></strong> de un <span class="definition-pill">componente de interoperabilidad</span>, considerado en su <u>entorno ferroviario</u>, en particular en caso de que se vean afectados <u>requisitos funcionales</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-signature icon text-purple-500"></i>La <span class="doc-pill">declaración «CE»</span> estará <strong><u>fechada y firmada</u></strong> por el <span class="actor-pill">fabricante</span> o su <span class="actor-pill">representante autorizado</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Subsistemas estructurales y funcionales -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-network-wired"></i></div>
+                <h2>5. Subsistemas estructurales y funcionales</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Los <span class="definition-pill"><strong>subsistemas</strong></span> son las <strong><u>partes estructurales o funcionales</u></strong> del <u>sistema ferroviario de la Unión</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-purple-600"></i>Pueden ser:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-building icon text-orange-500"></i><strong><u>Estructurales</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-road icon text-gray-400"></i>En <strong>líneas</strong>: <u>infraestructura</u>, <u>energía</u>, y <u>control-mando y señalización en tierra</u>.</p></li>
+                                            <li><p><i class="fas fa-train icon text-gray-400"></i>Y en <strong>vehículos</strong>: <u>material rodante</u> y <u>control- mando y señalización a bordo</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-cogs icon text-green-500"></i>O <strong><u>funcionales</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-traffic-light icon text-gray-400"></i><u>Explotación y gestión del tráfico</u>.</p></li>
+                                            <li><p><i class="fas fa-wrench icon text-gray-400"></i><u>Mantenimiento</u>.</p></li>
+                                            <li><p><i class="fas fa-desktop icon text-gray-400"></i>Y <u>aplicaciones telemáticas</u> al servicio de los <u>pasajeros</u> y del <u>transporte de mercancías</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>Los <span class="actor-pill"><strong>Estados miembros</strong></span> <strong><u>no prohibirán, restringirán o dificultarán</u></strong> en su territorio, la <u>construcción</u>, la <u>entrada en servicio</u> y la <u>explotación</u> de <span class="definition-pill">subsistemas de carácter estructural</span> constitutivos del sistema ferroviario de la Unión.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-double icon text-teal-500"></i>Si estos <strong><u>cumplen los requisitos esenciales</u></strong>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-ban icon text-red-500"></i>En particular, <strong><u>no exigirán verificaciones</u></strong> que ya se hayan efectuado:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-file-signature icon text-gray-400"></i>En el marco del procedimiento de expedición de la <span class="doc-pill"><strong>declaración «CE» de verificación</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-globe-europe icon text-gray-400"></i>O en <strong><u>otros Estados miembros</u></strong>, con el fin de <u>comprobar el cumplimiento de requisitos idénticos</u> en <u>condiciones idénticas de funcionamiento</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-circle icon text-green-700"></i>La <span class="actor-pill"><strong>Agencia Ferroviaria de la UE</strong></span> y las <span class="actor-pill"><strong>autoridades nacionales de seguridad</strong></span> <strong><u>considerarán conformes</u></strong> con los requisitos esenciales, los <span class="definition-pill">subsistemas de carácter estructural</span> constitutivos del sistema ferroviario de la Unión que:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-certificate icon text-purple-500"></i>Cuando proceda, estén <strong><u>provistos de la <span class="doc-pill">declaración «CE» de verificación</span></u></strong>, establecida con referencia a las <span class="doc-pill">ETIs</span>.</p></li>
+                                <li><p><i class="fas fa-flag icon text-orange-500"></i>O de la <strong><u>declaración de verificación</u></strong> establecida con referencia a las <span class="law-pill"><strong>normas nacionales</strong></span>.</p></li>
+                                <li><p><i class="fas fa-plus icon text-blue-500"></i>O de <strong><u>ambas</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 6: Organismos notificados -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-building"></i></div>
+                <h2>6. Organismos notificados</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Son los <strong><u>organismos encargados</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-gray-500"></i><strong><u>Evaluar la conformidad</u></strong> para el uso de los <u>componentes de interoperabilidad</u>.</p></li>
+                                <li><p><i class="fas fa-file-signature icon text-gray-500"></i>O de <strong><u>tramitar el procedimiento de verificación CE</u></strong> de los <u>subsistemas</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stamp icon text-purple-600"></i>Es <strong><u>necesaria la autorización de la <span class="actor-pill">AESF</span></u></strong> para poder actuar en calidad de <span class="actor-pill">organismos notificados</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tasks icon text-orange-500"></i>Las <strong><u>solicitudes</u></strong> que se reciban se <strong><u>evaluarán</u></strong> según los <u>criterios contemplados</u> en el <span class="law-pill"><strong>RDSOIF 929/2020</strong></span>.</p></li>
+                                <li><p><i class="fas fa-balance-scale icon text-green-500"></i>Se <strong><u>presumirá</u></strong> que los organismos que cumplen los criterios de evaluación contemplados en las <span class="doc-pill">normas europeas</span> pertinentes, <strong><u>cumplen los citados requisitos</u></strong>.</p></li>
+                                <li><p><i class="fas fa-paper-plane icon text-red-500"></i>Si la <span class="actor-pill">AESF</span> considera que un <span class="actor-pill">organismo notificado</span> por otro <span class="actor-pill">Estado</span> <strong><u>no cumple los criterios del RD</u></strong>, lo <strong><u>notificará a la <span class="actor-pill">Comisión Europea</span></u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-map-marker-alt icon text-cyan-600"></i>En <strong><u>España</u></strong> figura como <span class="actor-pill">Organismo notificado</span> para todos los subsistemas únicamente la entidad <span class="actor-pill"><strong>CETREN</strong></span>.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-list-check icon text-indigo-700"></i>Criterios principales</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Los <strong><u>criterios principales</u></strong> que se exigen al organismo y su personal son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-ban icon text-red-500"></i><strong><u>Incompatibilidades</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-times-circle icon text-gray-400"></i><strong><u>No podrán intervenir</u></strong> en el <u>diseño</u>, <u>fabricación</u>, <u>construcción</u>, <u>comercialización</u>, <u>mantenimiento</u> o <u>explotación</u> de los <u>componentes de interoperabilidad</u> o <u>subsistemas</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-gavel icon text-amber-600"></i><strong><u>Libertad de acción</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-check-circle icon text-gray-400"></i>Las operaciones de verificación se llevarán a cabo con la <strong><u>mayor integridad profesional y competencia técnica</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-hand-paper icon text-gray-400"></i>Estando <strong><u>libres de toda presión e incentivo</u></strong>, que pueda influir en los resultados de su control.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-unlink icon text-purple-600"></i><strong><u>Independencia funcional</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-check-circle icon text-gray-400"></i>Deberán <strong><u>gozar de ella</u></strong>, tanto de las <u>autoridades designadas</u> para expedir las <u>autorizaciones de entrada en servicio</u>, las <u>licencias de empresa ferroviaria</u>, y los <u>certificados de seguridad</u>, como de las <u>entidades a cargo de las investigaciones</u> en caso de accidente.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-file-invoice-dollar icon text-green-600"></i><strong><u>Necesidad de seguro de responsabilidad civil</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-shield-alt icon text-gray-400"></i>Deberá tener <strong><u>cubierta la responsabilidad civil</u></strong> que pueda derivarse de su actuación, mediante un <u>seguro</u> u otra <u>garantía financiera equivalente</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
