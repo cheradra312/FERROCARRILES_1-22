@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Personal ferroviario</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '�';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-users-cog"></i> MEB2T19. Personal ferroviario <i class="fas fa-id-card"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: La Orden FOM 2872/2010 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-gavel"></i></div>
+                <h2>1. La Orden FOM 2872/2010</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="law-pill"><strong>Ley 39/2003 del Sector Ferroviario</strong></span> <strong><u>estableció</u></strong> que el <span class="actor-pill">personal ferroviario</span> tendrá una <strong><u>cualificación</u></strong> para realizar sus funciones con <u>garantías de seguridad y eficiencia</u>.</p></li>
+                    <li><p><i class="fas fa-book-open icon text-purple-600"></i>Y que una <span class="law-pill"><strong>Orden Ministerial</strong></span> <strong><u>determinará</u></strong> los <u>requisitos</u> para obtener los <span class="doc-pill">títulos habilitantes</span>, así como el <u>régimen de autorización y funcionamiento</u> de los <u>centros de formación</u> de dicho personal.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-history icon text-orange-600"></i>Dicha <strong><u>previsión legal</u></strong> fue desarrollada por:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-file-alt icon text-gray-500"></i>La <span class="law-pill"><strong>Orden FOM 2520/2006</strong></span> que fue <strong><u>derogada</u></strong> por la <span class="law-pill"><strong>Orden FOM 2872/2010</strong></span>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-file-import icon text-green-400"></i>Que también <strong><u>transpuso</u></strong> la <span class="doc-pill"><strong>Directiva 2007/59</strong></span> sobre <u>certificación de maquinistas</u>.</p></li>
+                                            <li><p><i class="fas fa-edit icon text-blue-400"></i>Modificada por la <span class="law-pill"><strong>Orden FOM 679/2015</strong></span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-cyan-600"></i>La <span class="law-pill"><strong>Orden</strong></span> <strong><u>regula</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-id-card-alt icon text-gray-500"></i>Las <strong><u>habilitaciones</u></strong>, <strong><u>licencias</u></strong>, <strong><u>certificados</u></strong>.</p></li>
+                                <li><p><i class="fas fa-chalkboard-teacher icon text-gray-500"></i>La <strong><u>formación</u></strong> y <strong><u>evaluación</u></strong> del personal ferroviario.</p></li>
+                                <li><p><i class="fas fa-school icon text-gray-500"></i>Los <strong><u>centros de formación</u></strong>.</p></li>
+                                <li><p><i class="fas fa-hospital-user icon text-gray-500"></i>Y de los <strong><u>centros de reconocimiento médico</u></strong> y su <u>homologación</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-building icon text-indigo-600"></i>Las <span class="actor-pill"><strong>entidades ferroviarias</strong></span> deben <strong><u>disponer de programas de formación</u></strong> del personal y de <u>mantenimiento y perfeccionamiento</u> de sus <u>conocimientos profesionales</u>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Personal ferroviario relacionado con la seguridad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-user-shield"></i></div>
+                <h2>2. Personal ferroviario relacionado con la seguridad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-traffic-light icon text-blue-600"></i>Personal de circulación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-id-badge icon text-purple-600"></i>Se establecen <strong><u>habilitaciones</u></strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-tie icon text-gray-500"></i><span class="definition-pill"><strong>Responsable de circulación</strong></span> (para <u>dirigir la circulación</u> de trenes y maniobras en estaciones con un <u>sistema de control de tráfico centralizado</u>, las que le asigne la <u>normativa ferroviaria</u>, y para las tareas de <u>auxiliar de circulación</u>).</p></li>
+                                    <li><p><i class="fas fa-user-cog icon text-gray-500"></i>Y de <span class="definition-pill"><strong>auxiliar de circulación</strong></span> (para determinadas tareas en las estaciones como el <u>accionamiento de agujas</u> y de las <u>barreras de los pasos a nivel</u>, la <u>realización de maniobras</u> y demás <u>tareas complementarias</u>, a las órdenes del responsable de circulación).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-stamp icon text-green-600"></i>Ambas habilitaciones son <strong><u>otorgadas por el <span class="actor-pill">adif</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-check-circle icon text-teal-600"></i>Las habilitaciones serán <strong><u>válidas</u></strong> mientras sus titulares <strong><u>cumplan las condiciones</u></strong> y no incurran en <u>causa de suspensión o revocación</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-pause-circle icon text-yellow-600"></i>El <span class="actor-pill">adif</span> <strong><u>suspenderá la habilitación</u></strong> cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-beer icon text-red-500"></i>Se detecten en su titular <strong><u>niveles de alcohol superiores</u></strong> a los autorizados o <strong><u>indicios analíticos de consumo de estupefacientes</u></strong> (o se <u>niegue a someterse a control</u> durante la actividad profesional).</p></li>
+                                    <li><p><i class="fas fa-times-circle icon text-red-500"></i><strong><u>No se hayan realizado</u></strong> los <u>cursos de actualización</u>.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-red-500"></i>Se cometa una <strong><u>infracción administrativa</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-file-medical-alt icon text-red-500"></i>O <strong><u>no se renueve</u></strong> el <u>certificado de aptitud psicofísica</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-plus-circle icon text-red-500"></i>La modificación efectuada por la <span class="law-pill"><strong>Orden 679/2015</strong></span> ha añadido como causas para suspender la habilitación:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-exclamation-triangle icon text-orange-400"></i>Cometer una <strong><u>infracción relacionada con la seguridad</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-car-crash icon text-orange-400"></i>O haber estado <strong><u>involucrado, con indicios de infracción</u></strong>, en un <u>accidente</u> o en un <u>incidente</u> que hubiera podido dar lugar a accidente.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-shield icon text-blue-700"></i>Si la <span class="actor-pill"><strong>AESF</strong></span> constatara que el titular de una habilitación incurre en supuesto de inhabilitación:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-search icon text-gray-500"></i><strong><u>Solicitará del <span class="actor-pill">adif</span></u></strong> que lleve a cabo una <u>inspección</u> o que proceda a la <u>suspensión de la habilitación</u>.</p></li>
+                                    <li><p><i class="fas fa-ban icon text-gray-500"></i>Pudiendo <strong><u>prohibir cautelarmente el ejercicio de la actividad</u></strong> hasta que haya recibido el informe del <span class="actor-pill">adif</span> que debe contestar antes de <span class="pill-blue">4 semanas</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-undo-alt icon text-green-700"></i>El titular podrá <strong><u>recuperar la validez</u></strong> de la habilitación suspendida cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-heartbeat icon text-gray-500"></i><strong><u>Acredite su aptitud psicofísica</u></strong> (y hayan pasado <span class="pill-blue">3 meses</span> en el caso de negativa a control de alcoholemia o drogas).</p></li>
+                                    <li><p><i class="fas fa-chalkboard-teacher icon text-gray-500"></i><strong><u>Supere los cursos de actualización</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-balance-scale icon text-gray-500"></i>O <strong><u>cumpla la sanción administrativa</u></strong> a la que hubiere dado lugar la infracción cometida.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-trash-alt icon text-red-800"></i>El <span class="actor-pill">adif</span> <strong><u>revocará la habilitación</u></strong> cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-arrow-down icon text-gray-500"></i>Exista una <strong><u>pérdida sobrevenida de las condiciones</u></strong> exigidas para su obtención.</p></li>
+                                    <li><p><i class="fas fa-user-times icon text-gray-500"></i>Su titular <strong><u>cese en su actividad</u></strong> en el <span class="actor-pill">adif</span>.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-gray-500"></i>O cuando el <strong><u>procedimiento sancionador</u></strong> que se derive de la suspensión de la habilitación <strong><u>concluya en su pérdida definitiva</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-file-import icon text-cyan-600"></i>Son <strong><u>recurribles ante la <span class="actor-pill">AESF</span></u></strong> las decisiones de <u>expedición, actualización, suspensión y revocación</u> en el plazo de <span class="pill-blue">un mes</span>, debiendo emitir resolución en <span class="pill-blue">3 meses</span> como máximo.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-road icon text-orange-700"></i>Personal de infraestructura</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-id-badge icon text-purple-600"></i>Se establecen <strong><u>habilitaciones</u></strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-hard-hat icon text-gray-500"></i><span class="definition-pill"><strong>Encargado de trabajos</strong></span> (para <u>actuaciones en vía bloqueada</u>, <u>controlar los trabajos en la infraestructura</u> ferroviaria o en sus proximidades y <u>controlar a los pilotos de seguridad</u>).</p></li>
+                                    <li><p><i class="fas fa-user-shield icon text-gray-500"></i>De <span class="definition-pill"><strong>piloto de seguridad en la circulación</strong></span> (para realizar la <u>vigilancia de la infraestructura</u> y <u>protección de los trabajos</u> en relación con la seguridad en la circulación ferroviaria, así como la <u>vigilancia de los pasos a nivel</u>).</p></li>
+                                    <li><p><i class="fas fa-tractor icon text-gray-500"></i>Y de <span class="definition-pill"><strong>operador de maquinaria de infraestructura</strong></span> (para el <u>desplazamiento, manejo y guiado del material rodante auxiliar</u> para realizar trabajos en la infraestructura ferroviaria).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-stamp icon text-green-600"></i>Otorgadas por el <span class="actor-pill"><strong>adif</strong></span>.</p></li>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Las <strong><u>condiciones para la validez, suspensión o revocación</u></strong> de las habilitaciones son las <strong><u>mismas que para el personal de circulación</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-train-tram icon text-indigo-700"></i>Personal de operaciones del tren</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-id-badge icon text-purple-600"></i>Se establecen <strong><u>habilitaciones</u></strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><span class="definition-pill"><strong>Auxiliar de operaciones del tren</strong></span> (para realizar labores de <u>enganche, desenganche y acoplamiento</u> de vehículos ferroviarios, <u>colaborar en la realización de pruebas de frenado</u> y efectuar la <u>colocación y retirada de las señales de cola</u> de los trenes).</p></li>
+                                    <li><p><i class="fas fa-truck-loading icon text-gray-500"></i>De <span class="definition-pill"><strong>cargador</strong></span> (para <u>dirigir y realizar las operaciones de carga y descarga</u> de las mercancías).</p></li>
+                                    <li><p><i class="fas fa-car icon text-gray-500"></i>De <span class="definition-pill"><strong>operador de vehículos de maniobras</strong></span> (para realizar dentro del límite de la <u>zona de maniobras de las terminales de mercancías</u> el <u>desplazamiento y manejo de vehículos ferroviarios</u> por sus vías).</p></li>
+                                    <li><p><i class="fas fa-user-plus icon text-gray-500"></i>De <span class="definition-pill"><strong>auxiliar de cabina</strong></span> (<u>colabora con el maquinista</u> en el cumplimiento de las <u>prescripciones de circulación</u>, y en la <u>inmovilización del vehículo</u> en caso de emergencia).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-stamp icon text-green-600"></i>Otorgadas por la <span class="actor-pill"><strong>empresa ferroviaria</strong></span> o el <span class="actor-pill"><strong>adif</strong></span>, según el caso.</p></li>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Las <strong><u>condiciones para la validez, suspensión o revocación</u></strong> de las habilitaciones son las <strong><u>mismas que para el personal de circulación</u></strong>.</p></li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-astronaut icon text-red-700"></i>Personal de conducción</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>El <strong><u>personal que opere en la RFIG como maquinista</u></strong> perteneciente a una <span class="actor-pill">empresa ferroviaria</span> o al <span class="actor-pill">adif</span> deberá poseer una <strong><u>certificación</u></strong> que se compondrá de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-id-card icon text-purple-500"></i>Una <span class="doc-pill"><strong>licencia</strong></span>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-check icon text-gray-400"></i>Que <strong><u>acredita el cumplimiento</u></strong> de las condiciones establecidas.</p></li>
+                                                <li><p><i class="fas fa-user icon text-gray-400"></i><strong><u>Identificará al maquinista</u></strong> figurando su período de validez.</p></li>
+                                                <li><p><i class="fas fa-stamp icon text-gray-400"></i>Tendrá carácter de <strong><u>documento personal</u></strong> de su titular y será <strong><u>expedida por la <span class="actor-pill">AESF</span></u></strong> (exige una formación mª de <span class="pill-blue">425 h</span>).</p></li>
+                                                <li><p><i class="fas fa-database icon text-gray-400"></i>Se <strong><u>inscribirá en el Registro Especial Ferroviario</u></strong> con un nº atribuido a cada maquinista.</p></li>
+                                                <li><p><i class="fas fa-calendar-alt icon text-gray-400"></i>Tendrá una <strong><u>validez de <span class="pill-blue">10 años</span></u></strong> siempre que se cumplan los <u>requisitos psicofísicos</u> exigidos para su obtención.</p></li>
+                                                <li><p><i class="fas fa-sync-alt icon text-gray-400"></i>Y será <strong><u>renovable por la <span class="actor-pill">AESF</span></u></strong> si se mantienen dichos requisitos.</p></li>
+                                                <li><p><i class="fas fa-unlink icon text-gray-400"></i><strong><u>No estará ligada</u></strong> a la pertenencia a una <span class="actor-pill">empresa ferroviaria</span> concreta o al <span class="actor-pill">adif</span>.</p></li>
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-pause-circle icon text-yellow-400"></i>Se <strong><u>suspenderá</u></strong> cuando <u>no se renueve el certificado de aptitud psicofísica</u>, o se cometa alguna <u>infracción de las previstas en la LSF</u>.</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-undo-alt icon text-green-300"></i>El titular podrá <strong><u>recuperarla</u></strong> cuando <u>acredite su aptitud psicofísica</u> o <u>cumpla la sanción</u>.</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-times-circle icon text-red-400"></i>La <span class="actor-pill">AESF</span> <strong><u>revocará la licencia</u></strong> cuando:</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-arrow-down icon text-gray-300"></i>Exista una <strong><u>pérdida sobrevenida</u></strong> de las condiciones exigidas para su obtención.</p></li>
+                                                            <li><p><i class="fas fa-gavel icon text-gray-300"></i>Se <strong><u>derive de un procedimiento sancionador</u></strong>.</p></li>
+                                                            <li><p><i class="fas fa-beer icon text-gray-300"></i>O se hayan detectado <strong><u>niveles de alcoholemia, consumo de estupefacientes o la negativa a someterse a su control</u></strong>, un mínimo de <span class="pill-blue">2 veces</span> en un periodo de <span class="pill-blue">5 años</span>.</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li><p><i class="fas fa-file-import icon text-cyan-400"></i>La <span class="law-pill"><strong>Orden 679/2015</strong></span> ha incorporado la posibilidad de plantear un <strong><u>recurso potestativo de reposición</u></strong> ante la <span class="actor-pill">AESF</span> en relación con cualquier resolución que afecte a licencias, con plazo de presentación y de resolución de <span class="pill-blue">1 mes</span> cada uno.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-certificate icon text-orange-500"></i>Y un <span class="doc-pill"><strong>certificado</strong></span>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-road icon text-gray-400"></i>En el que se consignarán las <strong><u>infraestructuras</u></strong> por las que está autorizado a conducir.</p></li>
+                                                <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Y el <strong><u>material rodante</u></strong> que tiene permitido utilizar.</p></li>
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-stream icon text-gray-400"></i>El certificado <strong><u>autoriza</u></strong> al maquinista para la conducción de las siguientes <strong><u>categorías de vehículos</u></strong>:</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-tag icon text-blue-300"></i><span class="definition-pill"><strong>Categoría A</strong></span> (<u>vehículos y locomotoras de maniobra</u>, <u>trenes de trabajo</u> a velocidad máxima de <span class="pill-blue">60 km/h</span> y en una distancia máxima de <span class="pill-blue">140 km</span> desde la base a la zona de trabajos, <u>vehículos ferroviarios</u> empleados para el mantenimiento y construcción de la infraestructura ferroviaria).</p></li>
+                                                            <li><p><i class="fas fa-tag icon text-green-300"></i><span class="definition-pill"><strong>Categoría B</strong></span> (<u>toda clase de vehículos ferroviarios</u>).</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li><p><i class="fas fa-calendar-check icon text-gray-400"></i>El <strong><u>período de validez</u></strong> de los certificados se sujetará al <strong><u>régimen de renovación</u></strong> que establezca la <u>entidad ferroviaria correspondiente</u> (<span class="actor-pill">adif</span> o <span class="actor-pill">empresa ferroviaria</span>), que es quien los <u>otorga</u>.</p></li>
+                                                <li><p><i class="fas fa-chalkboard-teacher icon text-gray-400"></i>La <span class="law-pill"><strong>Orden 679/2015</strong></span> ha incorporado <strong><u>mayor detalle</u></strong> a la <u>formación necesaria</u> y a las <u>pruebas para la obtención</u> de los certificados y, especialmente a los <u>cursos de conocimientos generales mínimos</u> para los certificados de <span class="definition-pill">categoría B</span>.</p></li>
+                                                <li><p><i class="fas fa-times-circle icon text-red-400"></i>Los certificados <strong><u>perderán su validez</u></strong> cuando su titular <u>cause baja laboral</u> en la entidad ferroviaria que los expidió o la <u>licencia</u> de que dispone el titular sea <u>suspendida o revocada</u>.</p></li>
+                                                <li><p><i class="fas fa-pause-circle icon text-yellow-400"></i>Se <strong><u>suspenderán</u></strong> por <u>alcoholemia</u>, <u>consumo de drogas</u> o <u>negativa a control</u>, <u>no se hayan realizado los cursos de actualización</u>, o se cometa una <u>infracción según la LSF</u>.</p></li>
+                                                <li><p><i class="fas fa-trash-alt icon text-red-400"></i>Se <strong><u>revocará</u></strong> el certificado cuando <u>derive de un procedimiento sancionador</u>, en particular por <u>niveles de alcoholemia</u>, <u>consumo de estupefacientes</u> o la <u>negativa a someterse a su control</u> un mínimo de <span class="pill-blue">2 veces</span> en un periodo de <span class="pill-blue">5 años</span>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-shield icon text-green-700"></i>Responsable de seguridad en la circulación de las entidades ferroviarias</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Cada entidad (<span class="actor-pill">adif</span> y <span class="actor-pill">empresas ferroviarias</span>) <strong><u>designa al suyo</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-graduate icon text-purple-600"></i>Deberán disponer de <strong><u>título universitario</u></strong> y <strong><u>experiencia mínima de <span class="pill-blue">4 años</span></u></strong> en el desempeño de funciones relacionadas con:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>La <strong><u>gestión de la seguridad</u></strong> en la circulación de cualquier sistema de transporte.</p></li>
+                                    <li><p><i class="fas fa-traffic-light icon text-gray-500"></i>Con la <strong><u>gestión de la circulación ferroviaria</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>O con la <strong><u>conducción de vehículos ferroviarios</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-orange-600"></i>Sus <strong><u>competencias</u></strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-shield icon text-gray-500"></i><strong><u>Asumir la responsabilidad</u></strong> relacionada con la <u>seguridad en la circulación</u>.</p></li>
+                                    <li><p><i class="fas fa-file-alt icon text-gray-500"></i><strong><u>Proponer el tipo y alcance</u></strong> de las <u>habilitaciones y certificados</u> del personal ferroviario.</p></li>
+                                    <li><p><i class="fas fa-check icon text-gray-500"></i><strong><u>Comprobar el cumplimiento</u></strong> para <u>acceder a la formación</u> para obtener los certificados y habilitaciones.</p></li>
+                                    <li><p><i class="fas fa-book icon text-gray-500"></i><strong><u>Determinar el contenido</u></strong> de los <u>programas de formación</u>.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-gray-500"></i><strong><u>Aprobar la propuesta de desarrollo del contenido</u></strong> de los <u>programas de formación</u> y las <u>pruebas de evaluación</u> que le formule el <u>centro homologado de formación</u> correspondiente.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-gray-500"></i>Y <strong><u>proponer el otorgamiento, la suspensión, o revocación</u></strong> de las correspondientes <u>habilitaciones y certificados</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tools icon text-cyan-700"></i>Personal de las entidades encargadas de mantenimiento</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="law-pill"><strong>Orden TMA/404/2022</strong></span> establece que las <strong><u>organizaciones que realicen funciones de mantenimiento</u></strong> deben <strong><u>contemplar en sus sistemas de gestión de competencias</u></strong> el <u>personal</u> y los <u>puestos con funciones relevantes para la seguridad</u>.</p></li>
+                        <li><p><i class="fas fa-user-check icon text-red-600"></i>Incluyendo <strong><u>expresamente</u></strong> el personal con <strong><u>capacidad para emitir la aptitud para el servicio</u></strong> de los vehículos, una vez realizadas en los mismos las intervenciones requeridas.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-blue-600"></i>Dichos <strong><u>sistemas de gestión de competencias definirán</u></strong>, al menos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-door-open icon text-gray-500"></i>Las <strong><u>condiciones mínimas para el acceso</u></strong> a los puestos.</p></li>
+                                    <li><p><i class="fas fa-certificate icon text-gray-500"></i>Los <strong><u>sistemas para la certificación</u></strong> de la <u>competencia</u> y las <u>capacidades adquiridas</u>.</p></li>
+                                    <li><p><i class="fas fa-chalkboard icon text-gray-500"></i>Así como los <strong><u>contenidos mínimos</u></strong> de los <u>programas de formación iniciales</u> o de <u>reciclaje periódico</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-school icon text-purple-600"></i>La <strong><u>formación teórica o práctica</u></strong> podrá obtenerse mediante <strong><u>formación reglada</u></strong> en <u>centros homologados de formación del personal ferroviario</u> según la <span class="law-pill">Orden FOM/2872/2010</span>.</p></li>
+                        <li><p><i class="fas fa-lightbulb icon text-orange-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> podrá emitir <strong><u>recomendaciones técnicas</u></strong> con <u>directrices y criterios</u> para definir los <u>requisitos exigibles al personal</u> de las entidades encargadas de mantenimiento y las organizaciones que realicen función de ejecución del mantenimiento.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Centros de formación y centros de reconocimiento médico -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-building"></i></div>
+                <h2>4. Centros de formación y centros de reconocimiento médico</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-chalkboard-teacher icon text-blue-600"></i>Centros homologados de formación de personal ferroviario</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-purple-600"></i>Son <strong><u>organizaciones destinadas a impartir la formación</u></strong> necesaria para la <u>obtención y mantenimiento</u> de las <span class="doc-pill">habilitaciones</span>, <span class="doc-pill">licencias</span> y <span class="doc-pill">certificados</span> de personal ferroviario.</p></li>
+                        <li><p><i class="fas fa-stamp icon text-green-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> <strong><u>otorgará la correspondiente homologación</u></strong> en la que figurarán las <u>especialidades formativas autorizadas</u> al centro docente.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-orange-600"></i>Son <strong><u>funciones</u></strong> de los <span class="actor-pill">centros homologados de formación</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-graduation-cap icon text-gray-500"></i><strong><u>Impartir la formación</u></strong> de personal ferroviario.</p></li>
+                                    <li><p><i class="fas fa-book icon text-gray-500"></i>El <strong><u>desarrollo de los programas</u></strong> de formación.</p></li>
+                                    <li><p><i class="fas fa-file-signature icon text-gray-500"></i>La <strong><u>realización de las pruebas</u></strong> de evaluación.</p></li>
+                                    <li><p><i class="fas fa-sync-alt icon text-gray-500"></i>La <strong><u>realización de cursos de actualización</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-paper-plane icon text-gray-500"></i><strong><u>Proponer a la <span class="actor-pill">AESF</span></u></strong> (en el caso de la <span class="doc-pill">licencia de conducción</span>) la <strong><u>aprobación del programa de formación</u></strong> que se pretenda impartir.</p></li>
+                                    <li><p><i class="fas fa-exchange-alt icon text-gray-500"></i><strong><u>Proponer a la <span class="actor-pill">AESF</span></u></strong> la <strong><u>convalidación de la carga lectiva práctica</u></strong> para la obtención de <span class="doc-pill">licencias</span>, <span class="doc-pill">certificados</span> y <span class="doc-pill">habilitaciones</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-archive icon text-indigo-600"></i>Los <span class="actor-pill">centros homologados</span> estarán <strong><u>obligados a conservar durante <span class="pill-blue">5 años</span></u></strong> los <u>expedientes de cada curso</u>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-eye icon text-cyan-500"></i>Teniéndolos <strong><u>a disposición</u></strong> de la <span class="actor-pill">AESF</span>, de las <span class="actor-pill">entidades ferroviarias</span> y en su caso, de los <span class="actor-pill">centros de mantenimiento de material rodante</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-hospital-user icon text-green-700"></i>Centros homologados de reconocimiento médico de personal ferroviario</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Son <strong><u>organizaciones encargadas</u></strong> de la <strong><u>certificación de la aptitud psicofísica</u></strong> exigible.</p></li>
+                        <li><p><i class="fas fa-tasks icon text-purple-600"></i>Para la <strong><u>obtención y mantenimiento</u></strong> de las <span class="doc-pill">habilitaciones</span>, <span class="doc-pill">licencias</span> y <span class="doc-pill">certificados</span> del personal ferroviario.</p></li>
+                        <li><p><i class="fas fa-stamp icon text-green-600"></i>Debiendo estar para ello <strong><u>debidamente homologadas por la <span class="actor-pill">AESF</span></u></strong>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: ETI OPE en relación con el personal ferroviario -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-book-open"></i></div>
+                <h2>5. ETI OPE en relación con el personal ferroviario</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>ETI de explotación y gestión del tráfico (ETI OPE)</strong></span>, establece que las <span class="actor-pill">empresas ferroviarias</span> y los <span class="actor-pill">administradores de infraestructuras</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tasks icon text-purple-500"></i><strong><u>Determinarán en sus <span class="doc-pill">Sistemas de Gestión de la Seguridad (SGS)</span></u></strong> sus <u>tareas esenciales para la seguridad</u>, así como el <u>personal responsable</u> de su ejecución.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-orange-500"></i><strong><u>Definiendo procedimientos y requisitos</u></strong> para <u>formar</u>, <u>evaluar</u> y <u>vigilar</u> las <u>competencias del personal</u> que realiza tareas esenciales para la seguridad.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-ban icon text-red-500"></i><strong><u>Excepto</u></strong> los relativos a:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-user-astronaut icon text-gray-400"></i>Los <strong><u>maquinistas</u></strong> (recogidos en la <span class="doc-pill">Directiva 2007/59</span> traspuesta por la <span class="law-pill">Orden FOM 2872/2010</span>).</p></li>
+                                            <li><p><i class="fas fa-users icon text-gray-400"></i>Y al <strong><u>personal de acompañamiento y de preparación de trenes</u></strong> distintos del maquinista (recogidos en la propia <span class="doc-pill">ETI OPE</span>).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-id-badge icon text-green-600"></i>Toda <strong><u>cualificación adquirida</u></strong> con los procedimientos definidos en un <span class="doc-pill">SGS</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-database icon text-gray-500"></i>Se <strong><u>registrará</u></strong> en el propio <span class="doc-pill">SGS</span>.</p></li>
+                                <li><p><i class="fas fa-file-export icon text-gray-500"></i>Los <strong><u>documentos que acrediten</u></strong> la <u>formación</u>, la <u>experiencia</u> y las <u>competencias profesionales</u> se <strong><u>entregarán al personal</u></strong> que realiza tareas esenciales para la seguridad, <u>previa solicitud</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-exchange-alt icon text-gray-500"></i>Dicha cualificación <strong><u>permitirá a ese personal llevar a cabo tareas similares para otra entidad</u></strong>, siempre que:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-chalkboard-teacher icon text-blue-400"></i>Se <strong><u>determinen las necesidades de formación adicionales</u></strong> sobre <u>requisitos geográficos y técnicos</u> y sobre el <span class="doc-pill">SGS</span>.</p></li>
+                                            <li><p><i class="fas fa-check-circle icon text-green-400"></i>Y se <strong><u>complete satisfactoriamente</u></strong> dicha formación.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
