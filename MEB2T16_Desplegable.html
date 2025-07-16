@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: La seguridad ferroviaria (II)</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-shield-alt"></i> MEB2T16. La seguridad ferroviaria (II) <i class="fas fa-building"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Certificados y autorizaciones de seguridad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-file-signature"></i></div>
+                <h2>1. Certificados y autorizaciones de seguridad. Evaluación y supervisión</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Para el <strong><u>ejercicio de las funciones</u></strong> de <u>administración de la RFIG</u> y la <u>prestación del servicio ferroviario</u> sobre la misma:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-cog icon text-gray-500"></i>Los <span class="actor-pill">administradores de infraestructuras ferroviarias</span> deberán obtener las correspondientes <strong><u>autorizaciones de seguridad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>Y las <span class="actor-pill">empresas ferroviarias</span> los <strong><u>certificados de seguridad</u></strong>, respectivamente.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-green-600"></i>La <strong><u>autorización y el certificado de seguridad acreditan</u></strong> que los <span class="actor-pill">administradores de infraestructura</span> y las <span class="actor-pill">empresas ferroviarias</span> han establecido un <strong><u>sistema propio de gestión de la seguridad (SGS)</u></strong> y están en condiciones de <strong><u>cumplir</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-building icon text-purple-500"></i>Los <strong><u>administradores</u></strong>, los <strong><u>requisitos específicos necesarios</u></strong> para la <u>administración de la infraestructura en condiciones de seguridad</u>, incluidos el <u>mantenimiento</u> y la <u>explotación</u> de los <u>sistemas de control del tráfico y de señalización</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-industry icon text-orange-500"></i>Y las <strong><u>empresas</u></strong>, los <strong><u>requisitos sobre</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i><u>Sistemas de control, circulación y seguridad</u> ferroviaria.</p></li>
+                                            <li><p><i class="fas fa-user-graduate icon text-gray-400"></i>Sobre <u>conocimientos y requisitos de su personal</u> relacionado con la seguridad de la circulación.</p></li>
+                                            <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Y sobre <u>características técnicas del material rodante</u> y <u>condiciones de su mantenimiento</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-certificate icon text-teal-600"></i>Certificado de seguridad único</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>Directiva de seguridad 2016/798</strong></span> establece un <span class="definition-pill"><strong>certificado de seguridad único</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stamp icon text-purple-600"></i><strong>Expedido por</strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-building icon text-gray-500"></i>La <span class="actor-pill"><strong>Agencia Ferroviaria de la UE (EUAR)</strong></span> (para las empresas ferroviarias cuyo ámbito de operación abarque <u>uno o más Estados miembros</u>).</p></li>
+                                    <li><p><i class="fas fa-flag icon text-gray-500"></i>O también podrá ser expedido, bajo su propia responsabilidad, por la <span class="actor-pill"><strong>AESF</strong></span> (cuando el ámbito de operación de la empresa ferroviaria sea <u>solo España</u> y así lo pida el solicitante).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-stopwatch icon text-orange-600"></i>En ambos casos en un <strong><u>plazo no superior a <span class="pill-blue">4 meses</span></u></strong> después de que el solicitante haya presentado toda la documentación necesaria.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-green-600"></i>Para <strong><u>expedir el certificado de seguridad único</u></strong>, la <span class="actor-pill">EUAR</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-search-plus icon text-gray-500"></i><strong><u>Evaluará</u></strong> que la <span class="actor-pill">empresa ferroviaria</span> ha establecido su <span class="doc-pill">sistema de gestión de la seguridad</span> y que cumple los requisitos establecidos en las <span class="doc-pill">ETI</span>, los <span class="doc-pill">MCS</span> y los <span class="doc-pill">OCS</span>, con el fin de <u>controlar los riesgos</u> y <u>prestar servicios de transporte de manera segura</u> dentro de la red.</p></li>
+                                    <li><p><i class="fas fa-share-square icon text-gray-500"></i>Y <strong><u>remitirá inmediatamente la totalidad del expediente</u></strong> de la <span class="actor-pill">empresa ferroviaria</span> a las <span class="actor-pill">autoridades nacionales de seguridad</span> correspondientes al ámbito de operación previsto, para que éstas <strong><u>evalúen</u></strong> que la <span class="actor-pill">empresa ferroviaria</span> cumple los requisitos establecidos en las <span class="law-pill">normas nacionales</span> pertinentes notificadas.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-shield icon text-indigo-700"></i>Autorización de seguridad</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>La otorga la <strong><u>autoridad nacional de seguridad</u></strong> del <span class="actor-pill">Estado miembro</span> en que esté situada la infraestructura ferroviaria.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-sync-alt icon text-cyan-600"></i>Se <strong><u>revisará</u></strong> siempre que se hayan producido <strong><u>cambios sustanciales</u></strong> en:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i>La <u>infraestructura</u>, <u>señalización</u> o <u>subsistemas de energía</u>.</p></li>
+                                    <li><p><i class="fas fa-book icon text-gray-500"></i>O en los <u>principios de su explotación y mantenimiento</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-shield icon text-blue-700"></i>La <span class="actor-pill"><strong>AESF</strong></span> podrá exigir también que se revise si se producen <strong><u>cambios sustanciales en el marco reglamentario</u></strong> de la seguridad.</p></li>
+                        <li><p><i class="fas fa-stopwatch icon text-orange-600"></i>La <span class="actor-pill">AESF</span> <strong><u>decidirá</u></strong> sobre las solicitudes de autorización de seguridad en un <strong><u>plazo no superior a <span class="pill-blue">4 meses</span></u></strong> después de que el solicitante haya presentado toda la documentación necesaria.</p></li>
+                    </ul>
+                </div>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-calendar-alt icon text-teal-600"></i>Periodo de vigencia</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>El periodo de vigencia de los <span class="doc-pill">certificados</span> y las <span class="doc-pill">autorizaciones de seguridad</span> será de <span class="pill-blue"><strong>5 años</strong></span>.</p></li>
+                        <li><p><i class="fas fa-redo-alt icon text-green-600"></i>Podrán <strong><u>renovarse</u></strong>, por <u>periodos sucesivos iguales</u>, siempre que se cumplan las <u>condiciones exigidas</u> para su otorgamiento y <u>previa solicitud</u>.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: La Agencia Estatal de Seguridad Ferroviaria -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-university"></i></div>
+                <h2>2. La Agencia Estatal de Seguridad Ferroviaria</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="doc-pill"><strong>Directiva Europea 2004/49</strong></span> sobre la seguridad de los ferrocarriles comunitarios <strong><u>estableció</u></strong> que cada <span class="actor-pill">Estado miembro</span> debía <strong><u>crear una autoridad responsable de la seguridad</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i><strong><u>Independiente</u></strong>, en su <u>organización</u>, <u>estructura jurídica</u> y <u>capacidad decisoria</u>, de cualquier <span class="actor-pill">Empresa Ferroviaria</span>, <span class="actor-pill">Administrador de la Infraestructura</span>, <span class="actor-pill">Solicitante de Capacidad</span> y <span class="actor-pill">Entidad Adjudicadora</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-landmark icon text-purple-600"></i>El <span class="law-pill"><strong>RD 1072/2014</strong></span> ha <strong><u>creado la <span class="actor-pill">Agencia Estatal de Seguridad Ferroviaria (AESF)</span></u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-shield icon text-blue-500"></i>Que <strong><u>asume las funciones</u></strong> de <span class="definition-pill">Autoridad Responsable de Seguridad</span>.</p></li>
+                                <li><p><i class="fas fa-exchange-alt icon text-orange-500"></i>Y <strong><u>reemplaza</u></strong> a la <span class="actor-pill">Dirección General de Ferrocarriles</span> que desaparece.</p></li>
+                                <li><p><i class="fas fa-calendar-alt icon text-cyan-500"></i>Y <strong><u>fija el inicio de su actividad</u></strong> el <span class="pill-blue">1 de abril de 2015</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-info-circle icon text-blue-700"></i>La <span class="actor-pill"><strong>AESF</strong></span> es un <strong><u>organismo público</u></strong> de los regulados en la <span class="law-pill">Ley 40/2015 de Régimen Jurídico del Sector Público</span>.</p></li>
+                    <li><p><i class="fas fa-sitemap icon text-indigo-600"></i>Su <strong><u>ámbito de competencias</u></strong> es el <u>sistema ferroviario de la RFIG</u>, y los <u>servicios que por ella discurren</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-green-700"></i><strong><u>Ejerciendo como autoridad responsable</u></strong> de la seguridad ferroviaria, <strong><u>realizando la supervisión</u></strong> de la seguridad de todos los elementos del sistema ferroviario:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Las <strong><u>infraestructuras</u></strong>.</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>El <strong><u>material rodante</u></strong>.</p></li>
+                                <li><p><i class="fas fa-users icon text-gray-500"></i>El <strong><u>personal ferroviario</u></strong>.</p></li>
+                                <li><p><i class="fas fa-traffic-light icon text-gray-500"></i>Y la <strong><u>operación ferroviaria</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-clipboard-list icon text-blue-800"></i>Principales cometidos de la AESF</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-purple-600"></i>Los principales <strong><u>cometidos</u></strong> de la <span class="actor-pill">AESF</span> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-power-off icon text-gray-500"></i><strong><u>Autorizar la entrada en servicio</u></strong> de las <u>líneas</u>, los <u>vehículos</u> y los <u>subsistemas</u>.</p></li>
+                                    <li><p><i class="fas fa-search-plus icon text-gray-500"></i><strong><u>Supervisar el cumplimiento</u></strong> de los <u>requisitos esenciales</u> de los <u>componentes de interoperabilidad</u>.</p></li>
+                                    <li><p><i class="fas fa-user-shield icon text-gray-500"></i><strong><u>Conceder autorizaciones de seguridad</u></strong> a los <span class="actor-pill">administradores de infraestructura</span>.</p></li>
+                                    <li><p><i class="fas fa-id-card icon text-gray-500"></i><strong><u>Conceder licencias de empresa ferroviaria</u></strong> y <strong><u>certificados de seguridad</u></strong> a las <span class="actor-pill">empresas ferroviarias</span>.</p></li>
+                                    <li><p><i class="fas fa-tools icon text-gray-500"></i><strong><u>Conceder la homologación</u></strong> de los <u>centros de mantenimiento</u> y la <strong><u>certificación</u></strong> de las <u>entidades encargadas del mantenimiento</u>.</p></li>
+                                    <li><p><i class="fas fa-user-graduate icon text-gray-500"></i><strong><u>Conceder la homologación</u></strong> de los <u>centros de formación</u> y de los de <u>reconocimiento psicofísico</u> del <u>personal ferroviario</u>.</p></li>
+                                    <li><p><i class="fas fa-id-badge icon text-gray-500"></i><strong><u>Conceder las licencias de conducción</u></strong>, <strong><u>proponer las pruebas</u></strong> de obtención de <u>títulos habilitantes</u>, y <strong><u>aprobar el contenido mínimo</u></strong> de los <u>programas de formación</u> y las <u>condiciones de capacidad psicofísica</u> del <u>personal ferroviario</u>.</p></li>
+                                    <li><p><i class="fas fa-database icon text-gray-500"></i><strong><u>Gestionar el Registro Especial Ferroviario</u></strong>, supervisando la <u>inscripción del personal ferroviario</u>, la <u>matriculación del material rodante</u>, y las <u>bases de datos relacionadas con la seguridad</u>, incluidos los <u>inventarios de infraestructuras</u>.</p></li>
+                                    <li><p><i class="fas fa-chart-pie icon text-gray-500"></i><strong><u>Realizar el seguimiento</u></strong> y <strong><u>elaborar informes anuales de seguridad</u></strong> del transporte ferroviario.</p></li>
+                                    <li><p><i class="fas fa-globe-europe icon text-gray-500"></i><strong><u>Participar en los grupos de trabajo</u></strong> de la <span class="actor-pill">Agencia Ferroviaria de la Unión Europea</span> y en <u>otras organizaciones</u> relacionadas con la <u>seguridad o interoperabilidad</u> del transporte ferroviario.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-gray-500"></i><strong><u>Desarrollar el marco normativo de seguridad</u></strong> y <strong><u>supervisar su cumplimiento</u></strong> por los <u>agentes del sistema ferroviario</u>.</p></li>
+                                    <li><p><i class="fas fa-balance-scale icon text-gray-500"></i><strong><u>Ejercer la potestad sancionadora</u></strong> en materia de <u>seguridad ferroviaria</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-plus-circle icon text-green-600"></i>Las referencias a <strong><u>conceder</u></strong>, son <strong><u>ampliables a renovar, suspender o revocar</u></strong> las <span class="doc-pill">autorizaciones</span>, <span class="doc-pill">licencias</span> o <span class="doc-pill">certificados</span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-sitemap icon text-indigo-800"></i>Órganos de la AESF</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-users-cog icon text-blue-600"></i>Los <strong><u>órganos de gobierno</u></strong> de la <span class="actor-pill">AESF</span> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-tie icon text-gray-500"></i>La <strong><u>Presidencia</u></strong> (asumida por el titular de la <span class="actor-pill">Secretaría General de Transporte Terrestre</span>).</p></li>
+                                    <li><p><i class="fas fa-users icon text-gray-500"></i>Y el <strong><u>Consejo Rector</u></strong> (con representantes de los <span class="actor-pill">Ministerios de Transportes, Hacienda, Economía e Industria</span>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-purple-600"></i>Los <strong><u>órganos ejecutivos y operativos</u></strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-ninja icon text-gray-500"></i>El <strong><u>Director de la Agencia</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i>La <strong><u>Subdirección General de Infraestructuras</u></strong> (encargada de la emisión de las <u>autorizaciones de seguridad</u>).</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>La <strong><u>Subdirección General de Coordinación de la Seguridad Ferroviaria</u></strong> (encargada de la emisión de los <u>certificados de seguridad</u>, <u>mantenimiento</u>, <u>personal</u>, etc.).</p></li>
+                                    <li><p><i class="fas fa-building icon text-gray-500"></i>Y la <strong><u>División de Administración</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: La Autoridad Administrativa Independiente para la Investigación Técnica de Accidentes -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-university"></i></div>
+                <h2>3. La Autoridad Administrativa Independiente para la Investigación Técnica de Accidentes</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="law-pill"><strong>Ley 2/2024</strong></span> ha <strong><u>creado la <span class="actor-pill">Autoridad Administrativa Independiente para la Investigación Técnica de Accidentes e Incidentes ferroviarios, marítimos y de aviación civil</span></u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Cuyo <span class="doc-pill"><strong>Estatuto orgánico</strong></span> está <strong><u>pendiente de desarrollo y aprobación</u></strong> mediante <span class="law-pill">real decreto</span> del <span class="actor-pill">Consejo de Ministros</span>.</p></li>
+                                <li><p><i class="fas fa-exchange-alt icon text-orange-500"></i>Una vez se constituya la <span class="actor-pill">Autoridad</span> se <strong><u>extinguirá la <span class="actor-pill">Comisión de Investigación de Accidentes Ferroviarios (CIAF)</span></u></strong>, pero mientras tanto ésta <u>continúa con su actividad</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>El <span class="law-pill"><strong>R.D. 623/2014</strong></span> <strong><u>regula la investigación</u></strong> de los accidentes e incidentes ferroviarios y la <span class="actor-pill">CIAF</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>Estableciendo que ha de realizar su <strong><u>investigación técnica sin ningún tipo de traba</u></strong> y, en su caso, con <strong><u>total colaboración</u></strong> con la <u>autoridad judicial</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-purple-600"></i>La <span class="actor-pill"><strong>CIAF</strong></span> realizará la <strong><u>investigación técnica</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-car-crash icon text-red-500"></i>Los <strong><u>accidentes ferroviarios graves</u></strong> que se produzcan sobre la <span class="definition-pill">RFIG</span>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li>
+                                                <div class="collapsible-trigger">
+                                                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                    <p><i class="fas fa-info-circle icon text-gray-400"></i>Un <strong>accidente grave</strong> es:</p>
+                                                </div>
+                                                <div class="collapsible-content hidden">
+                                                    <ul class="even-deeper-nested-list">
+                                                        <li><p><i class="fas fa-users-slash icon text-red-300"></i><u>Colisiones o descarrilamientos</u> con al menos <span class="pill-blue"><strong>1</strong></span> <u>víctima mortal</u> o <span class="pill-blue"><strong>5</strong></span> o más <u>heridos graves</u>.</p></li>
+                                                        <li><p><i class="fas fa-house-damage icon text-yellow-300"></i>O con <strong><u>grandes daños</u></strong>, no inferiores a <span class="pill-blue">2 millones de euros</span>, al <u>material rodante</u>, la <u>infraestructura</u> o el <u>medio ambiente</u>.</p></li>
+                                                        <li><p><i class="fas fa-shield-alt icon text-orange-300"></i>O con <strong><u>efectos evidentes en la seguridad</u></strong>.</p></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Así como la investigación en la misma de los <strong><u>demás accidentes e incidentes ferroviarios</u></strong> cuando estime que de tal investigación podrán obtenerse <u>conclusiones que permitan mejorar la seguridad</u> ferroviaria.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-users-cog icon text-indigo-600"></i>La <span class="actor-pill"><strong>CIAF</strong></span> actúa en <strong><u>pleno</u></strong> que está <strong><u>compuesto por</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-tie icon text-gray-500"></i>El <strong><u>Presidente</u></strong>.</p></li>
+                                <li><p><i class="fas fa-users icon text-gray-500"></i><strong><u>5 vocales</u></strong> uno de los cuales actuará como <u>vicepresidente</u>.</p></li>
+                                <li><p><i class="fas fa-user-edit icon text-gray-500"></i>Y un <strong><u>secretario</u></strong> con <u>voz, pero sin voto</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-check icon text-teal-600"></i>El <strong><u>Presidente y los vocales</u></strong> de la <span class="actor-pill">Comisión</span> serán <strong><u>nombrados por el <span class="actor-pill">Ministro de TMS</span></u></strong> entre personas de <u>reconocido prestigio y competencia profesional</u> en el ámbito ferroviario.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-cyan-600"></i>Los <strong><u>vocales</u></strong> serán los siguientes:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-gray-500"></i><strong><u>ICCP</u></strong> experto en <u>infraestructura</u>.</p></li>
+                                <li><p><i class="fas fa-industry icon text-gray-500"></i><strong><u>Ingeniero industrial</u></strong> experto en <u>material rodante</u>.</p></li>
+                                <li><p><i class="fas fa-broadcast-tower icon text-gray-500"></i><strong><u>Ingeniero de telecomunicaciones</u></strong> experto en <u>señalización, seguridad y comunicaciones</u>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><strong><u>Experto en seguridad y circulación</u></strong>.</p></li>
+                                <li><p><i class="fas fa-concierge-bell icon text-gray-500"></i>Y <strong><u>experto en explotación</u></strong> de los <u>servicios ferroviarios</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-plus icon text-blue-700"></i>A propuesta del <span class="actor-pill">Ministro de TMS</span>, el <span class="actor-pill">Pleno de la Comisión</span> designará un <strong><u>Secretario</u></strong> que deberá ser <u>funcionario de carrera</u> perteneciente a un <u>cuerpo del subgrupo A1</u> de la <span class="actor-pill">AGE</span>.</p></li>
+                    <li><p><i class="fas fa-calendar-alt icon text-orange-600"></i>El <strong><u>mandato del Presidente y los vocales</u></strong> será de <span class="pill-blue"><strong>6 años</strong></span> <strong><u>sin posibilidad de reelección</u></strong>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-green-700"></i>Corresponde al <span class="actor-pill"><strong>Pleno de la Comisión</strong></span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tag icon text-gray-500"></i>La <strong><u>calificación definitiva</u></strong> de los <u>accidentes e incidentes ferroviarios</u>.</p></li>
+                                <li><p><i class="fas fa-check-double icon text-gray-500"></i><strong><u>Aprobar los informes y recomendaciones de seguridad</u></strong> elaborados al finalizar una investigación técnica.</p></li>
+                                <li><p><i class="fas fa-bullhorn icon text-gray-500"></i>Y <strong><u>ordenar su publicación</u></strong> en un plazo máximo de <span class="pill-blue">12 meses</span> a contar desde la fecha en la que se produjo el accidente o incidente ferroviario.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-search icon text-blue-800"></i>La <strong><u>investigación</u></strong> se realiza por parte del <strong><u>equipo investigador de la <span class="actor-pill">CIAF</span></u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-friends icon text-gray-500"></i>Que estará <strong><u>integrado como mínimo</u></strong> por el <u>investigador encargado</u> y los <u>investigadores que sean asignados</u> a la misma por parte del <span class="actor-pill">Presidente de la Comisión</span>.</p></li>
+                                <li><p><i class="fas fa-user-shield icon text-gray-500"></i>Los <u>funcionarios públicos</u> del equipo tendrán la <strong><u>consideración de agentes de autoridad</u></strong> cuando actúen en ejercicio de su misión investigadora.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-file-invoice icon text-purple-700"></i>El <strong><u>investigador encargado</u></strong> elaborará una <strong><u>propuesta de informe técnico</u></strong> de cada accidente o incidente.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-balance-scale icon text-gray-500"></i>Que se <strong><u>adecuará a su importancia y gravedad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-lightbulb icon text-gray-500"></i>E <strong><u>incluirá</u></strong>, cuando proceda, <u>recomendaciones de seguridad</u>.</p></li>
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i>El <span class="doc-pill">informe técnico</span> se <strong><u>ajustará lo máximo posible a la estructura</u></strong> de información que determine la <span class="actor-pill">Comisión Europea</span>.</p></li>
+                                <li><p><i class="fas fa-list icon text-gray-500"></i>En todo caso, deberá <strong><u>incluir</u></strong>: la <u>descripción de la incidencia</u> y de su <u>contexto</u>, las <u>investigaciones y las pesquisas</u> realizadas, y los <u>análisis y las conclusiones</u> relacionados con las <u>causas de las incidencias</u> de todos los <u>factores contribuyentes</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-red-700"></i>El <span class="doc-pill"><strong>informe técnico</strong></span> y sus <strong><u>recomendaciones</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-balance-scale-left icon text-gray-500"></i><strong><u>No prejuzgarán</u></strong> en ningún caso la <u>decisión que pueda recaer en vía judicial</u>.</p></li>
+                                <li><p><i class="fas fa-user-secret icon text-gray-500"></i>Y <strong><u>no perseguirán la evaluación de responsabilidades</u></strong>, ni la <strong><u>determinación de culpabilidades</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-comment-dots icon text-orange-600"></i>Existe un <strong><u>plazo de <span class="pill-blue">15 días</span></u></strong> para <strong><u>formular observaciones de interesados</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>Siempre que ello <strong><u>no perjudique la investigación</u></strong> de seguridad y se <strong><u>respete la protección de datos</u></strong>.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>En caso de que existan <u>diligencias judiciales</u> esto se <strong><u>supeditará a la legislación procesal</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: La Agencia Ferroviaria de la Unión Europea -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-university"></i></div>
+                <h2>4. La Agencia Ferroviaria de la Unión Europea</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>El <span class="doc-pill"><strong>Reglamento 2016/796</strong></span> <strong><u>establece la <span class="actor-pill">Agencia Ferroviaria de la Unión Europea</span></u></strong>, regulando sus <u>funciones</u>, y <u>apoyando el establecimiento del espacio ferroviario europeo único</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-crosshairs icon text-red-600"></i>Y en particular sus <strong><u>objetivos</u></strong> relacionados con:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-link icon text-gray-500"></i>La <strong><u>interoperabilidad</u></strong> dentro del sistema ferroviario de la Unión, regulada por la <span class="doc-pill"><strong>Directiva 2016/797</strong></span>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>La <strong><u>seguridad</u></strong> del sistema ferroviario de la Unión, regulada por la <span class="doc-pill"><strong>Directiva 2016/798</strong></span>.</p></li>
+                                <li><p><i class="fas fa-id-card icon text-gray-500"></i>Y la <strong><u>certificación de los maquinistas</u></strong>, regulada por la <span class="doc-pill"><strong>Directiva 2007/59</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-600"></i>La <span class="actor-pill">Agencia</span> tiene como <strong><u>objetivo contribuir a un mayor desarrollo y funcionamiento efectivo</u></strong> de un <span class="definition-pill">Espacio Ferroviario Europeo único sin fronteras</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-double icon text-green-500"></i><strong><u>Garantizando</u></strong> un <u>elevado nivel de seguridad e interoperabilidad</u> ferroviarias.</p></li>
+                                <li><p><i class="fas fa-chart-line icon text-purple-500"></i>E <strong><u>impulsando la posición competitiva</u></strong> del <u>sector ferroviario</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-orange-600"></i>En particular, <strong><u>contribuirá</u></strong>, en el <u>aspecto técnico</u>, a la <strong><u>aplicación de la legislación de la Unión</u></strong> mediante:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-users-cog icon text-gray-500"></i>Desarrollando un <strong><u>enfoque común en materia de seguridad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-gray-500"></i>Y <strong><u>mejorando el grado de interoperabilidad</u></strong> del sistema ferroviario de la Unión.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-bullseye icon text-cyan-600"></i><strong><u>Otros objetivos</u></strong> de la <span class="actor-pill">Agencia</span> serán:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-search icon text-gray-500"></i><strong><u>Supervisar el desarrollo</u></strong> de las <u>normas nacionales</u> en materia ferroviaria.</p></li>
+                                <li><p><i class="fas fa-hands-helping icon text-gray-500"></i>Para <strong><u>apoyar la actuación de las autoridades nacionales</u></strong> en los ámbitos de la <u>seguridad</u> y la <u>interoperabilidad</u> ferroviarias.</p></li>
+                                <li><p><i class="fas fa-lightbulb icon text-gray-500"></i>Y <strong><u>promover la optimización</u></strong> de los <u>procedimientos</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-user-shield icon text-indigo-700"></i>Cuando así lo dispongan la <span class="doc-pill"><strong>Directiva 2016/797</strong></span> y la <span class="doc-pill"><strong>Directiva 2016/798</strong></span>, la <span class="actor-pill">Agencia</span> desempeñará la <strong><u>función de autoridad de la Unión</u></strong> responsable de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train icon text-gray-500"></i><strong><u>Expedir autorizaciones de puesta en el mercado</u></strong> de <u>vehículos</u> y <u>tipos de vehículos ferroviarios</u>.</p></li>
+                                <li><p><i class="fas fa-certificate icon text-gray-500"></i>Y de <strong><u>expedir certificados de seguridad únicos</u></strong> para las <span class="actor-pill">empresas ferroviarias</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
