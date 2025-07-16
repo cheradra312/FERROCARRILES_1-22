@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Las infraestructuras ferroviarias en el entorno urbano</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-city"></i> MEB2T14. Las infraestructuras ferroviarias en el entorno urbano <i class="fas fa-train"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Problemática -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-exclamation-triangle"></i></div>
+                <h2>1. Las infraestructuras ferroviarias en el entorno urbano. Problemática</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-history icon text-orange-600"></i>Las <strong><u>estaciones ferroviarias</u></strong>, que originalmente se construían en la <strong><u>periferia</u></strong>, han quedado <strong><u>absorbidas por la trama urbana</u></strong> con el desarrollo urbanístico, convirtiéndose en un <u>preciado suelo</u> para las <span class="actor-pill">administraciones locales</span> en muchos casos.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-sync-alt icon text-blue-600"></i>La <strong><u>modernización de la red</u></strong> y la <strong><u>implantación de la Alta Velocidad</u></strong> han generado una <strong><u>doble necesidad</u></strong> que propicia las <span class="definition-pill"><strong>operaciones de integración del ferrocarril</strong></span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-wrench icon text-gray-500"></i>La <strong><u>renovación de estaciones</u></strong> para adaptarlas a las necesidades actuales, donde <u>cercanías</u> y <u>alta velocidad</u> marcan las prioridades.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-lightbulb icon text-cyan-500"></i>La <strong><u>oportunidad de redefinir la relación ciudad-infraestructura</u></strong>, convirtiéndose en un <u>proyecto de transformación urbanística</u> que palia el <u>histórico papel de barrera</u>.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-bullseye icon text-red-400"></i>Los proyectos suelen centrarse en la <strong><u>permeabilización o eliminación de la barrera urbana</u></strong> para <u>articular los barrios</u> del entorno.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-users-cog icon text-indigo-700"></i>Para explicar las características de implantación de la Alta Velocidad debe hacerse referencia a la <strong><u>gestión del proyecto</u></strong> y al <strong><u>proceso de toma de decisiones</u></strong>, en el que intervienen <strong><u>varios agentes con intereses distintos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-building icon text-gray-500"></i>La visión de <span class="actor-pill"><strong>ADIF-AV</strong></span> se centra en la <strong><u>eficiencia de la red</u></strong> y la <strong><u>articulación de los grandes nodos</u></strong>.</p></li>
+                                <li><p><i class="fas fa-map-marked-alt icon text-gray-500"></i>Mientras que la visión de los <span class="actor-pill"><strong>agentes locales y regionales</strong></span> se centra en la <strong><u>escala de la estación</u></strong> y su <strong><u>integración en el territorio</u></strong>.</p></li>
+                                <li><p><i class="fas fa-balance-scale icon text-orange-500"></i>El <strong><u>peso de una u otra visión</u></strong> explica las <strong><u>diferencias existentes</u></strong> en cada una de las soluciones y su <u>grado de inserción urbana</u>.</p></li>
+                                <li><p><i class="fas fa-map-pin icon text-purple-500"></i>En general, en los <strong><u>territorios con menor densidad de población</u></strong>, el ferrocarril suele <strong><u>imponer sus propias lógicas</u></strong> al <u>modelo urbano</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Alternativas para su integración -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-random"></i></div>
+                <h2>2. Alternativas para su integración</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Para tratar de <strong><u>integrar la infraestructura ferroviaria</u></strong> en el medio urbano existen:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-hard-hat icon text-red-500"></i><strong><u>Soluciones duras</u></strong> como la <u>construcción de variantes del trazado</u> o el <u>soterramiento de la travesía urbana</u>.</p></li>
+                                <li><p><i class="fas fa-leaf icon text-green-500"></i>Y <strong><u>soluciones blandas</u></strong> como el <u>tratamiento de bordes</u>, <u>aumento de permeabilidad</u>, <u>construcción de pasos a distinto nivel</u>, etc.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-clipboard-list icon text-purple-600"></i>A continuación, se <strong><u>desarrolla cada una de ellas</u></strong>.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-route icon text-orange-600"></i>Variantes de trazado</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-map-signs icon text-blue-600"></i>Consisten en <strong><u>llevar al extrarradio el trazado</u></strong> que surca el centro de la ciudad.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-exchange-alt icon text-purple-600"></i>Esta solución, <strong><u>cambia la centralidad de la estación</u></strong> por una <strong><u>estación periférica</u></strong>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-minus-circle icon text-red-500"></i><strong><u>Peor conectada</u></strong> con el resto de las infraestructuras, con <strong><u>escasos servicios</u></strong>, <strong><u>menores posibilidades de intermodalidad</u></strong> y <strong><u>difícilmente integrable</u></strong> a la trama urbana consolidada.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-plus-circle icon text-green-500"></i>Pero plantea <strong><u>ventajas</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-tools icon text-gray-400"></i>Obras <strong><u>más sencillas</u></strong>, <strong><u>más baratas</u></strong>, <strong><u>más seguras</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-volume-mute icon text-gray-400"></i><strong><u>Menos molestas</u></strong> para la <u>población</u> y para el <u>tráfico ferroviario</u>.</p></li>
+                                                <li><p><i class="fas fa-landmark icon text-gray-400"></i>El <strong><u>terreno liberado</u></strong> puede ser empleado al <span class="pill-blue">100%</span> para <u>otros usos</u>.</p></li>
+                                                <li><p><i class="fas fa-map-marked-alt icon text-gray-400"></i>Y la <strong><u>nueva estación</u></strong> puede ubicarse en <u>terrenos de futuro desarrollo urbanístico</u> y con <u>buenas comunicaciones</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-city icon text-cyan-600"></i>Ejemplo: <strong><u>Burgos</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-archway icon text-indigo-700"></i>Soterramientos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Son <strong><u>otra de las soluciones</u></strong> para la integración del ferrocarril en las ciudades.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-check-circle icon text-green-600"></i><strong><u>Enterrar todo o parte del corredor</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-volume-up icon text-gray-500"></i><strong><u>Elimina ruidos</u></strong>, <strong><u>impactos visuales</u></strong>, <strong><u>estorbos para la movilidad</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-layer-group icon text-gray-500"></i>Y <strong><u>libera un terreno</u></strong> que permite <u>ordenar la superficie</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-times-circle icon text-red-600"></i>Desde el <strong><u>punto de vista ferroviario</u></strong> esta solución <strong><u>no aporta ventajas</u></strong> ya que supone:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-euro-sign icon text-gray-500"></i>Obras <strong><u>más caras</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-hard-hat icon text-gray-500"></i>Y con <strong><u>mayores dificultades de ejecución y mantenimiento</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-search-location icon text-gray-500"></i>En cuyos proyectos se deben <strong><u>analizar cuidadosamente</u></strong> las <u>características geotécnicas</u> de los terrenos en los que se realiza el soterramiento, así como la <u>compatibilidad con otras infraestructuras subterráneas</u> que puedan existir previamente como <u>líneas de metro</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>A pesar de todo, es la <strong><u>alternativa por la que primero optan</u></strong> las <span class="actor-pill">administraciones locales</span>.</p></li>
+                        <li><p><i class="fas fa-map icon text-purple-600"></i>Hay que tener en cuenta que con el soterramiento <strong><u>se libera mucho suelo</u></strong>, y eso da la <strong><u>oportunidad de cambiar todo el urbanismo</u></strong> de la zona <u>casi sin condicionantes</u>.</p></li>
+                        <li><p><i class="fas fa-city icon text-cyan-600"></i>Ejemplo: <strong><u>Girona</u></strong> (línea de AV y ancho UIC).</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-stream icon text-teal-600"></i>Otras alternativas</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bridge icon text-blue-600"></i>Una de ellas es el <span class="definition-pill"><strong>viaducto</strong></span>, <strong><u>elevando la cota del ferrocarril</u></strong>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check-circle icon text-green-500"></i>Con ello se <strong><u>mejora la permeabilidad</u></strong> eliminando el <u>efecto barrera</u> porque el <u>terreno bajo las vías es aprovechable</u>.</p></li>
+                                    <li><p><i class="fas fa-thumbs-up icon text-teal-500"></i>Supone una <strong><u>ejecución más sencilla y barata</u></strong> que un soterramiento.</p></li>
+                                    <li><p><i class="fas fa-city icon text-cyan-500"></i>Ejemplo: <strong><u>Jerez de la Frontera</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-level-down-alt icon text-orange-600"></i>Otra alternativa es <strong><u>bajar la cota del ferrocarril</u></strong> sin llegar a cubrir totalmente las instalaciones.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-info-circle icon text-gray-500"></i>Es decir <strong><u>rebajar la cota de las vías</u></strong> disponiéndolas entre <u>taludes a <span class="pill-blue">2-3 m</span> por debajo del nivel de la superficie</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-check-double icon text-green-500"></i>Esta solución, <u>combinada adecuadamente con modificaciones urbanísticas</u> en el entorno, permite:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-arrows-alt-h icon text-blue-400"></i>Conseguir una <strong><u>mayor permeabilidad</u></strong> en la zona de influencia del ferrocarril.</p></li>
+                                                <li><p><i class="fas fa-volume-mute icon text-purple-400"></i><strong><u>Resta ruidos</u></strong> y <strong><u>minimiza el impacto visual</u></strong> de las instalaciones.</p></li>
+                                                <li><p><i class="fas fa-road icon text-orange-400"></i>Y permite, por ejemplo, hacer <strong><u>pasos más cómodos y a menos altura</u></strong> sobre las vías.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-plus-square icon text-gray-500"></i>También se pueden <strong><u>cubrir parcialmente las vías</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-city icon text-cyan-500"></i>Ejemplo: <strong><u>León</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-clipboard-check icon text-indigo-700"></i>Consideraciones adicionales</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-compress icon text-blue-600"></i>En todos los casos se procura <strong><u>minimizar la zona ferroviaria</u></strong> que va a quedar en la ciudad.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-sign-out-alt icon text-gray-500"></i><strong><u>Sacando de la trama urbana</u></strong> los <u>talleres</u>, <u>almacenes</u>, etc. que hubiera.</p></li>
+                                    <li><p><i class="fas fa-ruler-horizontal icon text-gray-500"></i>Y se <strong><u>adelgaza al máximo</u></strong> el <u>corredor de las vías</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-bullseye icon text-red-600"></i>Lo que se intenta es que por la ciudad sólo queden las <strong><u>vías necesarias y la estación</u></strong>, lo <strong><u>mínimo imprescindible</u></strong> para dar servicio a los viajeros.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-ban icon text-orange-600"></i>Al mismo tiempo, se <strong><u>evita el tránsito de mercancías</u></strong> o el <strong><u>trabajo de mantenimiento</u></strong> de los trenes.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Porque eso <strong><u>ocupa mucho espacio</u></strong>, y es una actividad que se puede hacer <strong><u>perfectamente fuera del casco urbano</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-plus-circle icon text-green-700"></i>Además, se pueden llevar a cabo <strong><u>otro tipo de actuaciones</u></strong> que suponen <strong><u>soluciones puntuales</u></strong>, como:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-landmark icon text-gray-500"></i>La <strong><u>liberación de terrenos ferroviarios</u></strong> en desuso.</p></li>
+                                    <li><p><i class="fas fa-road icon text-gray-500"></i><strong><u>Construcción y adecuación de pasos</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-vector-square icon text-gray-500"></i><strong><u>Ejecución de viales de borde</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-archive icon text-gray-500"></i><strong><u>Cubrimiento de trincheras</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-volume-mute icon text-gray-500"></i>Y <strong><u>colocación de barreras acústicas y cerramientos</u></strong>, por ejemplo.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Sistemas de financiación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-users"></i></div>
+                <h2>3. Sistemas de financiación en colaboración con otras administraciones</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Una vez que se plantea una <span class="definition-pill">operación de integración del ferrocarril</span> en una ciudad, se <strong><u>estudia todo el abanico de alternativas</u></strong> y se <strong><u>analizan conjuntamente</u></strong> con las distintas <span class="actor-pill">administraciones implicadas</span> (<span class="actor-pill">Ayuntamiento</span> y <span class="actor-pill">Comunidad Autónoma</span>).</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-comments-dollar icon text-purple-600"></i>El <span class="actor-pill"><strong>MITMS</strong></span> pondrá sobre la mesa <strong><u>dos cuestiones básicas</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-money-bill-wave icon text-green-500"></i>La primera es que <strong><u>aportará como máximo la inversión necesaria</u></strong> para lograr los <u>objetivos incluidos en su planificación ferroviaria</u>, ya sea en el <u>trazado de nuevas vías</u>, la <u>reconversión de las existentes</u> o la <u>remodelación de la estación</u>.</p></li>
+                                <li><p><i class="fas fa-landmark icon text-orange-500"></i>La segunda cuestión tiene que ver con la <strong><u>liberación de suelo</u></strong>, y es que si las <span class="actor-pill">administraciones locales y autonómicas</span> pretenden una <u>operación urbanística de mayor calado</u> que la necesaria por <u>criterios meramente ferroviarios</u>, el <span class="actor-pill">Ministerio</span> está dispuesto a <strong><u>ceder aquellos suelos</u></strong> que ocupaba el ferrocarril y que con la nueva ordenación ferroviaria ya no necesitará.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-chart-line icon text-cyan-600"></i>Mediante la <strong><u>recalificación y posterior enajenación</u></strong> de esos suelos se pueden obtener <span class="definition-pill"><strong>plusvalías</strong></span> que ayuden a <u>financiar la operación</u>.</p></li>
+                    <li><p><i class="fas fa-file-invoice-dollar icon text-red-600"></i>El posible <strong><u>déficit</u></strong> que pudiera darse deberá ser <strong><u>cubierto por aportaciones directas</u></strong> del <span class="actor-pill">Ayuntamiento</span> y la <span class="actor-pill">Comunidad Autónoma</span> implicadas en la actuación.</p></li>
+                    <li><p><i class="fas fa-search-dollar icon text-yellow-600"></i>Es preciso <strong><u>analizar con rigor</u></strong> tanto los <u>precios reales del suelo</u> como las <u>posibilidades de acceso a la financiación extrapresupuestaria</u> teniendo en cuenta la <u>situación real en cada momento</u>.</p></li>
+                    <li><p><i class="fas fa-exclamation-triangle icon text-red-700"></i>Ya que <strong><u>alternativas poco realistas</u></strong>, no acordes con los problemas de integración y la capacidad de generar financiación, sólo <strong><u>suponen un retraso</u></strong> en su resolución.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-handshake icon text-indigo-700"></i>Es también <strong><u>primordial el acuerdo y la colaboración</u></strong> entre todas las <span class="actor-pill">administraciones implicadas</span>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullseye icon text-blue-500"></i>No sólo para <strong><u>consensuar una solución</u></strong> que satisfaga a todas las partes.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-green-500"></i>Sino también para <strong><u>trabajar en su desarrollo</u></strong>, aunando los diferentes <u>ámbitos de competencias</u>.</p></li>
+                                <li><p><i class="fas fa-stream icon text-purple-500"></i>Para ello existen <strong><u>diferentes fórmulas</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-file-signature icon text-orange-600"></i>El convenio</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Establece el <strong><u>acuerdo entre las distintas administraciones implicadas</u></strong> (<span class="actor-pill">Administración Ferroviaria</span>, <span class="actor-pill">Comunidad Autónoma</span> y <span class="actor-pill">Ayuntamiento</span>).</p></li>
+                        <li><p><i class="fas fa-tasks icon text-purple-600"></i>En que se <strong><u>regula las aportaciones de cada uno</u></strong> para la <u>financiación</u> y sus <u>responsabilidades</u> durante todo el proceso.</p></li>
+                        <li><p><i class="fas fa-landmark icon text-green-600"></i>Que pueden incluir la <strong><u>cesión de los antiguos terrenos ferroviarios</u></strong> al <span class="actor-pill">Ayuntamiento</span> a cambio de su <u>aportación económica al proyecto</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-building icon text-cyan-700"></i>Sociedades anónimas</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong>función</strong> de estas sociedades (participadas por el <span class="actor-pill">Ayuntamiento</span>, la <span class="actor-pill">Comunidad Autónoma</span> y la <span class="actor-pill">Administración Ferroviaria</span>) es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Gestionar la operación</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-coins icon text-gray-500"></i><strong><u>Conseguir financiación</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-chart-line icon text-gray-500"></i>E intentar <strong><u>generar plusvalías</u></strong> con los <u>suelos liberados</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-purple-600"></i>Hay <strong>sociedades</strong> que:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-hard-hat icon text-gray-500"></i>Se encargan <strong><u>directamente de ejecutar las obras</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-exchange-alt icon text-gray-500"></i>Mientras otras optan por <strong><u>transferir los recursos generados</u></strong> a los organismos para que sean éstos los que las lleven a cabo.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-times-circle icon text-red-600"></i>Una vez <strong><u>acabada la operación y cumplida su misión</u></strong>, normalmente, esas sociedades <strong><u>se disuelven</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-plus-square icon text-indigo-700"></i>Otros instrumentos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-handshake icon text-blue-600"></i><span class="definition-pill"><strong>Acuerdo</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-info-circle icon text-gray-500"></i><strong><u>Pacto de organizaciones, instituciones, empresas públicas o privadas</u></strong> que produce <u>efectos jurídicos</u>.</p></li>
+                                    <li><p><i class="fas fa-gavel icon text-gray-500"></i>El principal es la <strong><u>obligatoriedad para las partes</u></strong> que lo otorgan, naciendo para las mismas <u>obligaciones y derechos</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
