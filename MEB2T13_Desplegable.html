@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Señalización e instalaciones de seguridad ferroviaria</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-signal"></i> MEB2T13. Señalización e instalaciones de seguridad ferroviaria <i class="fas fa-shield-alt"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Conceptos generales -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-info-circle"></i></div>
+                <h2>1. Conceptos generales</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-lightbulb icon text-yellow-500"></i>Señales luminosas</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-book-open icon text-purple-600"></i>El <span class="law-pill"><strong>Reglamento de Circulación Ferroviaria (RCF)</strong></span> contempla las siguientes <strong><u>señales luminosas fijas fundamentales</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-check-circle icon text-green-500"></i><span class="color-green-pill"><strong>Verde</strong></span> (<span class="definition-pill">vía libre</span>), que ordena <strong><u>circular normalmente</u></strong> si nada se opone.</p></li>
+                                    <li><p><i class="fas fa-spinner icon text-green-400"></i><span class="color-green-pill"><strong>Verde intermitente</strong></span> (<span class="definition-pill">vía libre condicional</span>), que ordena <strong><u>no exceder la velocidad de <span class="pill-blue">160 km/h</span></u></strong> al pasar por la señal siguiente, salvo que ésta ordene vía libre.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-400"></i><span class="color-green-pill"><strong>Verde</strong></span> y <span class="color-yellow-pill"><strong>amarillo</strong></span> (<span class="definition-pill">anuncio de precaución</span>), que ordena <strong><u>no exceder la velocidad de <span class="pill-blue">30 km/h</span></u></strong>, o la que indique el número de la pantalla, al paso por las <u>agujas</u> situadas a continuación de la señal siguiente.</p></li>
+                                    <li><p><i class="fas fa-tachometer-alt icon text-yellow-500"></i><span class="color-yellow-pill"><strong>Amarillo con indicación de velocidad</strong></span> (<span class="definition-pill">preanuncio de parada</span>) que ordena <strong><u>no exceder la velocidad que indique la pantalla</u></strong>, al pasar por la señal siguiente, salvo que ésta ordene <u>vía libre</u>, <u>vía libre condicional</u> o <u>preanuncio de parada</u>.</p></li>
+                                    <li><p><i class="fas fa-exclamation-circle icon text-yellow-600"></i><span class="color-yellow-pill"><strong>Amarillo</strong></span> (<span class="definition-pill">anuncio de parada</span>), que ordena <strong><u>ponerse en condiciones de parar</u></strong> ante la señal siguiente.</p></li>
+                                    <li><p><i class="fas fa-bolt icon text-yellow-300"></i><span class="color-yellow-pill"><strong>Amarillo a destellos</strong></span> (<span class="definition-pill">anuncio de parada inmediata</span>) que ordena <strong><u>ponerse en condiciones de parar</u></strong> ante la señal siguiente, situada a <u>corta distancia</u>.</p></li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-hand-paper icon text-red-600"></i><span class="color-red-pill"><strong>Rojo</strong></span> (<span class="definition-pill">parada</span>), que ordena <strong><u>parar ante la señal sin rebasarla</u></strong>, salvo ciertas excepciones si el color rojo se combina con:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-font icon text-gray-400"></i>La <strong><u>letra “P”</u></strong> (<span class="definition-pill">marcha a la vista v<40 km/h</span>).</p></li>
+                                                <li><p><i class="fas fa-palette icon text-blue-400"></i>Con el <strong><u>color azul</u></strong> (<span class="definition-pill">parada selectiva</span>).</p></li>
+                                                <li><p><i class="fas fa-palette icon text-gray-200"></i>O con el <strong><u>color blanco</u></strong> (<span class="definition-pill">rebase autorizado</span>).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-check icon text-gray-400"></i><span class="color-white-pill"><strong>Blanco</strong></span> (<span class="definition-pill">movimiento autorizado</span>), en ciertas condiciones según el tren esté <u>parado</u>, en <u>marcha</u> o en <u>maniobras</u>.</p></li>
+                                    <li><p><i class="fas fa-traffic-light icon text-orange-500"></i>Señales que indican <strong><u>paso a nivel protegido</u></strong> y <strong><u>paso a nivel sin protección</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-shield-alt icon text-indigo-700"></i>Instalaciones de seguridad ferroviaria</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Dentro de las instalaciones de seguridad ferroviaria destacan:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-lock icon text-purple-500"></i><span class="definition-pill"><strong>Enclavamientos</strong></span>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-cogs icon text-gray-400"></i><strong><u>Sistemas que permiten establecer itinerarios seguros</u></strong> para la circulación de los trenes en el ámbito de <u>estaciones</u>.</p></li>
+                                                <li><p><i class="fas fa-link icon text-gray-400"></i>Estableciendo una <strong><u>relación de dependencia</u></strong> entre las <u>posiciones de los distintos aparatos de vía</u>, las <u>semibarreras de pasos a nivel</u> (en su caso) y las <u>órdenes que transmiten las señales</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-traffic-light icon text-red-500"></i><span class="definition-pill"><strong>Bloqueos</strong></span>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-bullseye icon text-gray-400"></i><strong><u>Sistemas o procesos</u></strong> cuyo <strong><u>objetivo es garantizar</u></strong>:</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-arrows-alt-h icon text-green-300"></i>Que los trenes que circulen por la <strong><u>misma vía y en el mismo sentido</u></strong>, lo hagan <strong><u>separados a una distancia</u></strong> que impida su alcance.</p></li>
+                                                            <li><p><i class="fas fa-exchange-alt icon text-red-300"></i>Y que cuando un tren circule por una vía, <strong><u>no circule otro en sentido contrario</u></strong> por la misma vía.</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li><p><i class="fas fa-road icon text-gray-400"></i>Un <span class="definition-pill"><strong>cantón de bloqueo</strong></span> es un <strong><u>tramo de vía</u></strong> en el que, en <u>condiciones normales de circulación</u>, <strong><u>no puede haber más de un tren</u></strong> de forma simultánea.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Sistemas tradicionales clase B y nuevas tendencias: el ERTMS -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>2. Sistemas tradicionales clase B y nuevas tendencias: el ERTMS</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>En un principio las <strong><u>señales servían como referencia al maquinista</u></strong> para tomar la decisión de detener o no el tren.</p></li>
+                    <li><p><i class="fas fa-exclamation-triangle icon text-red-600"></i>Pero el <strong><u>problema residía</u></strong> en que la <strong><u>última decisión la tomaba él</u></strong>, pudiendo <u>pasar por alto alguna señal</u> que le prohibiera el paso y <u>provocar accidentes por fallo humano</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-shield-alt icon text-green-600"></i>Para que esto no suceda, existen <strong><u>sistemas que impiden poner al tren en una situación de peligro</u></strong>, por ejemplo:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-hand-paper icon text-gray-500"></i><strong><u>No pudiendo sobrepasar una señal de parada</u></strong> sin que el tren se <u>detenga automáticamente</u>.</p></li>
+                                <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i>O <strong><u>no circulando a mayor velocidad de la permitida</u></strong> en cada tramo.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-stream icon text-purple-600"></i>En <strong>España</strong> se utilizan <strong><u>diferentes sistemas</u></strong> de <span class="definition-pill">clase B</span> (<u>no interoperables</u>) y <span class="definition-pill">clase A</span> (<u>interoperables</u>):</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-times-circle icon text-red-700"></i>Sistemas de clase B (no interoperables)</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-train icon text-orange-600"></i><span class="definition-pill"><strong>ASFA Analógico</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-broadcast-tower icon text-gray-500"></i><strong><u>Transmite automáticamente a la cabina</u></strong> el <u>aspecto que presentan las señales fijas</u>.</p></li>
+                                    <li><p><i class="fas fa-stop-circle icon text-gray-500"></i>Y <strong><u>aplica los frenos de emergencia</u></strong> si el tren <u>rebasa una señal de parada</u>.</p></li>
+                                    <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Por lo que <strong><u>no asegura la detención del tren ante la señal</u></strong>, pudiendo ser sobrepasada y, por tanto, <u>no evitando totalmente los accidentes</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-digital-tachograph icon text-blue-600"></i><span class="definition-pill"><strong>ASFA Digital</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-plus-circle icon text-green-500"></i><strong><u>Añade</u></strong> a las prestaciones del ASFA Analógico la <strong><u>supervisión discreta de la velocidad</u></strong> en determinados puntos al <u>aproximarse a una señal</u>.</p></li>
+                                    <li><p><i class="fas fa-robot icon text-red-500"></i>Cuando el equipo detecta <u>ausencia de reconocimiento</u> de la indicación recibida o que <u>no se están respetando los controles de velocidad</u> establecidos, <strong><u>actúa sobre el freno de emergencia</u></strong> del tren.</p></li>
+                                    <li><p><i class="fas fa-calendar-times icon text-purple-600"></i>A partir del <span class="pill-blue"><strong>1-1-2019</strong></span> en líneas de <u>ancho ibérico e internacional</u> y del <span class="pill-blue"><strong>1-7-2022</strong></span> en líneas de <u>ancho métrico</u> <strong><u>no se admitirá la circulación</u></strong> de trenes con <span class="definition-pill">ASFA analógico</span>, debiendo sustituirse por <span class="definition-pill">ASFA digital</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-shield-check icon text-green-700"></i><span class="definition-pill"><strong>EBICAB 900</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-map-marker-alt icon text-gray-500"></i>Es el <strong><u>equipado en el Corredor Mediterráneo</u></strong> (vmáx=<span class="pill-blue">220 km/h</span>).</p></li>
+                                    <li><p><i class="fas fa-satellite-dish icon text-gray-500"></i>La <strong><u>transmisión de datos</u></strong> se realiza entre las <u>balizas pasivas en tierra</u> y la <u>antena instalada en los bajos del tren</u>.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>A veces se utiliza para referirse a este sistema el término <span class="definition-pill"><strong>ATP (Automatic Train Protection)</strong></span> por ser el <u>primer sistema de la red</u> que ofrece una <u>auténtica protección automática</u> a los trenes con <u>supervisión continua de su velocidad</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-rocket icon text-red-700"></i><span class="definition-pill"><strong>LZB</strong></span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-map-marker-alt icon text-gray-500"></i>Es el <strong><u>equipado en la línea del AVE Madrid-Sevilla</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i><strong><u>Supervisa continuamente la velocidad</u></strong> del tren, <strong><u>gobernando su marcha</u></strong> por medio de la <u>señalización en la cabina</u> y el sistema <span class="definition-pill">ATF (Automatismo de Tracción y Frenado)</span>.</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i>Lo componen <strong><u>equipos en vía</u></strong> y <strong><u>a bordo del vehículo ferroviario</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-globe-europe icon text-sky-600"></i>ERTMS (clase A - interoperable)</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-map-marker-alt icon text-purple-600"></i>Es el que <strong><u>equipan las líneas de AVE</u></strong> <u>Madrid-Barcelona</u>, <u>Madrid-Valencia</u> y <u>Madrid-Valladolid</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>El <span class="definition-pill"><strong>sistema europeo de gestión de la circulación de trenes ERTMS (European Rail Traffic Management System)</strong></span> es el resultado de la <strong><u>unión de dos sistemas complejos</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>El de <strong><u>control ferroviario ETCS</u></strong> (European Train Control System).</p></li>
+                                    <li><p><i class="fas fa-satellite-dish icon text-gray-500"></i>Y el <span class="definition-pill"><strong>GSM-R</strong></span> (<u>derivación ferroviaria</u> del estándar civil de telecomunicaciones <span class="definition-pill">GSM</span>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-bullseye icon text-red-600"></i>Ese sistema tiene el <strong><u>objetivo de permitir un funcionamiento homogéneo</u></strong> en toda Europa de los <u>sistemas de protección de trenes</u>.</p></li>
+                        <li><p><i class="fas fa-link icon text-green-600"></i>Siendo uno de los <strong><u>pilares básicos</u></strong> sobre los que se sustenta la <strong><u>interoperabilidad ferroviaria europea</u></strong>.</p></li>
+                        <li><p><i class="fas fa-tasks icon text-orange-600"></i>La <strong><u>función del sistema</u></strong> basada en la información que le proporcionan los sistemas de señalización, es <strong><u>impedir que los trenes pasen con una velocidad inapropiada</u></strong> por ciertos puntos, incluyendo la <u>parada donde se requiera</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-sitemap icon text-indigo-600"></i>El sistema <span class="definition-pill">ERTMS</span> puede configurarse para <strong><u>operar en tres niveles diferentes 1, 2 y 3</u></strong>, según el tipo de equipos de vía que incluye para la transmisión de información, y <strong><u>dos niveles especiales</u></strong> denominados <span class="definition-pill">0</span> y <span class="definition-pill">STM</span>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-layer-group icon text-blue-500"></i><strong><u>Nivel 1</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Tren equipado con <span class="definition-pill">ERTMS</span> operando en una línea equipada con <strong><u>eurobalizas asociadas a las señales laterales</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-search-location icon text-gray-400"></i>Donde la <strong><u>localización de los trenes</u></strong> se realiza por medio de <u>circuitos de vía</u>.</p></li>
+                                                <li><p><i class="fas fa-broadcast-tower icon text-gray-400"></i>Estos equipos <strong><u>transmiten de manera puntual los datos</u></strong> en ambos sentidos dando al tren su <u>perfil de movimiento</u>.</p></li>
+                                                <li><p><i class="fas fa-check-circle icon text-gray-400"></i>Este nivel es de <strong><u>relativa fácil implantación</u></strong> y <strong><u>precio ajustado</u></strong> por lo que permitirá equipar las <u>líneas convencionales</u> de cara a la futura <u>interoperabilidad del ferrocarril europeo</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-layer-group icon text-green-500"></i><strong><u>Nivel 2</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Tren equipado con <span class="definition-pill">ERTMS</span> operando en una línea equipada con <u>eurobalizas</u>, y controlada por un <span class="definition-pill"><strong>Centro de Control de Bloqueo por Radio (RBC)</strong></span>.</p></li>
+                                                <li><p><i class="fas fa-satellite-dish icon text-gray-400"></i>La <strong><u>transmisión de datos se realiza de forma continua por GSM-R</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-cogs icon text-gray-400"></i>Y el equipo de control <span class="definition-pill">RBC</span> efectúa los <strong><u>cálculos y define el perfil de circulación</u></strong> de los trenes.</p></li>
+                                                <li><p><i class="fas fa-search-location icon text-gray-400"></i>Cuya <strong><u>presencia y localización se detecta</u></strong> por medio de <u>circuitos de vía</u>.</p></li>
+                                                <li><p><i class="fas fa-check icon text-gray-400"></i>Y <strong><u>autoriza sus movimientos</u></strong> en función de los <u>cantones fijos</u> establecidos.</p></li>
+                                                <li><p><i class="fas fa-eye-slash icon text-gray-400"></i>La <strong><u>señalización lateral desaparece</u></strong> en este nivel.</p></li>
+                                                <li><p><i class="fas fa-network-wired icon text-gray-400"></i>Este nivel <strong><u>equipará en el futuro la gran red europea de alta velocidad</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-chart-line icon text-gray-400"></i>Y permitirá <strong><u>aumentar la capacidad</u></strong> de la que disponen las líneas con sistemas convencionales de señalización y gestión del tráfico, <strong><u>hasta en un <span class="pill-blue">15%</span></u></strong>.</p></li>
+                                                <li><p><i class="fas fa-map-marker-alt icon text-gray-400"></i>Es el que <strong><u>ahora equipan las líneas españolas</u></strong> con <span class="definition-pill">ERTMS</span>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-layer-group icon text-red-500"></i><strong><u>Nivel 3</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-eye-slash icon text-gray-400"></i>En este tercer nivel del <span class="definition-pill">ERTMS</span> <strong><u>desaparecen los circuitos de vía</u></strong> para la localización del tren.</p></li>
+                                                <li><p><i class="fas fa-street-view icon text-gray-400"></i>Y son los <strong><u>propios trenes los que fijan su posición</u></strong> y envían la información por <span class="definition-pill">GSM-R</span> a los <span class="definition-pill">RBC</span>.</p></li>
+                                                <li><p><i class="fas fa-road icon text-gray-400"></i>Que <strong><u>fijan cantones móviles</u></strong>, determinando y vigilando su ocupación.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-retweet icon text-purple-500"></i><strong><u>Compatibilidad entre niveles de ERTMS</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-info-circle icon text-gray-400"></i>En una infraestructura equipada con <strong><u>nivel 1</u></strong> pueden operar vehículos que equipen a bordo <strong><u>cualquiera de los 3 niveles</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-info-circle icon text-gray-400"></i>En infraestructura con <strong><u>nivel 2</u></strong> pueden operar vehículos con <strong><u>niveles 2 y 3</u></strong>.</p></li>
+                                                <li><p><i class="fas fa-info-circle icon text-gray-400"></i>Y en infraestructura con <strong><u>nivel 3</u></strong> solo pueden operar vehículos con ese <strong><u>nivel 3</u></strong>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-layer-group icon text-orange-500"></i><strong><u>Nivel 0</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Tren equipado con <span class="definition-pill">ERTMS</span> operando en una línea con un <strong><u>sistema de señalización “nacional”</u></strong> (<span class="definition-pill">ASFA</span>, <span class="definition-pill">EBICAB</span>, <span class="definition-pill">LZB</span>) o con sistemas en <u>fase de recepción</u>.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-layer-group icon text-cyan-500"></i><strong><u>Nivel STM</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-train-tram icon text-gray-400"></i>Tren equipado con <span class="definition-pill">ERTMS</span> (clase A) operando en una línea con un sistema de señalización “nacional” (clase B).</p></li>
+                                                <li><p><i class="fas fa-microchip icon text-gray-400"></i>El sistema embarcado incorpora un <strong><u>módulo <span class="definition-pill">STM</span></u></strong> (<u>Specific Transmision Module</u>, traductor de los datos emitidos por la línea) para comunicar con el sistema instalado en la vía.</p></li>
+                                                <li><p><i class="fas fa-hand-paper icon text-gray-400"></i>La <strong><u>detención de los trenes</u></strong> y la <strong><u>supervisión de su integridad</u></strong> se realizan por <u>equipos ajenos al ERTMS</u>.</p></li>
+                                                <li><p><i class="fas fa-signal icon text-gray-400"></i>La <strong><u>señalización lateral está presente</u></strong> si así lo requiere el sistema “nacional”.</p></li>
+                                                <li><p><i class="fas fa-link icon text-gray-400"></i>Los <span class="definition-pill">STM</span> permiten a los sistemas de clase A (interoperables) <strong><u>funcionar en infraestructuras de clase B</u></strong> (no interoperables).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Normativa de aplicación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-balance-scale"></i></div>
+                <h2>3. Normativa de aplicación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-globe-europe icon text-blue-600"></i>A <strong><u>nivel europeo</u></strong>, existen los <strong><u>reglamentos de ejecución de la <span class="actor-pill">Comisión</span></u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i><span class="doc-pill"><strong>UE 2023/1695</strong></span>, sobre la <u>especificación técnica de interoperabilidad</u> relativa a los subsistemas de <u>«control-mando y señalización»</u> del sistema ferroviario de la Unión Europea.</p></li>
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Y <span class="doc-pill"><strong>UE 2017/6</strong></span>, sobre el <u>plan de despliegue europeo</u> del <span class="definition-pill">Sistema Europeo de Gestión del Tráfico Ferroviario</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-flag icon text-red-600"></i>Y a <strong><u>nivel nacional</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-book-open icon text-purple-500"></i>El <span class="law-pill"><strong>Reglamento de Circulación Ferroviaria</strong></span>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-book icon text-orange-500"></i>Y las <strong><u>normas</u></strong> de:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i><span class="doc-pill"><strong>Funcionalidad nacional del sistema ERTMS</strong></span> equipo embarcado e infraestructura.</p></li>
+                                            <li><p><i class="fas fa-microchip icon text-gray-400"></i>Y <span class="doc-pill"><strong>Especificaciones técnicas del sistema embarcado ASFA Digital</strong></span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-file-signature icon text-cyan-500"></i>Así como <strong><u>especificaciones técnicas</u></strong> de <span class="actor-pill">ADIF</span> y <span class="actor-pill">ADIF-AV</span> sobre:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-digital-tachograph icon text-gray-400"></i><span class="doc-pill"><strong>ASFA Digital vía</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-wave-square icon text-gray-400"></i><span class="doc-pill"><strong>Circuitos de vía</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-broadcast-tower icon text-gray-400"></i>Y <span class="doc-pill"><strong>Radiotelefonía digital GSM-R</strong></span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: Explotación ferroviaria -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tasks"></i></div>
+                <h2>4. Explotación ferroviaria</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>capacidad de una línea</u></strong> se suele medir por el <strong><u>número de trenes</u></strong> que pueden circular por ella en <u>un día</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-stream icon text-purple-600"></i>Se distinguen <strong><u>distintos conceptos de capacidad</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-flask icon text-cyan-500"></i><span class="definition-pill"><strong>Capacidad Teórica</strong></span>: <strong><u>máximo número de circulaciones</u></strong> en una línea que podrían circular por ella en <u>condiciones ideales</u>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-cogs icon text-orange-500"></i><span class="definition-pill"><strong>Capacidad Técnica</strong></span>: <strong><u>número de circulaciones</u></strong> que podrían circular por la línea teniendo en cuenta las <u>posibilidades y limitaciones</u> impuestas por los <u>medios y procedimientos técnicos</u> empleados.</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-arrow-down icon text-red-400"></i>En su determinación <strong><u>influyen</u></strong>, entre otras, las <u>circulaciones parásitas</u> (de <u>máquinas aisladas</u> o <u>trenes de trabajo</u>), y los <u>tiempos</u> que se han de emplear en el <u>mantenimiento</u>, <u>reparaciones</u>, lo que hace que la capacidad técnica sea <strong><u>inferior a la teórica</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i><span class="definition-pill"><strong>Capacidad Real</strong></span>: debe <strong><u>reflejar la situación real</u></strong> de cada línea, teniendo en cuenta la <u>disminución de la capacidad</u> por <u>averías</u>, <u>irregularidades inevitables</u>, etc.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-balance-scale icon text-indigo-600"></i><strong><u>Factores que influyen</u></strong> en la capacidad:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-road icon text-gray-500"></i>La <strong><u>línea</u></strong>: especialmente su <u>perfil longitudinal</u> y si es <u>vía doble o única</u> (la doble más que duplica la única).</p></li>
+                                <li><p><i class="fas fa-store-alt icon text-gray-500"></i>Las <strong><u>estaciones</u></strong>: especialmente la <u>dimensión del haz de vías</u> y la <u>longitud y anchura</u> de los <u>muelles de embarque</u>.</p></li>
+                                <li><p><i class="fas fa-bolt icon text-gray-500"></i>La <strong><u>tracción</u></strong>: existe diferencia entre una línea explotada mediante <u>tracción diésel o eléctrica</u>, siendo la relación entre capacidades en líneas de vía única <span class="pill-blue"><strong>1,75</strong></span> veces mayor en la tracción eléctrica.</p></li>
+                                <li><p><i class="fas fa-train-tram icon text-gray-500"></i>El <strong><u>material móvil</u></strong>: influyen en la capacidad la <u>carga máxima por eje</u>, las <u>características de frenado</u> y la <u>relación carga/tara</u>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Los <strong><u>sistemas de seguridad</u></strong> en la explotación.</p></li>
+                                <li><p><i class="fas fa-traffic-light icon text-gray-500"></i>El <strong><u>tráfico</u></strong>: si no es <u>homogéneo</u> se <u>perturba la regularidad</u> del transporte, <u>disminuyendo sensiblemente la capacidad</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-chart-pie icon text-blue-700"></i><span class="definition-pill"><strong>Grado de utilización</strong></span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-calculator icon text-gray-500"></i>Es el <strong><u>cociente</u></strong> entre el <u>número de circulaciones reales</u> de trenes y la <u>capacidad real</u>.</p></li>
+                                <li><p><i class="fas fa-thumbs-up icon text-green-500"></i>En general, un valor de <span class="pill-blue"><strong>0,67</strong></span> se considera <strong><u>ideal</u></strong> para la explotación.</p></li>
+                                <li><p><i class="fas fa-arrow-down icon text-yellow-500"></i>Valores del orden de <span class="pill-blue"><strong>0,5</strong></span> indican <strong><u>infrautilización</u></strong> de la línea.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-red-500"></i>Mientras que el valor <span class="pill-blue"><strong>0,85</strong></span> se considera <strong><u>crítico</u></strong>, pues por encima de él aparecen <u>graves problemas de explotación</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-arrow-alt-circle-up icon text-green-800"></i><strong><u>Actuaciones de mejora</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-info-circle icon text-blue-500"></i>Entre las <strong><u>medidas aplicables</u></strong> para la <strong><u>mejora de la capacidad</u></strong> se encuentran:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-users-cog icon text-gray-400"></i><strong><u>Mejoras de organización</u></strong> (<u>personal profesional bien formado</u>).</p></li>
+                                            <li><p><i class="fas fa-wrench icon text-gray-400"></i><strong><u>Mejoras en la vía</u></strong> (<u>refuerzo de la vía y puentes</u>, <u>rectificaciones de trazado</u>).</p></li>
+                                            <li><p><i class="fas fa-store icon text-gray-400"></i><strong><u>Mejoras en las estaciones</u></strong> (<u>establecimiento de vías suplementarias</u>, <u>mejora de la disposición de aparatos de vía</u> para aumentar la velocidad).</p></li>
+                                            <li><p><i class="fas fa-map-pin icon text-gray-400"></i><strong><u>Mejoras en los puntos singulares</u></strong> (<u>supresión de pasos a nivel</u> o <u>mejora de su protección</u>, <u>sustitución de empalmes en vía doble por saltos de carnero</u>).</p></li>
+                                            <li><p><i class="fas fa-bolt icon text-gray-400"></i><strong><u>Mejoras en la tracción</u></strong> (<u>utilización de locomotoras más potentes</u> que permitan aumentar la velocidad y la carga por eje).</p></li>
+                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i><strong><u>Mejoras en la explotación</u></strong> (<u>actuaciones sobre la longitud de los cantones</u> y sobre los <u>sistemas de seguridad</u>, <u>banalización de líneas</u>).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-desktop icon text-indigo-600"></i><span class="actor-pill"><strong>ADIF-AV</strong></span> utiliza el <span class="definition-pill"><strong>sistema DaVinci</strong></span> para el <u>control y gestión del tráfico ferroviario</u> en las <u>líneas españolas de alta velocidad</u>.</p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
