@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: La Interoperabilidad Ferroviaria (II)</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-link"></i> MEB2T18. La Interoperabilidad Ferroviaria (II) <i class="fas fa-globe-europe"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Entrada en servicio de subsistemas -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-power-off"></i></div>
+                <h2>1. Entrada en servicio de subsistemas y puesta en servicio de líneas</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>El <span class="law-pill"><strong>RD 929/2020</strong></span> sobre <u>seguridad operacional e interoperabilidad ferroviarias</u>, <strong><u>establece los procedimientos de autorización</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-tasks icon text-blue-500"></i>Para:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i>La <strong><u>entrada en servicio</u></strong> de los <u>subsistemas estructurales fijos</u>.</p></li>
+                                            <li><p><i class="fas fa-road icon text-gray-400"></i>Y para la <strong><u>puesta en servicio</u></strong> de <u>líneas ferroviarias</u>, de sus <u>tramos</u>, de las <u>estaciones de transporte de viajeros</u> y de las <u>terminales de transporte de mercancías</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-network-wired icon text-purple-500"></i>Pertenecientes a la <span class="definition-pill"><strong>Red Ferroviaria de Interés General</strong></span>.</p></li>
+                                <li><p><i class="fas fa-user-shield icon text-indigo-500"></i>Siendo la <span class="actor-pill"><strong>Agencia Estatal de Seguridad Ferroviaria (AESF)</strong></span> la <strong><u>autoridad competente</u></strong> para su otorgamiento.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-exclamation-triangle icon text-yellow-600"></i>En las <strong><u>autorizaciones</u></strong> para la <u>entrada en servicio de los subsistemas</u> o la <u>puesta en servicio de líneas, tramos, estaciones o terminales</u> podrán establecerse <strong><u>condiciones de uso y restricciones</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-info-circle icon text-cyan-500"></i>En particular en cuanto a las <strong><u>condiciones para iniciar o restablecer el servicio ferroviario</u></strong> una vez se produzca la <u>conexión con el resto de la Red Ferroviaria de Interés General</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Card 2: Autorización de entrada en servicio de los subsistemas estructurales fijos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>2. Autorización de entrada en servicio de subsistemas estructurales fijos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-green-600"></i>La <strong><u>entrada en servicio</u></strong> de los <span class="definition-pill">subsistemas estructurales fijos</span> en estado de <u>funcionamiento nominal</u> <strong><u>requerirá</u></strong> que estos:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-drafting-compass icon text-gray-500"></i>Sean <strong><u>concebidos, construidos e instalados</u></strong> de modo que se cumplan los <u>requisitos esenciales</u>.</p></li>
+                                <li><p><i class="fas fa-link icon text-gray-500"></i>Se <strong><u>integren de manera segura</u></strong> en el conjunto del <u>sistema ferroviario</u>.</p></li>
+                                <li><p><i class="fas fa-stamp icon text-gray-500"></i>Y <strong><u>dispongan de la autorización</u></strong> de la <span class="actor-pill">AESF</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-user-shield icon text-blue-700"></i>La <strong><u>función de la <span class="actor-pill">AESF</span></u></strong> en la autorización de entrada en servicio de subsistemas estructurales fijos será <strong><u>comprobar que la documentación</u></strong> presentada por el <span class="actor-pill">solicitante</span> de la autorización para demostrar el cumplimiento de todos los requisitos esenciales:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check icon text-gray-500"></i>Está <strong><u>completa</u></strong>.</p></li>
+                                <li><p><i class="fas fa-check icon text-gray-500"></i>Es <strong><u>pertinente y coherente</u></strong>.</p></li>
+                                <li><p><i class="fas fa-check icon text-gray-500"></i>Y se <strong><u>circunscribe al ámbito de sus competencias</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-purple-600"></i>La <strong><u>autorización de la <span class="actor-pill">AESF</span> será necesaria</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-plus-circle icon text-green-500"></i>Para <strong><u>nuevos subsistemas</u></strong> estructurales fijos.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-orange-500"></i>Y en el caso de <strong><u>mejora o renovación de subsistemas existentes</u></strong>, cuando así lo resuelva la <span class="actor-pill">Agencia</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-cyan-600"></i>En <strong>ambos casos</strong>, a la vista de la <span class="doc-pill">Comunicación Previa</span>, la <span class="actor-pill">AESF</span> podrá resolver que sea <strong><u>necesaria también la autorización de entrada en servicio para fases intermedias</u></strong> de algún subsistema, o parte de él.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-teal-500"></i>Siempre que estas fases intermedias <strong><u>no sean meras fases de obra</u></strong>.</p></li>
+                                <li><p><i class="fas fa-check-circle icon text-teal-500"></i>Y <strong><u>correspondan a etapas completas</u></strong> del proceso de fabricación o construcción.</p></li>
+                                <li><p><i class="fas fa-check-circle icon text-teal-500"></i>O su periodo de funcionamiento <strong><u>no esté suficientemente acotado</u></strong> en el tiempo.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-book-reader icon text-indigo-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> proporcionará gratuitamente una <span class="doc-pill"><strong>guía orientativa</strong></span>, a través de su página web.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-list-ul icon text-gray-500"></i>Que <strong><u>expondrá y precisará los requisitos</u></strong> que deben reunirse y los <strong><u>documentos que deben acompañarse</u></strong> para la obtención de las autorizaciones de entrada en servicio de los subsistemas.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Mejora o renovación de los subsistemas estructurales fijos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-sync-alt"></i></div>
+                <h2>3. Mejora o renovación de los subsistemas estructurales fijos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-file-alt icon text-blue-600"></i>En caso de <strong><u>mejora o renovación</u></strong> de subsistemas existentes, el <span class="actor-pill">solicitante</span> deberá formular una <strong><u>comunicación previa</u></strong>.</p></li>
+                    <li><p><i class="fas fa-search-plus icon text-purple-600"></i>La <span class="actor-pill"><strong>AESF</strong></span>, en <u>estrecha cooperación</u> con la <span class="actor-pill">Agencia Ferroviaria de la UE</span> si la solicitud se refiere a proyectos de <span class="definition-pill">ERTMS</span>, <strong><u>examinará la documentación y resolverá</u></strong> sobre la <strong><u>necesidad de una nueva autorización</u></strong> de entrada en servicio.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-orange-600"></i>De acuerdo con los siguientes <strong>criterios</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Cuando el <strong><u>nivel global de seguridad</u></strong> del subsistema de que se trate pueda verse <u>afectado por las obras</u> previstas.</p></li>
+                                <li><p><i class="fas fa-book icon text-gray-500"></i>Cuando así lo exijan las <span class="doc-pill"><strong>Especificaciones Técnicas de Interoperabilidad</strong></span> aplicables.</p></li>
+                                <li><p><i class="fas fa-flag icon text-gray-500"></i>Cuando así lo exijan los <span class="plan-pill"><strong>planes nacionales de ejecución</strong></span>.</p></li>
+                                <li><p><i class="fas fa-edit icon text-gray-500"></i>O cuando se hayan <strong><u>modificado los valores de los parámetros</u></strong> sobre la base de los cuales ya se hubiera concedido la autorización.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-cyan-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> <strong><u>resolverá y notificará</u></strong> sobre la necesidad o no de una nueva autorización de entrada en servicio del subsistema.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-stopwatch icon text-indigo-500"></i>Como máximo dentro de los <strong><u>cuatro meses siguientes</u></strong> a la recepción de toda la documentación necesaria.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-sitemap icon text-green-700"></i>La <strong><u>resolución de la <span class="actor-pill">AESF</span></u></strong> podrá <strong><u>diferenciar</u></strong>, en cuanto a la necesidad de una nueva autorización, entre:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Los distintos <strong><u>subsistemas afectados</u></strong>.</p></li>
+                                <li><p><i class="fas fa-tasks icon text-gray-500"></i>Y, en su caso, entre las distintas <strong><u>fases de ejecución</u></strong> de la actuación.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-forward icon text-blue-800"></i>En caso de que la <span class="actor-pill">AESF</span> resuelva que es <strong><u>precisa una nueva autorización</u></strong> para alguno de los subsistemas y/o fases de ejecución, se seguirá el <strong><u>procedimiento general</u></strong> a partir de la <u>comunicación previa presentada</u>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: Procedimiento de autorización de entrada en servicio -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-clipboard-check"></i></div>
+                <h2>4. Procedimiento de autorización de entrada en servicio</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ol icon text-blue-600"></i>El <strong><u>procedimiento de obtención</u></strong> de la autorización de entrada en servicio de un subsistema estructural fijo se <strong><u>compone de las siguientes fases</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullhorn icon text-gray-500"></i><strong><u>Comunicación previa</u></strong> a la <span class="actor-pill">AESF</span>.</p></li>
+                                <li><p><i class="fas fa-eye icon text-gray-500"></i><strong><u>Puesta en conocimiento</u></strong> a la <span class="actor-pill">AESF</span> de los <u>proyectos antes de su aprobación</u>.</p></li>
+                                <li><p><i class="fas fa-search icon text-gray-500"></i><strong><u>Evaluación del subsistema</u></strong> tras su construcción y <u>previa a su entrada en servicio</u>.</p></li>
+                                <li><p><i class="fas fa-file-signature icon text-gray-500"></i><strong><u>Solicitud de autorización</u></strong> de entrada en servicio del subsistema estructural fijo.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-purple-600"></i>Cuando se inicie una actuación que prevea el <u>diseño o construcción</u> de uno o varios subsistemas estructurales fijos, el <span class="actor-pill">solicitante</span> habrá de <strong><u>comunicarlo previamente a la <span class="actor-pill">AESF</span></u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-calendar-alt icon text-orange-500"></i>Con <strong><u>anterioridad a la redacción</u></strong> de los proyectos de construcción y, en todo caso <strong><u>antes de la aprobación del primero</u></strong> de los que formen parte de la actuación.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-cyan-500"></i>Esta <strong><u>comunicación previa también será aplicable</u></strong> a la <u>modificación de subsistemas existentes</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-bullseye icon text-red-600"></i>La <strong><u>comunicación previa tiene por objeto</u></strong> que la <span class="actor-pill">AESF</span> disponga, con la antelación necesaria, de <strong><u>información suficiente</u></strong> para:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-gavel icon text-gray-500"></i><strong><u>Resolver</u></strong>, cuando proceda, sobre la <u>necesidad de autorización de entrada en servicio</u> de los subsistemas.</p></li>
+                                <li><p><i class="fas fa-search-plus icon text-gray-500"></i><strong><u>Determinar</u></strong> las eventuales <u>acciones de supervisión</u> durante el <u>diseño, fabricación y construcción</u> de los subsistemas.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-file-import icon text-green-700"></i>El <span class="actor-pill">solicitante</span> <strong><u>remitirá a la <span class="actor-pill">AESF</span> la solicitud de entrada en servicio</u></strong> de los subsistemas acompañada de la <strong><u>documentación necesaria</u></strong> para:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-pen icon text-gray-500"></i><strong><u>Describir la actuación</u></strong> objeto de autorización.</p></li>
+                                <li><p><i class="fas fa-tasks icon text-gray-500"></i>Incluyendo los <strong><u>procesos de evaluación de la conformidad</u></strong> realizados.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Las <strong><u>características técnicas</u></strong> del subsistema.</p></li>
+                                <li><p><i class="fas fa-lightbulb icon text-gray-500"></i>Las <strong><u>soluciones innovadoras</u></strong> aplicadas.</p></li>
+                                <li><p><i class="fas fa-play-circle icon text-gray-500"></i>La <strong><u>definición de su estado de funcionamiento nominal</u></strong>.</p></li>
+                                <li><p><i class="fas fa-ban icon text-gray-500"></i>Y las <strong><u>restricciones de uso</u></strong>, en su caso.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-double icon text-teal-600"></i><strong><u>Deberá acreditarse</u></strong>, asimismo, que:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check icon text-gray-500"></i>Se <strong><u>cumplen los requisitos esenciales</u></strong>.</p></li>
+                                <li><p><i class="fas fa-check icon text-gray-500"></i>Y se ha <strong><u>aplicado la normativa exigible</u></strong> o <u>justificado las excepciones</u> que fuesen procedentes.</p></li>
+                                <li><p><i class="fas fa-check icon text-gray-500"></i>Y que el <span class="plan-pill"><strong>plan de pruebas</strong></span> establecido por el <span class="actor-pill">administrador de infraestructuras</span>, o acordado por el <span class="actor-pill">solicitante</span> y aquel, <strong><u>se ha cumplido</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-folder-open icon text-indigo-600"></i>Este <strong><u>expediente contendrá</u></strong> las <strong><u>evidencias documentales</u></strong> concernientes a:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-certificate icon text-gray-500"></i><span class="doc-pill"><strong>Declaraciones “CE” de verificación</strong></span>.</p></li>
+                                <li><p><i class="fas fa-link icon text-gray-500"></i><strong><u>Justificación de la compatibilidad técnica</u></strong> del subsistema con el sistema en que se integra.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><strong><u>Justificación de la integración segura</u></strong> del subsistema.</p></li>
+                                <li><p><i class="fas fa-satellite-dish icon text-gray-500"></i>Y en el caso de subsistemas de <u>control-mando y señalización</u> en las vías que utilicen equipamiento <span class="definition-pill">ERTMS</span>, la <strong><u>decisión positiva de la <span class="actor-pill">Agencia Ferroviaria de la UE</span></u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="actor-pill"><strong>AESF</strong></span> <strong><u>examinará la documentación</u></strong> presentada, y <strong><u>resolverá si procede o no autorizar</u></strong> la entrada en servicio del subsistema.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-stopwatch icon text-orange-500"></i>Como máximo dentro de los <strong><u>cuatro meses siguientes</u></strong> a la recepción de la documentación completa.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Card 5: Procedimiento de autorización de puesta en servicio -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-clipboard-check"></i></div>
+                <h2>5. Procedimiento de autorización de puesta en servicio</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-file-signature icon text-blue-600"></i>Para la <strong><u>autorización de puesta en servicio</u></strong> de <u>nuevas líneas, tramos, estaciones y terminales</u> deberá presentarse una <strong><u>solicitud</u></strong>, junto a la de entrada en servicio de los subsistemas.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-folder-open icon text-purple-600"></i>Que <strong><u>incluya, adicionalmente</u></strong> la siguiente <strong><u>documentación</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i><span class="doc-pill"><strong>Informe de adecuación</strong></span> de las obras a la <u>normativa técnica aplicable</u>.</p></li>
+                                <li><p><i class="fas fa-tasks icon text-gray-500"></i><span class="doc-pill"><strong>Documentación acreditativa</strong></span> del cumplimiento de la ejecución del <span class="plan-pill">plan de pruebas</span>.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><span class="doc-pill"><strong>Documentación justificativa</strong></span> de que se ha llevado a cabo el <strong><u>proceso de gestión del riesgo</u></strong> de acuerdo con el <span class="doc-pill">Método Común Seguridad para la evaluación y valoración del riesgo</span>.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-certificate icon text-gray-500"></i><span class="doc-pill"><strong>Certificado de implantación del Plan de Autoprotección</strong></span>, si procede según la <span class="law-pill">Norma Básica de Autoprotección</span> de lugares con actividades que puedan dar origen a situaciones de emergencia, lo que sucede en:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-users icon text-red-400"></i><strong><u>Estaciones</u></strong> con una ocupación <span class="formula-pill"><strong>≥ 1.500 personas</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-archway icon text-orange-400"></i><strong><u>Túneles</u></strong> de longitud <span class="formula-pill"><strong>≥ 1.000 m</strong></span>.</p></li>
+                                            <li><p><i class="fas fa-truck-loading icon text-yellow-400"></i>Y <strong><u>áreas de estacionamiento</u></strong> para el transporte de <u>mercancías peligrosas</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="actor-pill"><strong>AESF</strong></span> <strong><u>emitirá la correspondiente autorización</u></strong> de puesta en servicio de la <u>línea, tramo, estación o terminal</u>, y de los <u>subsistemas</u>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-stopwatch icon text-indigo-500"></i>En el <strong><u>plazo máximo de <span class="pill-blue">4 meses</span></u></strong> desde la recepción de la <u>documentación completa</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 6: Procedimiento de autorización de modificación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-clipboard-check"></i></div>
+                <h2>6. Procedimiento de autorización de modificación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-check-circle icon text-green-600"></i>Será <strong><u>necesaria una nueva autorización de puesta en servicio</u></strong>, al menos en los siguientes <strong>supuestos</strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-route icon text-gray-500"></i><strong><u>Modificación sustancial</u></strong> del <u>trazado</u>.</p></li>
+                                <li><p><i class="fas fa-plus-circle icon text-gray-500"></i><strong><u>Adición de una o más vías</u></strong> en una <u>línea o tramo</u>.</p></li>
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Y, en general, <strong><u>modificaciones que hayan requerido un estudio informativo</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-times-circle icon text-red-600"></i><strong><u>No será necesaria una nueva autorización</u></strong> de puesta en servicio en los casos de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Instalación de nuevos subsistemas</u></strong> de <u>electrificación</u>, y <u>control-mando y señalización</u>, <u>cambio de tensión eléctrica</u> o de <u>cambio de versión o de nivel de ERTMS</u>.</p></li>
+                                <li><p><i class="fas fa-sync-alt icon text-gray-500"></i><strong><u>Mejora o renovación</u></strong> de <u>líneas, tramos, estaciones o terminales preexistentes</u>, salvo los casos señalados en el párrafo anterior.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-balance-scale icon text-yellow-600"></i>Todo ello será <strong><u>sin perjuicio de lo que la <span class="actor-pill">AESF</span> pueda decidir</u></strong> en cada caso, en relación con la <u>autorización de entrada en servicio de los subsistemas</u>, y de lo que se establezca en las <span class="doc-pill">Instrucciones Ferroviarias</span> u otras disposiciones.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-blue-700"></i>A los efectos de <strong><u>resolver sobre la necesidad de una nueva autorización</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-file-import icon text-purple-500"></i>El <span class="actor-pill">solicitante</span> <strong><u>remitirá a la <span class="actor-pill">AESF</span></u></strong> la <span class="doc-pill"><strong>Comunicación Previa</strong></span>, y además la <u>necesaria para verificar el cumplimiento</u> de lo indicado en los párrafos anteriores.</p></li>
+                                <li><p><i class="fas fa-gavel icon text-orange-500"></i>En base a los anteriores criterios, la <span class="actor-pill"><strong>AESF</strong></span>, en un <strong><u>plazo de cuatro meses</u></strong> a partir de la recepción de toda la información pertinente, <strong><u>tomará una decisión</u></strong> en cuanto a la <u>necesidad de una nueva autorización de puesta en servicio</u> de la modificación de la línea, tramo, estación o terminal existente.</p></li>
+                                <li><p><i class="fas fa-link icon text-cyan-500"></i>De forma <strong><u>conjunta con la relativa a necesidad de una nueva autorización</u></strong> de entrada en servicio de los <u>subsistemas afectados</u>.</p></li>
+                                <li><p><i class="fas fa-forward icon text-green-500"></i>En caso de que la <span class="actor-pill">AESF</span> resuelva que es <strong><u>precisa una nueva autorización</u></strong> de puesta en servicio, se seguirá el <strong><u>procedimiento general</u></strong> descrito para <u>nuevas líneas, tramos, estaciones y terminales</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-800"></i>En <strong><u>todos los procedimientos descritos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-stopwatch icon text-indigo-500"></i>En el plazo de <span class="pill-blue"><strong>un mes</strong></span> a partir de la recepción de la comunicación, la <span class="actor-pill">AESF</span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-check icon text-gray-400"></i><strong><u>Notificará</u></strong> al solicitante que el <u>expediente está completo</u>.</p></li>
+                                            <li><p><i class="fas fa-question-circle icon text-gray-400"></i>O le <strong><u>pedirá información complementaria</u></strong>, para cuya entrega fijará un <u>plazo de <span class="pill-blue">10 días hábiles</span></u>, <u>ampliables a <span class="pill-blue">5</span> más</u> a petición del interesado o por propia iniciativa, cuando los documentos requeridos presenten dificultades especiales.</p></li>
+                                            <li><p><i class="fas fa-exclamation icon text-gray-400"></i>Con indicación de que si así no lo hiciera se le tendrá por <strong><u>desistido de su petición</u></strong>, previa resolución que deberá ser dictada en los términos previstos en la <span class="law-pill">Ley 39/2015 del Procedimiento Administrativo Común de las Administraciones Públicas</span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-balance-scale-right icon text-red-600"></i>Asimismo, las <strong><u>resoluciones de la <span class="actor-pill">AESF</span></u></strong> respecto a todos los procedimientos descritos:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-comment-dots icon text-gray-400"></i>Serán siempre <strong><u>motivadas</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-flag-checkered icon text-gray-400"></i>Y <strong><u>ponen fin a la vía administrativa</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-undo-alt icon text-gray-400"></i>Contra las mismas se podrá interponer <strong><u>recurso potestativo de reposición</u></strong>, en el plazo de <span class="pill-blue">un mes</span>, o acudir directamente a la <strong><u>vía jurisdiccional contencioso administrativa</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
