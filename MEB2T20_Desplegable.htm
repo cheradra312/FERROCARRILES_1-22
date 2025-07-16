@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Material rodante ferroviario</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '�';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-train"></i> MEB2T20. Material rodante ferroviario <i class="fas fa-cogs"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Material rodante ferroviario -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-subway"></i></div>
+                <h2>1. Material rodante ferroviario</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i><span class="definition-pill"><strong>Material rodante ferroviario</strong></span> engloba a <strong><u>todos los vehículos</u></strong> que circulan por las <u>líneas ferroviarias</u>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-train icon text-red-600"></i><span class="definition-pill"><strong>Locomotoras</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info-circle icon text-gray-500"></i>Vehículo ferroviario <strong><u>capaz de desplazarse por sí mismo</u></strong> y <u>remolcar a otros</u> vehículos ferroviarios.</p></li>
+                                            <li><p><i class="fas fa-cogs icon text-gray-500"></i>Proporcionando los <strong><u>esfuerzos de tracción</u></strong> (<u>diésel</u> o <u>eléctrica</u> con <span class="pill-blue">CC 3.000 V</span> o <span class="pill-blue">CA 25.000 V</span>) y <strong><u>frenado</u></strong>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-rocket icon text-purple-600"></i><span class="definition-pill"><strong>Unidades autopropulsadas</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info-circle icon text-gray-500"></i><strong><u>Composiciones de varios vehículos</u></strong> que, formando un <strong><u>tren indeformable</u></strong> en explotación, están dotadas de <u>tracción térmica o eléctrica</u> que las hace <u>capaces de desplazarse por sí mismas</u>.</p></li>
+                                            <li><p><i class="fas fa-user-friends icon text-gray-500"></i>Utilizados habitualmente para el <strong><u>transporte de viajeros</u></strong> (<u>cercanías</u>, <u>metro</u>, <u>trenes AVE</u>).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-person-walking-luggage icon text-orange-600"></i><span class="definition-pill"><strong>Coches</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info-circle icon text-gray-500"></i>Vehículos ferroviarios <strong><u>sin tracción propia</u></strong> habilitados para el <strong><u>transporte de viajeros y su servicio</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-concierge-bell icon text-gray-500"></i>(<u>Coches de viajeros</u>, <u>cama</u>, <u>cafetería</u>, <u>restaurante</u>).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-truck-loading icon text-green-600"></i><span class="definition-pill"><strong>Vagones</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info-circle icon text-gray-500"></i>Vehículos ferroviarios <strong><u>sin tracción propia</u></strong> habilitados para el <strong><u>transporte de mercancías</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-box-open icon text-gray-500"></i>(<u>Contenedores</u>, <u>gráneles líquidos y sólidos</u>, <u>tolvas</u>, y <u>plataformas</u>).</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-tools icon text-cyan-600"></i><span class="definition-pill"><strong>Material rodante auxiliar</strong></span>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-info-circle icon text-gray-500"></i>Vehículos ferroviarios para <strong><u>supervisión y mantenimiento</u></strong> de la <u>vía y sus instalaciones fijas</u>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-sitemap icon text-indigo-600"></i>Un <strong><u>vehículo se compone</u></strong> de los <span class="definition-pill">subsistemas de carácter estructural</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train-tram icon text-gray-500"></i><strong><u>Material rodante</u></strong>.</p></li>
+                                <li><p><i class="fas fa-signal icon text-gray-500"></i>Y, cuando proceda, <strong><u>control-mando y señalización a bordo</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Entrada en servicio de vehículos -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-power-off"></i></div>
+                <h2>2. Entrada en servicio de vehículos</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-gavel icon text-amber-800"></i>El <span class="law-pill"><strong>RD 929/2020</strong></span> sobre <u>seguridad operacional e interoperabilidad ferroviarias</u> establece que los <strong><u>vehículos que vayan a circular por la RFIG</u></strong> precisarán de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sign-in-alt icon text-gray-500"></i>La <strong><u>puesta en el mercado</u></strong> de sus <u>subsistemas móviles</u>.</p></li>
+                                <li><p><i class="fas fa-stamp icon text-gray-500"></i>Una <strong><u>autorización de puesta en el mercado del vehículo</u></strong> expedida por la <span class="actor-pill">AESF</span> o por la <span class="actor-pill">Agencia Ferroviaria de la UE</span>.</p></li>
+                                <li><p><i class="fas fa-check-double icon text-gray-500"></i>Las <strong><u>comprobaciones</u></strong> antes de su utilización.</p></li>
+                                <li><p><i class="fas fa-database icon text-gray-500"></i>Y la <strong><u>inscripción en el registro de vehículos</u></strong> de uno de los <span class="actor-pill">Estados miembros</span> donde vaya a ser utilizado.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-certificate icon text-purple-600"></i>Autorización de puesta en el mercado de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-file-signature icon text-blue-600"></i>En la <strong><u>solicitud de autorización</u></strong> de puesta en el mercado de un vehículo, el <span class="actor-pill">solicitante</span> deberá <strong><u>especificar su área de uso</u></strong>, incluyendo <u>pruebas</u> de que se ha comprobado la <u>compatibilidad técnica entre el vehículo y la red</u> de esa área.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-user-check icon text-green-600"></i>La <strong><u>autorización será expedida</u></strong> por:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-globe-europe icon text-gray-500"></i>La <span class="actor-pill"><strong>Agencia Ferroviaria de la UE</strong></span> para los vehículos cuya <u>área de uso esté en varios Estados miembros</u>.</p></li>
+                                    <li><p><i class="fas fa-flag icon text-gray-500"></i>La <span class="actor-pill"><strong>AESF</strong></span> o la <span class="actor-pill"><strong>Agencia Ferroviaria de la UE</strong></span> indistintamente, a <u>decisión del solicitante</u>, para los vehículos cuya <u>área de uso esté en la RFIG</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-link icon text-orange-600"></i>Toda autorización de puesta en el mercado de vehículos deberá estar <strong><u>respaldada por una autorización de tipo de vehículo</u></strong> en la misma área de uso.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-file-import icon text-cyan-700"></i>Solicitud y emisión de la autorización de puesta en el mercado de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-folder-open icon text-indigo-600"></i>La <strong><u>solicitud de autorización incluirá</u></strong> la siguiente documentación:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-sign-in-alt icon text-gray-500"></i>La <strong><u>puesta en el mercado</u></strong> de los <u>subsistemas móviles</u> que componen el vehículo.</p></li>
+                                    <li><p><i class="fas fa-check-circle icon text-gray-500"></i>La <strong><u>compatibilidad técnica y la integración segura</u></strong> dentro del vehículo de sus <u>subsistemas móviles</u>.</p></li>
+                                    <li><p><i class="fas fa-network-wired icon text-gray-500"></i>Y la <strong><u>compatibilidad técnica del vehículo con la red</u></strong> en el <u>área de uso</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-desktop icon text-blue-700"></i>Todas las solicitudes se presentarán a través de la <strong><u>ventanilla única de la Unión Europea</u></strong>.</p></li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>La <span class="actor-pill"><strong>AESF</strong></span> <strong><u>resolverá motivadamente</u></strong> sobre la solicitud de autorización en un <strong><u>plazo máximo de cuatro meses</u></strong> desde la presentación de la documentación completa.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-list-ul icon text-purple-600"></i>Las <strong><u>autorizaciones de puesta en el mercado de vehículos</u></strong> incluirán:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-map-marked-alt icon text-gray-500"></i>El <strong><u>área de uso</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-ruler-combined icon text-gray-500"></i>Los <strong><u>valores de los parámetros</u></strong> para la comprobación de la <u>compatibilidad técnica</u> entre el vehículo y el área de uso.</p></li>
+                                    <li><p><i class="fas fa-check icon text-gray-500"></i>La <strong><u>conformidad del vehículo</u></strong> con esos parámetros.</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i>Las <strong><u>condiciones de uso del vehículo</u></strong> y, si procede, sus <u>restricciones</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-train-tram icon text-green-700"></i>Autorización de tipos de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-shield icon text-blue-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> podrá, cuando proceda y en los casos en los que el <u>área de uso se circunscriba exclusivamente a la RFIG</u>, <strong><u>conceder autorizaciones de tipos de vehículo</u></strong>.</p></li>
+                        <li><p><i class="fas fa-desktop icon text-purple-600"></i>La <strong><u>solicitud de autorización</u></strong> para un tipo de vehículos se presentará siempre a través de la <strong><u>ventanilla única de la Unión Europea</u></strong>.</p></li>
+                        <li><p><i class="fas fa-database icon text-orange-600"></i>Las autorizaciones de tipos de vehículos se <strong><u>registrarán</u></strong> en el <span class="doc-pill"><strong>Registro Europeo de Tipos Autorizados de Vehículos Ferroviarios</strong></span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-check-double icon text-teal-600"></i>Conformidad de los vehículos con un tipo de vehículo autorizado</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-stamp icon text-indigo-600"></i>La <strong><u>autorización de puesta en el mercado de vehículos</u></strong>, de un vehículo o serie de vehículos que acrediten ser conformes con un tipo de vehículo previamente autorizado, se <strong><u>emitirá basándose en una declaración de conformidad</u></strong> con ese tipo de vehículo firmada por el <span class="actor-pill">solicitante</span>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-edit icon text-cyan-700"></i>Vehículos modificados</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>En caso de <strong><u>renovación o rehabilitación de vehículos existentes</u></strong> que ya cuenten con una autorización de puesta en el mercado de vehículos, <strong><u>será necesaria una nueva autorización</u></strong> si:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-chart-line icon text-gray-500"></i>Los <strong><u>valores de los parámetros se modificaran</u></strong> quedando <u>fuera del intervalo de parámetros aceptables</u> definidos en la normativa.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>El <strong><u>nivel global de seguridad del vehículo</u></strong> pudiera verse <u>afectado por los trabajos</u> previstos.</p></li>
+                                    <li><p><i class="fas fa-book icon text-gray-500"></i>O así lo <strong><u>exigieran las <span class="doc-pill">ETIs</span> aplicables</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-handshake icon text-purple-700"></i>Colaboración con la Agencia Ferroviaria de la Unión Europea</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> <strong><u>colaborará</u></strong> con la <span class="actor-pill"><strong>Agencia Ferroviaria de la UE</strong></span> en la <strong><u>evaluación de los expedientes de autorizaciones de puesta en el mercado de vehículos</u></strong> cuya <u>área de uso incluya uno o varios Estados miembros</u> y a la <u>RFIG en su totalidad o en parte</u>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-vial icon text-orange-600"></i>Circulación para pruebas, ensayos o traslados</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>La realización de <strong><u>pruebas, ensayos o traslados en la RFIG</u></strong> por un vehículo ferroviario que no cuente con una autorización de puesta en el mercado que los ampare, <strong><u>requiere</u></strong> de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-stamp icon text-gray-500"></i>Una <strong><u>autorización provisional de la <span class="actor-pill">AESF</span></u></strong>.</p></li>
+                                    <li><p><i class="fas fa-door-open icon text-gray-500"></i>O que el <span class="actor-pill">administrador de infraestructuras</span> de la red sobre la que se vaya a realizar las pruebas <strong><u>otorgue un permiso de acceso a su red</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-database icon text-blue-600"></i>Numeración y registro de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-purple-600"></i>Para que un vehículo pueda ser <strong><u>utilizado por primera vez</u></strong> tras la autorización de puesta en el mercado, deberá ser <strong><u>inscrito previamente</u></strong> en uno de los <u>registros de vehículos</u> a petición del <span class="actor-pill">poseedor</span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-map-marker-alt icon text-orange-600"></i>Cuando el <strong><u>área de uso</u></strong> del vehículo esté <strong><u>limitada a la RFIG</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-flag icon text-gray-500"></i>El vehículo se <strong><u>registrará en España</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-user-shield icon text-gray-500"></i>La <span class="actor-pill"><strong>AESF</strong></span> será la <strong><u>entidad responsable</u></strong> del tratamiento de las solicitudes y la actualización de los datos en dichos registros.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-globe-europe icon text-cyan-600"></i>Cuando el <strong><u>área de uso</u></strong> del vehículo abarque el territorio de <strong><u>más de un Estado miembro</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-random icon text-gray-500"></i>El vehículo deberá ser <strong><u>registrado en uno de los Estados miembros</u></strong> de que se trate, a <u>elección del primer poseedor</u> del mismo.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-check-double icon text-green-600"></i>Comprobaciones antes de la utilización de vehículos autorizados</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i><strong><u>Antes de utilizar un vehículo</u></strong> en el área de uso especificada en su autorización de puesta en el mercado, la <span class="actor-pill"><strong>empresa ferroviaria</strong></span> deberá <strong><u>comprobar</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-stamp icon text-gray-500"></i>Que se ha <strong><u>autorizado debidamente la puesta en el mercado</u></strong> de ese vehículo y que este está <strong><u>registrado debidamente</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-link icon text-gray-500"></i>Que el vehículo y la composición del tren en el que se integra, son <strong><u>compatibles con la ruta</u></strong> por la que va a circular.</p></li>
+                                    <li><p><i class="fas fa-train-tram icon text-gray-500"></i>Que el vehículo está <strong><u>adecuadamente integrado en la composición del tren</u></strong> en el que esté destinado a operar, teniendo en cuenta su respectivo <span class="doc-pill">sistema de gestión de la seguridad</span> y la <span class="doc-pill">ETI</span> relativa a la <u>explotación y gestión del tráfico</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-search-plus icon text-indigo-600"></i>Inspecciones de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-user-shield icon text-blue-600"></i>La <span class="actor-pill"><strong>AESF</strong></span> podrá <strong><u>inspeccionar los vehículos</u></strong> que estén autorizados para circular por la RFIG en <u>cualquier momento</u>.</p></li>
+                        <li><p><i class="fas fa-hands-helping icon text-purple-600"></i>Y podrá <strong><u>solicitar la asistencia</u></strong> del <span class="actor-pill">Administrador de infraestructuras ferroviarias</span> para realizar las inspecciones, en virtud de un <u>acuerdo de colaboración</u> suscrito entre ambas entidades.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-exclamation-triangle icon text-red-600"></i>Incumplimiento de requisitos esenciales por parte de los vehículos o tipos de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>En caso de que una <span class="actor-pill">empresa ferroviaria</span> <strong><u>observe, durante su explotación</u></strong>, que alguno de los vehículos que emplea <strong><u>no cumple alguno de los requisitos esenciales</u></strong> aplicables:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tools icon text-orange-500"></i><strong><u>Tomará las medidas de corrección necesarias</u></strong> para que el vehículo sea conforme.</p></li>
+                                    <li><p><i class="fas fa-bullhorn icon text-cyan-500"></i>Además, podrá <strong><u>informar a la <span class="actor-pill">Agencia Ferroviaria de la UE</span></u></strong>, a la <span class="actor-pill"><strong>AESF</strong></span> y a las <strong><u>demás autoridades nacionales de seguridad</u></strong> afectadas de las medidas que haya tomado.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-ban icon text-red-700"></i>Suspensión y revocación de la autorización de puesta en el mercado de vehículos</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-pause-circle icon text-yellow-600"></i>La <strong><u>autorización de puesta en el mercado</u></strong> de un vehículo ferroviario podrá ser <strong><u>suspendida</u></strong> cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-edit icon text-gray-500"></i>Lo <strong><u>solicite el propietario o el poseedor</u></strong> del vehículo.</p></li>
+                                    <li><p><i class="fas fa-file-excel icon text-gray-500"></i>Se <strong><u>incumpla el plan de mantenimiento</u></strong> del vehículo, afectando al cumplimiento de los <u>requisitos esenciales</u>.</p></li>
+                                    <li><p><i class="fas fa-edit icon text-gray-500"></i>Se haya realizado cualquier <strong><u>modificación en el plan de mantenimiento</u></strong> del vehículo que <u>no haya sido aprobada</u> por la <span class="actor-pill">entidad encargada del mantenimiento</span> responsable del mismo.</p></li>
+                                    <li><p><i class="fas fa-search icon text-gray-500"></i>Como consecuencia de una <strong><u>acción de supervisión efectuada por la <span class="actor-pill">AESF</span></u></strong> se deduzca que las <u>garantías de seguridad, fiabilidad y compatibilidad</u> exigidas al vehículo resultan <u>afectadas</u>.</p></li>
+                                    <li><p><i class="fas fa-times-circle icon text-gray-500"></i>O las <strong><u>medidas correctoras</u></strong> que aplique la <span class="actor-pill">empresa ferroviaria</span> <strong><u>no garanticen la conformidad</u></strong> con los <u>requisitos esenciales</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-trash-alt icon text-red-800"></i>La <strong><u>autorización podrá ser revocada</u></strong> cuando:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user-edit icon text-gray-500"></i>Lo <strong><u>solicite el propietario o el poseedor</u></strong> del vehículo ferroviario.</p></li>
+                                    <li><p><i class="fas fa-exclamation-circle icon text-gray-500"></i>O las <strong><u>deficiencias</u></strong> que hubieren provocado la suspensión de dicha autorización <strong><u>no hubieren sido subsanadas</u></strong>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Mantenimiento de vehículos y organismos responsables -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-wrench"></i></div>
+                <h2>3. Mantenimiento de vehículos y organismos responsables</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li><p><i class="fas fa-gavel icon text-amber-800"></i>El <span class="doc-pill"><strong>Reglamento UE 2019/779</strong></span> <strong><u>regula el sistema de certificación</u></strong> de las <span class="actor-pill">entidades encargadas de mantenimiento (EEM)</span>, y de los <span class="actor-pill">centros de mantenimiento</span> que ejerzan las funciones de mantenimiento externalizadas.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-purple-600"></i>Las <span class="actor-pill"><strong>EEM</strong></span> se ocupan de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i>La <strong><u>gestión del sistema de mantenimiento</u></strong>.</p></li>
+                                <li><p><i class="fas fa-chart-line icon text-gray-500"></i>El <strong><u>desarrollo del mantenimiento</u></strong>.</p></li>
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>La <strong><u>gestión del mantenimiento de la flota</u></strong>.</p></li>
+                                <li><p><i class="fas fa-tools icon text-gray-500"></i>Y la <strong><u>ejecución del mantenimiento</u></strong> que es el que realizan los <span class="actor-pill">centros de mantenimiento</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-file-signature icon text-orange-600"></i>Para ello puede <strong><u>subcontratar todas las actividades</u></strong> excepto la <u>gestión del sistema</u>.</p></li>
+                    <li><p><i class="fas fa-stamp icon text-green-600"></i>Las <span class="actor-pill"><strong>EEM</strong></span> y los <span class="actor-pill"><strong>centros de mantenimiento</strong></span> deben ser <strong><u>certificados por la <span class="actor-pill">AESF</span></u></strong>, o por cualquier otro <u>organismo de certificación</u> que se sujete a los efectos del <span class="doc-pill">Reglamento UE 2019/779</span>.</p></li>
+                    <li><p><i class="fas fa-user-shield icon text-blue-700"></i>Sin perjuicio de las competencias de supervisión de los organismos certificadores, la <span class="actor-pill"><strong>AESF</strong></span> podrá <strong><u>supervisar la actividad</u></strong> de las <span class="actor-pill">entidades encargadas de mantenimiento</span> y las <u>organizaciones que lleven a cabo funciones externalizadas</u> en el territorio nacional.</p></li>
+                </ul>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-clipboard-list icon text-cyan-700"></i>Plan de Mantenimiento</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Es interesante destacar el concepto de <span class="plan-pill"><strong>Plan de Mantenimiento</strong></span> de un vehículo ferroviario.</p></li>
+                        <li><p><i class="fas fa-file-alt icon text-purple-600"></i>Que es el <strong><u>documento que recoge el conjunto de operaciones</u></strong> de cada una de las <u>intervenciones de mantenimiento</u> que deben realizarse sobre un vehículo ferroviario y la <u>frecuencia</u> con que éstas han de efectuarse durante toda su vida útil.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-red-600"></i>Para <strong><u>conservar, en el estado requerido</u></strong> durante su validación, las <strong><u>características técnicas</u></strong> que, en materia de:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><u>Seguridad</u>.</p></li>
+                                    <li><p><i class="fas fa-check-circle icon text-gray-500"></i><u>Fiabilidad</u>.</p></li>
+                                    <li><p><i class="fas fa-link icon text-gray-500"></i><u>Compatibilidad técnica</u>.</p></li>
+                                    <li><p><i class="fas fa-medkit icon text-gray-500"></i><u>Salubridad</u>.</p></li>
+                                    <li><p><i class="fas fa-leaf icon text-gray-500"></i><u>Protección medioambiental</u>.</p></li>
+                                    <li><p><i class="fas fa-globe-europe icon text-gray-500"></i>Y, en su caso, <u>interoperabilidad</u>, le fueron exigidas conforme a lo dispuesto en la normativa de aplicación.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-cog icon text-indigo-600"></i>Es <strong><u>responsabilidad del titular</u></strong> de un vehículo ferroviario <strong><u>cumplir su plan de mantenimiento</u></strong>.</p></li>
+                        <li><p><i class="fas fa-search-plus icon text-orange-600"></i>Y la <span class="actor-pill"><strong>empresa ferroviaria</strong></span> que lo opere, cuando ésta no coincida con el titular, deberá <strong><u>comprobar dicho cumplimiento</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-industry icon text-blue-800"></i>Centros de mantenimiento de material rodante</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>La <strong><u>ejecución del plan de mantenimiento</u></strong> será realizada por <span class="actor-pill"><strong>centros de mantenimiento</strong></span> debidamente <u>certificados</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-green-600"></i>Cuyas <strong><u>funciones</u></strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-book icon text-gray-500"></i><strong><u>Elaborar los programas</u></strong> de cada intervención de mantenimiento.</p></li>
+                                    <li><p><i class="fas fa-tools icon text-gray-500"></i>La <strong><u>ejecución del mantenimiento</u></strong> con su <u>documentación acreditativa</u>.</p></li>
+                                    <li><p><i class="fas fa-lightbulb icon text-gray-500"></i>Y la <strong><u>formulación de recomendaciones</u></strong> a los <span class="actor-pill">titulares de los vehículos ferroviarios</span> sobre la <u>modificación de sus planes de mantenimiento</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+�
