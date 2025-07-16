@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: La seguridad ferroviaria (I)</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-shield-alt"></i> MEB2T15. La seguridad ferroviaria (I) <i class="fas fa-gavel"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: La seguridad ferroviaria -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-book-open"></i></div>
+                <h2>1. La seguridad ferroviaria en la Directiva 2016/798/UE y en el RDSOIF 929/2020</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>La <span class="doc-pill"><strong>Directiva 2016/798</strong></span> sobre la <u>seguridad ferroviaria</u>, transpuesta por el <span class="law-pill"><strong>RD 929/2020</strong></span> sobre <u>seguridad operacional e interoperabilidad ferroviarias</u>, <strong><u>establece disposiciones</u></strong> para:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-chart-line icon text-green-500"></i>Garantizar el <strong><u>desarrollo y la mejora de la seguridad</u></strong> en el <u>sistema ferroviario de la Unión</u>.</p></li>
+                                <li><p><i class="fas fa-door-open icon text-purple-500"></i>Así como la <strong><u>mejora del acceso al mercado</u></strong> de los <u>servicios de transporte ferroviario</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tasks icon text-orange-600"></i>Mediante:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i>La <strong><u>armonización de la estructura reguladora</u></strong> en los <span class="actor-pill">Estados miembros</span>.</p></li>
+                                <li><p><i class="fas fa-users-cog icon text-gray-500"></i>La <strong><u>definición de responsabilidades</u></strong> entre los <u>agentes del sistema ferroviario</u> de la Unión.</p></li>
+                                <li><p><i class="fas fa-bullseye icon text-gray-500"></i>La <strong><u>elaboración de <span class="doc-pill">objetivos comunes de seguridad (OCS)</span></u></strong> y <span class="doc-pill"><strong>métodos comunes de seguridad (MCS)</strong></span> con vistas a la <u>eliminación progresiva</u> de la necesidad de <u>normas nacionales</u>.</p></li>
+                                <li><p><i class="fas fa-gavel icon text-gray-500"></i>La <strong><u>definición de los principios</u></strong> para la <u>expedición</u>, <u>renovación</u>, <u>modificación</u> y <u>revocación</u> de los <span class="doc-pill">certificados y autorizaciones de seguridad</span>.</p></li>
+                                <li><p><i class="fas fa-building icon text-gray-500"></i>El <strong><u>establecimiento obligatorio</u></strong> en cada <span class="actor-pill">Estado miembro</span> de una <strong><u>autoridad nacional de seguridad</u></strong> y un <strong><u>organismo de investigación de accidentes e incidentes</u></strong> ferroviarios.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>La <strong><u>definición de principios comunes</u></strong> de <u>gestión</u>, <u>regulación</u> y <u>supervisión</u> de la seguridad ferroviaria.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-universal-access icon text-cyan-700"></i>La <span class="doc-pill"><strong>Directiva</strong></span> se <strong><u>aplica al sistema ferroviario</u></strong> de los <span class="actor-pill">Estados miembros</span>, que puede dividirse en <u>subsistemas estructurales y funcionales</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-expand-arrows-alt icon text-indigo-600"></i><strong><u>Abarca los requisitos en materia de seguridad</u></strong> del sistema en su conjunto, incluida:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-tools icon text-gray-500"></i>La <strong><u>gestión en condiciones de seguridad</u></strong> de la <u>infraestructura</u> y de las <u>operaciones de tráfico</u>.</p></li>
+                                <li><p><i class="fas fa-handshake icon text-gray-500"></i>Y la <strong><u>interacción</u></strong> entre las <span class="actor-pill">empresas ferroviarias</span>, los <span class="actor-pill">administradores de infraestructuras</span> y <u>otros agentes</u> del sistema ferroviario de la Unión.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Card 2: Desarrollo y gestión de la seguridad ferroviaria -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-shield-alt"></i></div>
+                <h2>2. Desarrollo y gestión de la seguridad ferroviaria</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-flag-usa icon text-blue-700"></i>Estados miembros</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Con objeto de <strong><u>desarrollar y mejorar la seguridad ferroviaria</u></strong>, los <span class="actor-pill">Estados miembros</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-shield-alt icon text-green-500"></i><strong><u>Velarán por el mantenimiento general</u></strong> de la <u>seguridad ferroviaria</u> y por su <u>mejora permanente</u>, teniendo en cuenta la <u>evolución del Derecho de la Unión</u> y el <u>progreso técnico y científico</u>, dando <strong><u>prioridad a la prevención de accidentes</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-balance-scale icon text-purple-500"></i><strong><u>Velarán por el cumplimiento</u></strong> de toda la <u>legislación aplicable</u> de manera <u>abierta</u> y <u>no discriminatoria</u>, para fomentar un <u>sistema de transporte ferroviario europeo único</u>.</p></li>
+                                    <li><p><i class="fas fa-sitemap icon text-orange-500"></i><strong><u>Velarán por que las medidas</u></strong> para mejorar la seguridad ferroviaria tengan un <strong><u>enfoque sistémico</u></strong>.</p></li>
+                                    <li><p><i class="fas fa-users icon text-indigo-500"></i><strong><u>Velarán por que la responsabilidad</u></strong> de la <u>explotación segura del sistema ferroviario</u> de la Unión y del <u>control de riesgos</u> relacionado con él corresponda a los <span class="actor-pill">administradores de infraestructuras</span> y a las <span class="actor-pill">empresas ferroviarias</span>.</p></li>
+                                    <li><p><i class="fas fa-file-alt icon text-cyan-500"></i><strong><u>Publicarán <span class="plan-pill">planes anuales de seguridad</span></u></strong> que recojan las <u>medidas previstas</u> para alcanzar los <span class="doc-pill">OCS</span>.</p></li>
+                                    <li><p><i class="fas fa-hands-helping icon text-teal-500"></i><strong><u>Prestarán su apoyo</u></strong> a la <span class="actor-pill"><strong>Agencia Ferroviaria de la Unión Europea (EUAR)</strong></span> en el <u>seguimiento de la evolución de la seguridad ferroviaria</u> a escala de la Unión.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-building icon text-blue-800"></i>EUAR (Agencia Ferroviaria de la Unión Europea)</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-shield-alt icon text-green-600"></i>La <span class="actor-pill"><strong>EUAR</strong></span> también <strong><u>velará por el mantenimiento general de la seguridad ferroviaria</u></strong> y por su <strong><u>mejora permanente</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-train icon text-purple-700"></i>Empresas ferroviarias y administradores de infraestructuras</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-blue-600"></i>Las <span class="actor-pill">empresas ferroviarias</span> y los <span class="actor-pill">administradores de infraestructuras</span>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Aplicarán las medidas necesarias de control de riesgos</u></strong>, <u>cooperando</u> entre sí y con otros actores.</p></li>
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-gray-500"></i><strong><u>Tendrán en cuenta en sus sistemas de gestión de la seguridad</u></strong> los <u>riesgos de las actividades de otros agentes</u>.</p></li>
+                                    <li><p><i class="fas fa-file-signature icon text-gray-500"></i><strong><u>Obligarán contractualmente a los demás agentes</u></strong> a que <u>apliquen medidas de control de riesgos</u>.</p></li>
+                                    <li><p><i class="fas fa-check-double icon text-gray-500"></i><strong><u>Garantizarán</u></strong> que sus <u>contratistas apliquen medidas de control de riesgos</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-users icon text-cyan-800"></i>Otras entidades y agentes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Las <span class="actor-pill"><strong>entidades encargadas del mantenimiento</strong></span> y <strong><u>todos los demás agentes</u></strong> que tengan una <u>posible incidencia en la seguridad</u> de la explotación del sistema ferroviario de la Unión, incluidos:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-industry icon text-gray-500"></i><u>Fabricantes</u>, <u>prestadores de servicios de mantenimiento</u>, <u>poseedores</u>, <u>proveedores de servicios</u>, <u>entidades adjudicadoras</u>.</p></li>
+                                    <li><p><i class="fas fa-truck icon text-gray-500"></i><u>Transportistas</u>, <u>expedidores</u>, <u>destinatarios</u>, <u>cargadores</u>, <u>descargadores</u>, <u>llenadores</u> y <u>descargadores de cisternas</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-tasks icon text-orange-600"></i>Estos agentes:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><strong><u>Aplicarán las medidas necesarias de control de riesgos</u></strong> cooperando con otros agentes.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-green-500"></i><strong><u>Velarán por que los subsistemas, accesorios, equipos y servicios</u></strong> que presten puedan ser <strong><u>utilizados de forma segura</u></strong> por las <span class="actor-pill">empresas ferroviarias</span> y los <span class="actor-pill">administradores de infraestructuras ferroviarias</span>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Objetivos comunes de seguridad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tasks"></i></div>
+                <h2>3. Objetivos comunes de seguridad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Los <span class="doc-pill"><strong>OCS</strong></span> establecerán los <strong><u>niveles mínimos de seguridad</u></strong> que debe alcanzar:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i>El <strong><u>sistema en su conjunto</u></strong>.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>Y las <strong><u>diversas partes del sistema ferroviario</u></strong> en cada <span class="actor-pill">Estado miembro</span> y en la <span class="actor-pill">Unión</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-ruler-combined icon text-purple-600"></i>Los <span class="doc-pill">OCS</span> podrán <strong><u>expresarse</u></strong> en términos de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-gray-500"></i><span class="definition-pill"><strong>Criterios de aceptación del riesgo</strong></span>.</p></li>
+                                <li><p><i class="fas fa-chart-line icon text-gray-500"></i>O en <span class="definition-pill"><strong>niveles de seguridad objetivo</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-exclamation-triangle icon text-red-600"></i>Y tendrán en <strong><u>consideración</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user icon text-gray-500"></i>Los <strong><u>riesgos individuales</u></strong> relacionados con los <u>pasajeros</u>, el <u>personal</u>, los <u>usuarios de pasos a nivel</u> y otros.</p></li>
+                                <li><p><i class="fas fa-users icon text-gray-500"></i>Y los <strong><u>riesgos para la sociedad</u></strong> en su conjunto.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-cog icon text-slate-700"></i>La <span class="actor-pill"><strong>EUAR</strong></span> <strong><u>elabora los <span class="doc-pill">OCS</span></u></strong> por mandato de la <span class="actor-pill">Comisión</span>.</p></li>
+                    <li><p><i class="fas fa-sync-alt icon text-cyan-600"></i>Los <span class="doc-pill">OCS</span> se <strong><u>revisarán periódicamente</u></strong>, teniendo en cuenta la <u>evolución general de la seguridad ferroviaria</u>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-flag-usa icon text-blue-700"></i>Los <span class="actor-pill"><strong>Estados miembros</strong></span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-edit icon text-orange-500"></i><strong><u>Introducirán las modificaciones necesarias</u></strong> en sus <u>normas nacionales</u> a fin de <strong><u>cumplir, como mínimo, los <span class="doc-pill">OCS</span></u></strong>, y cualquier <span class="doc-pill">OCS</span> revisado.</p></li>
+                                <li><p><i class="fas fa-calendar-alt icon text-purple-500"></i>De acuerdo con los <strong><u>calendarios de aplicación</u></strong> que se les hayan asignado.</p></li>
+                                <li><p><i class="fas fa-paper-plane icon text-green-500"></i><strong><u>Notificarán dichas normas</u></strong> a la <span class="actor-pill">Comisión</span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 4: Métodos comunes de seguridad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-tasks"></i></div>
+                <h2>4. Métodos comunes de seguridad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>Los <span class="doc-pill"><strong>MCS</strong></span> <strong><u>describirán los procedimientos de evaluación</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-chart-bar icon text-gray-500"></i>Los <strong><u>niveles de seguridad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-bullseye icon text-gray-500"></i>De la <strong><u>consecución de los objetivos de seguridad</u></strong>.</p></li>
+                                <li><p><i class="fas fa-check-double icon text-gray-500"></i>Y del <strong><u>cumplimiento de otros requisitos de seguridad</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-check icon text-purple-600"></i>Inclusive, si procede, a través de un <span class="actor-pill"><strong>organismo de evaluación independiente</strong></span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-orange-600"></i>Mediante la <strong><u>elaboración y la definición</u></strong> de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-exclamation-triangle icon text-gray-500"></i>La <strong><u>valoración de riesgos</u></strong> y <strong><u>métodos de evaluación</u></strong>.</p></li>
+                                <li><p><i class="fas fa-certificate icon text-gray-500"></i>Los <strong><u>métodos de evaluación de la conformidad</u></strong> con los requisitos de los <span class="doc-pill">certificados de seguridad</span> y <span class="doc-pill">autorizaciones de seguridad</span> expedidos.</p></li>
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-search-plus icon text-gray-500"></i>Los <strong><u>métodos de supervisión</u></strong> que deberán aplicar las <span class="actor-pill">autoridades nacionales de seguridad</span> y los <strong><u>métodos de vigilancia</u></strong> que deberán aplicar:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-train icon text-gray-400"></i>Las <span class="actor-pill">empresas ferroviarias</span>.</p></li>
+                                            <li><p><i class="fas fa-cogs icon text-gray-400"></i>Los <span class="actor-pill">administradores de infraestructuras</span>.</p></li>
+                                            <li><p><i class="fas fa-tools icon text-gray-400"></i>Y las <span class="actor-pill">entidades encargadas del mantenimiento</span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-chart-bar icon text-gray-500"></i>Los <strong><u>métodos de evaluación del nivel de seguridad</u></strong> y el <strong><u>desempeño en materia de seguridad</u></strong> de los <u>operadores ferroviarios</u>, en el plano <u>nacional</u> y de la <u>Unión</u>.</p></li>
+                                <li><p><i class="fas fa-bullseye icon text-gray-500"></i>Los <strong><u>métodos de evaluación de la consecución de los objetivos de seguridad</u></strong> a nivel <u>nacional</u> y de la <u>Unión</u>.</p></li>
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i><strong><u>Cualesquiera otros métodos</u></strong> que abarquen un <u>proceso del sistema de gestión de la seguridad</u> y que sea necesario <u>armonizar a nivel de la Unión</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-user-cog icon text-slate-700"></i>La <span class="actor-pill"><strong>EUAR</strong></span> <strong><u>elabora los <span class="doc-pill">MCS</span></u></strong> por mandato de la <span class="actor-pill">Comisión</span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-users icon text-indigo-600"></i>En la <strong><u>elaboración, adopción y revisión</u></strong> de los <span class="doc-pill">MCS</span> se tendrán en cuenta las <strong><u>opiniones</u></strong> de los <u>usuarios</u>, de las <u>autoridades nacionales de seguridad</u> y de las <u>partes interesadas</u>, incluidos los <u>interlocutores sociales</u>, si procede.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-sync-alt icon text-cyan-600"></i>Los <span class="doc-pill">MCS</span> se <strong><u>revisarán periódicamente</u></strong>, teniendo en cuenta:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-history icon text-gray-500"></i>La <strong><u>experiencia de su aplicación</u></strong>.</p></li>
+                                <li><p><i class="fas fa-chart-line icon text-gray-500"></i>Y la <strong><u>evolución global de la seguridad ferroviaria</u></strong> con miras al <u>mantenimiento general de la seguridad ferroviaria</u> y a su <u>mejora permanente</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-flag-usa icon text-blue-700"></i>Los <span class="actor-pill"><strong>Estados miembros</strong></span> <strong><u>introducirán sin demora los cambios necesarios</u></strong> en sus <u>normas nacionales</u> a la luz de la <u>adopción de los <span class="doc-pill">MCS</span></u> y sus <u>modificaciones</u>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 5: Sistemas de gestión de la seguridad -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>5. Sistemas de gestión de la seguridad</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-building icon text-blue-600"></i>Los <span class="actor-pill"><strong>administradores de infraestructuras</strong></span> y las <span class="actor-pill"><strong>empresas ferroviarias</strong></span> <strong><u>establecerán sus sistemas de gestión de la seguridad</u></strong> para garantizar que:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-bullseye icon text-green-500"></i>El <u>sistema ferroviario de la Unión</u> pueda <strong><u>cumplir los <span class="doc-pill">OCS</span></u></strong>.</p></li>
+                                <li><p><i class="fas fa-check-double icon text-purple-500"></i>Que sea <strong><u>conforme a los requisitos de seguridad</u></strong> fijados en las <span class="doc-pill">ETI</span>.</p></li>
+                                <li><p><i class="fas fa-tasks icon text-orange-500"></i>Así como que se <strong><u>apliquen los <span class="doc-pill">MCS</span></u></strong> y las <span class="law-pill"><strong>normas nacionales notificadas</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-file-alt icon text-cyan-600"></i>El <strong><u>sistema de gestión de la seguridad se documentará</u></strong> en todas sus partes y <strong><u>describirá</u></strong>, en particular:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-sitemap icon text-gray-500"></i>El <strong><u>reparto de responsabilidades</u></strong> dentro de la organización del <span class="actor-pill">administrador de la infraestructura</span> o de la <span class="actor-pill">empresa ferroviaria</span>.</p></li>
+                                <li><p><i class="fas fa-user-shield icon text-gray-500"></i>Indicará cómo se <strong><u>asegura el control de los gestores</u></strong>.</p></li>
+                                <li><p><i class="fas fa-users icon text-gray-500"></i>Cómo <strong><u>participan el personal y sus representantes</u></strong>.</p></li>
+                                <li><p><i class="fas fa-chart-line icon text-gray-500"></i>Y cómo se vela por la <strong><u>mejora permanente</u></strong> del sistema de gestión de la seguridad.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-list-ul icon text-indigo-600"></i>El <strong><u>sistema de gestión de la seguridad</u></strong> constará de los siguientes <strong><u>elementos básicos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-flag icon text-gray-500"></i>Una <strong><u>política de seguridad</u></strong> aprobada por el <u>director ejecutivo</u> de la organización y <u>comunicada a todo el personal</u>.</p></li>
+                                <li><p><i class="fas fa-bullseye icon text-gray-500"></i><strong><u>Objetivos cualitativos y cuantitativos</u></strong> de la organización respecto al <u>mantenimiento y mejora de la seguridad</u>, y <u>planes y procedimientos</u> para alcanzar estos objetivos.</p></li>
+                                <li><p><i class="fas fa-gavel icon text-gray-500"></i><strong><u>Procedimientos para cumplir las normas</u></strong> técnicas y de explotación existentes, y para <u>garantizar su cumplimiento</u>.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-gray-500"></i><strong><u>Procedimientos y métodos</u></strong> para <u>determinar y evaluar riesgos</u> y <u>aplicar las medidas de control del riesgo</u> siempre que un <u>cambio de las condiciones de funcionamiento</u> o la <u>introducción de un nuevo material</u> impliquen <u>nuevos riesgos</u> en las infraestructuras o en la <u>interfaz hombre-máquina-organización</u>.</p></li>
+                                <li><p><i class="fas fa-user-graduate icon text-gray-500"></i><strong><u>Programas de formación del personal</u></strong> y <strong><u>sistemas que garanticen el mantenimiento de la competencia</u></strong> del personal y el consiguiente <u>desempeño de los cometidos</u>, en particular las medidas sobre la <u>aptitud física y psicológica</u>.</p></li>
+                                <li><p><i class="fas fa-info-circle icon text-gray-500"></i><strong><u>Medidas para el suministro de información suficiente</u></strong> dentro de la organización.</p></li>
+                                <li><p><i class="fas fa-file-signature icon text-gray-500"></i><strong><u>Procedimientos y formatos de la documentación</u></strong> de información sobre la seguridad, y <strong><u>designación del procedimiento de control</u></strong> de la configuración de la información vital relativa a la seguridad.</p></li>
+                                <li><p><i class="fas fa-search icon text-gray-500"></i><strong><u>Procedimientos</u></strong> que garanticen la <u>notificación, investigación y análisis</u> de <u>accidentes, incidentes, cuasi accidentes y otras incidencias peligrosas</u>, así como la <u>adopción de las medidas de prevención</u> necesarias.</p></li>
+                                <li><p><i class="fas fa-bullhorn icon text-gray-500"></i><strong><u>Planes de acción, alerta e información</u></strong> en caso de <u>emergencia</u>, acordados con las <u>autoridades públicas pertinentes</u>.</p></li>
+                                <li><p><i class="fas fa-clipboard-check icon text-gray-500"></i><strong><u>Disposiciones</u></strong> relativas a la <strong><u>auditoría interna periódica</u></strong> del sistema de gestión de la seguridad.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-cogs icon text-blue-700"></i>El <strong>sistema de gestión de la seguridad</strong> de todo <span class="actor-pill">administrador de infraestructuras</span>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-retweet icon text-gray-500"></i>Tendrá en cuenta los <strong><u>efectos de las actividades de las empresas ferroviarias</u></strong> en la red.</p></li>
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Y <strong><u>adoptará disposiciones</u></strong> para que éstas puedan operar de conformidad con las <span class="doc-pill">ETI</span>, las <span class="law-pill">normas nacionales</span> y las <u>condiciones fijadas en su <span class="doc-pill">certificado de seguridad</span></u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-sync-alt icon text-purple-700"></i>Los <strong>sistemas de gestión de la seguridad</strong> se elaborarán para <strong><u>coordinar los procedimientos de emergencia</u></strong> del <span class="actor-pill">administrador de infraestructuras</span> con:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>Todas las <strong><u>empresas ferroviarias</u></strong> que operen en su infraestructura.</p></li>
+                                <li><p><i class="fas fa-users icon text-gray-500"></i>Con <strong><u>cualquier otra parte</u></strong> que pueda verse implicada.</p></li>
+                                <li><p><i class="fas fa-first-aid icon text-gray-500"></i>Y con los <strong><u>servicios de emergencia</u></strong>, para facilitar la <u>rápida intervención</u> de los <u>servicios de rescate</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-calendar-alt icon text-orange-600"></i>Antes del <span class="pill-blue"><strong>31 de mayo</strong></span> de cada año, los <span class="actor-pill">administradores de infraestructuras</span> y las <span class="actor-pill">empresas ferroviarias</span> presentarán a la <span class="actor-pill">autoridad nacional de seguridad</span> un <span class="doc-pill"><strong>informe anual de seguridad</strong></span> relativo al año anterior.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-file-invoice icon text-cyan-500"></i>Que <strong><u>incluirá</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-bullseye icon text-gray-400"></i>Información sobre cómo se cumplen los <strong><u>objetivos de seguridad</u></strong> y los <strong><u>resultados de los planes de seguridad</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-chart-bar icon text-gray-400"></i>Un informe sobre la <strong><u>definición de indicadores nacionales de seguridad</u></strong> y de los <strong><u>indicadores comunes de seguridad</u></strong>.</p></li>
+                                            <li><p><i class="fas fa-clipboard-check icon text-gray-400"></i>Los <strong><u>resultados de auditorías internas</u></strong> de la seguridad.</p></li>
+                                            <li><p><i class="fas fa-comment-alt-exclamation icon text-gray-400"></i><strong><u>Observaciones</u></strong> respecto a los <u>funcionamientos defectuosos</u> de los <u>servicios ferroviarios</u> y de la <u>gestión de la infraestructura</u> de interés para la autoridad nacional de seguridad.</p></li>
+                                            <li><p><i class="fas fa-file-alt icon text-gray-400"></i>Y un <strong><u>informe sobre la aplicación</u></strong> de los <span class="doc-pill">MCS</span> pertinentes.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
