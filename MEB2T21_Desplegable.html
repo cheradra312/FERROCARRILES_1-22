@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Conceptual: Normativa de circulación ferroviaria</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Fuentes y fondo base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Estructura principal de las tarjetas */
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-header .icon-bg {
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            line-height: 1;
+            border-radius: 9999px;
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Reset de listas */
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-top: 1rem; }
+
+        /* Estilos para las "píldoras" de colores */
+        .pill, .law-pill, .directive-pill, .actor-pill, .plan-pill, .definition-pill, .doc-pill, .principle-pill, .formula-pill, .pill-blue, .operator-pill, .color-white-pill, .color-yellow-pill, .color-blue-pill, .color-green-pill {
+            display: inline;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 0 0.2rem;
+            white-space: normal;
+        }
+        .pill-blue { background-color: #dbeafe; color: #1e4d91; border: 1px solid #93c5fd; }
+        .law-pill { background-color: #f3e8ff; color: #581c87; border: 1px solid #c084fc; }
+        .actor-pill { background-color: #e5e7eb; color: #1f2937; border: 1px solid #9ca3af; }
+        .operator-pill { background-color: #fffbeb; color: #b45309; border: 1px solid #f59e0b; }
+        .plan-pill { background-color: #cffafe; color: #164e63; border: 1px solid #67e8f9; }
+        .definition-pill { background-color: #cffafe; color: #155e75; border: 1px solid #22d3ee; }
+        .doc-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; font-weight: 700; }
+        .principle-pill { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;}
+        .formula-pill { background-color: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .color-white-pill { background-color: #f1f5f9; color: #1e293b; border: 1px solid #94a3b8; }
+        .color-yellow-pill { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+        .color-blue-pill { background-color: #dbeafe; color: #1e4d91; border: 1px solid #60a5fa; }
+        .color-green-pill { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .color-red-pill { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* Iconos dentro del texto */
+        .icon {
+            margin-right: 0.5rem;
+            width: 1.25em;
+            text-align: center;
+        }
+
+        /* Estilos para las listas anidadas y sus viñetas */
+        .nested-list, .deeper-nested-list, .even-deeper-nested-list {
+            padding-left: 1.75rem;
+            margin-top: 0.75rem;
+            border-left: 3px dotted #cbd5e1;
+        }
+        .nested-list > li, .deeper-nested-list > li, .even-deeper-nested-list > li {
+            position: relative;
+        }
+        .nested-list > li::before {
+            content: '🔹';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            color: #3b82f6;
+        }
+        .deeper-nested-list > li::before {
+             content: '▪️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        .even-deeper-nested-list > li::before {
+             content: '▫️';
+             position: absolute;
+             left: -1.5rem;
+             top: 0.25rem;
+        }
+        /* Regla para ocultar la viñeta CSS si un icono es el PRIMER elemento */
+        .nested-list > li:has(> i.icon:first-child)::before,
+        .deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(> i.icon:first-child)::before,
+        .nested-list > li:has(p > i.icon:first-child)::before,
+        .deeper-nested-list > li:has(p > i.icon:first-child)::before,
+        .even-deeper-nested-list > li:has(p > i.icon:first-child)::before {
+            content: none;
+        }
+
+        /* --- Estilos para la funcionalidad desplegable --- */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.25rem 0;
+            transition: background-color 0.2s ease;
+        }
+        .collapsible-trigger:hover {
+            background-color: #f9fafb;
+        }
+        .collapsible-trigger > p, .collapsible-trigger > h3, .collapsible-trigger > span {
+            margin: 0;
+            text-align: left;
+        }
+        .collapsible-trigger > h3, .collapsible-trigger > span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            margin-right: 0.75rem;
+            width: 1em;
+            color: #3b82f6;
+        }
+        .collapsible-content {
+            padding-left: 1.75rem;
+        }
+        .collapsible-trigger.open .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
+                <i class="fas fa-traffic-light"></i> MEB2T21. Normativa de circulación ferroviaria <i class="fas fa-gavel"></i>
+            </h1>
+        </header>
+
+        <!-- Card 1: Conceptos básicos de normativa de circulación ferroviaria -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-book-open"></i></div>
+                <h2>1. Conceptos básicos de normativa de circulación ferroviaria</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-info-circle icon text-blue-600"></i>El objeto del <span class="law-pill"><strong>Reglamento de Circulación Ferroviaria (RCF)</strong></span> es <strong><u>establecer reglas operativas generales</u></strong> para que la <u>circulación de los trenes</u> y de las <u>maniobras</u> se realice de forma <strong><u>segura, eficiente y puntual</u></strong>.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-circle icon text-green-500"></i>Tanto en condiciones de <strong><u>explotación normal</u></strong>.</p></li>
+                                <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i>Como <strong><u>degradada</u></strong>, incluyendo su <u>recuperación efectiva</u> tras una <u>interrupción del servicio</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-universal-access icon text-purple-600"></i>El <span class="law-pill"><strong>RCF</strong></span> es de <strong><u>aplicación</u></strong> en la <span class="definition-pill">RFIG</span>, a todo el personal de:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-train icon text-gray-500"></i>Las <span class="actor-pill"><strong>Empresas Ferroviarias (EF)</strong></span>.</p></li>
+                                <li><p><i class="fas fa-cogs icon text-gray-500"></i>De los <span class="actor-pill"><strong>Administradores de Infraestructuras (AI)</strong></span>.</p></li>
+                                <li><p><i class="fas fa-building icon text-gray-500"></i>Y de <strong><u>otras empresas</u></strong> que intervengan en los <u>procesos de circulación de trenes y maniobras</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-globe-europe icon text-cyan-600"></i>El <span class="law-pill">Reglamento</span> <strong><u>incorpora al derecho interno</u></strong> la regulación sobre <u>seguridad en la circulación</u> recogida en el <u>derecho europeo</u> sobre la <span class="doc-pill"><strong>especificación técnica de interoperabilidad relativa al subsistema explotación y gestión de tráfico (ETI OPE)</strong></span>.</p></li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-times-circle icon text-red-600"></i>Con el <span class="law-pill">Reglamento</span> <strong><u>dejan de ser aplicables</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-book icon text-gray-500"></i>El <span class="doc-pill"><strong>Reglamento General de Circulación de Renfe</strong></span>.</p></li>
+                                <li><p><i class="fas fa-file-alt icon text-gray-500"></i>Las <span class="doc-pill"><strong>Normas Específicas de Circulación (NEC)</strong></span> aplicables a la línea <u>Madrid-Sevilla</u>.</p></li>
+                                <li><p><i class="fas fa-file-signature icon text-gray-500"></i>Y las <span class="doc-pill"><strong>prescripciones de Circulación y Seguridad</strong></span> correspondientes al tramo <u>Madrid-Zaragoza-Lleida</u> de la línea de AV.</p></li>
+                                <li><p><i class="fas fa-subway icon text-gray-500"></i>Así como el <span class="doc-pill"><strong>Reglamento de Circulación de Trenes de FEVE</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-calendar-alt icon text-orange-600"></i>En su <strong><u>disposición transitoria</u></strong> establece el <strong><u>periodo de adaptación</u></strong> al nuevo reglamento.</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-check-double icon text-green-500"></i>En <span class="pill-blue"><strong>enero de 2017</strong></span> los <span class="actor-pill">AI</span> y las <span class="actor-pill">EF</span> habrán de tener <strong><u>adaptada toda la actividad</u></strong> de <u>explotación, gestión y operación del tráfico</u> ferroviario.</p></li>
+                                <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i>Sin perjuicio de que la <strong><u>adecuación de las señales fijas</u></strong> de los trenes deberá realizarse <strong><u>antes del <span class="pill-blue">1 de enero de 2026</span></u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-user-shield icon text-indigo-700"></i>Entre las <strong><u>obligaciones del personal ferroviario</u></strong> recogidas en las <u>reglas internas</u> establecidas por los <span class="actor-pill">AI</span> y las <span class="actor-pill">EF</span> en sus <span class="doc-pill">Sistemas de Gestión de la Seguridad</span> se deberán incorporar:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-heartbeat icon text-gray-500"></i><strong><u>Presentarse a prestar servicio</u></strong> en <u>buenas condiciones físicas</u>, <u>sin fatiga</u> y evitando cualquier tipo de <u>exceso</u>.</p></li>
+                                <li><p><i class="fas fa-beer icon text-gray-500"></i><strong><u>No prestar servicio</u></strong> bajo los efectos de <u>bebidas alcohólicas</u>, <u>drogas</u> u otras <u>sustancias psicoactivas</u>.</p></li>
+                                <li><p><i class="fas fa-mobile-alt icon text-gray-500"></i><strong><u>Abstenerse de utilizar medios de distracción</u></strong> en el puesto de trabajo (p.e. teléfonos móviles).</p></li>
+                                <li><p><i class="fas fa-user-slash icon text-gray-500"></i><strong><u>Prohibir personas carentes de autorización</u></strong> en las <u>dependencias de circulación</u> y en las <u>cabinas de conducción</u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 2: Criterios generales de operación de trenes -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-cogs"></i></div>
+                <h2>Criterios generales de operación de trenes</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <ul>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-play-circle icon text-blue-600"></i>Para que un <strong><u>tren pueda iniciar servicio</u></strong>, es necesario que <strong><u>disponga en la cabina de conducción</u></strong> y tenga <strong><u>operativos</u></strong>:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Un <strong><u>sistema de protección de tren</u></strong> compatible con alguno de los instalados en la infraestructura.</p></li>
+                                <li><p><i class="fas fa-eye icon text-gray-500"></i>Un <strong><u>dispositivo de vigilancia</u></strong>.</p></li>
+                                <li><p><i class="fas fa-broadcast-tower icon text-gray-500"></i>Y <strong><u>radiotelefonía</u></strong>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-tachometer-alt icon text-purple-600"></i>Las <strong><u>velocidades máximas de circulación</u></strong> serán:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li>
+                                    <div class="collapsible-trigger">
+                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                        <p><i class="fas fa-check-circle icon text-green-500"></i>Cuando los <strong><u>sistemas de protección</u></strong> del tren instalados en la infraestructura y en la cabina de conducción sean <strong><u>compatibles entre sí y estén operativos</u></strong>:</p>
+                                    </div>
+                                    <div class="collapsible-content hidden">
+                                        <ul class="deeper-nested-list">
+                                            <li><p><i class="fas fa-rocket icon text-red-400"></i><span class="pill-blue"><strong>350 km/h</strong></span> para trenes circulando con <span class="definition-pill">ERTMS Nivel 2</span>.</p></li>
+                                            <li><p><i class="fas fa-fighter-jet icon text-orange-400"></i><span class="pill-blue"><strong>300 km/h</strong></span> con <span class="definition-pill">ERTMS Nivel 1</span> o <span class="definition-pill">LZB</span>.</p></li>
+                                            <li><p><i class="fas fa-plane icon text-yellow-400"></i><span class="pill-blue"><strong>220 km/h</strong></span> con <span class="definition-pill">EBICAB</span>.</p></li>
+                                            <li><p><i class="fas fa-train icon text-blue-400"></i><span class="pill-blue"><strong>200 km/h</strong></span> con <span class="definition-pill">ASFA</span>.</p></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li><p><i class="fas fa-times-circle icon text-red-500"></i>Cuando los <strong><u>sistemas de protección no sean compatibles</u></strong>, o alguno de ellos <strong><u>no esté operativo</u></strong>, la velocidad máxima será <span class="pill-blue"><strong>120 km/h</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-users icon text-indigo-600"></i>La <strong><u>dotación mínima de personal</u></strong> en la cabina de conducción será:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user icon text-gray-500"></i><strong><u>Un maquinista</u></strong>, cuando los <u>sistemas sean compatibles y estén operativos</u>, y haya además un <u>dispositivo de vigilancia</u>.</p></li>
+                                <li><p><i class="fas fa-user-friends icon text-gray-500"></i>O <strong><u>un maquinista y una segunda persona</u></strong> debidamente habilitada, <u>en caso contrario</u>.</p></li>
+                                <li><p><i class="fas fa-exclamation-circle icon text-yellow-500"></i><strong><u>Salvo</u></strong> que la <span class="actor-pill">EF</span> establezca en su <span class="doc-pill">SGS</span> otro procedimiento que <u>mitigue el riesgo</u> y esté <u>autorizado por la <span class="actor-pill">AESF</span></u>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-trigger">
+                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                            <p><i class="fas fa-file-alt icon text-cyan-700"></i>En desarrollo del <span class="law-pill">Reglamento</span>, y para determinar con precisión las condiciones de operación de la infraestructura ferroviaria, la <span class="actor-pill">AESF</span>, los <span class="actor-pill">AI</span> y las <span class="actor-pill">EF</span>, podrán elaborar <strong><u>documentación reglamentaria complementaria</u></strong>, con esta forma:</p>
+                        </div>
+                        <div class="collapsible-content hidden">
+                            <ul class="nested-list">
+                                <li><p><i class="fas fa-user-shield icon text-blue-500"></i>Elaborados y aprobados por la <span class="actor-pill"><strong>AESF</strong></span>: <span class="doc-pill"><strong>Especificaciones Técnicas de Circulación de ámbito nacional</strong></span>.</p></li>
+                                <li><p><i class="fas fa-building icon text-green-500"></i>Elaborados y aprobados por los <span class="actor-pill"><strong>AI</strong></span>: <span class="doc-pill"><strong>Consignas</strong></span>, <span class="doc-pill"><strong>Avisos</strong></span>, y <span class="doc-pill"><strong>Horarios de los trenes</strong></span>.</p></li>
+                                <li><p><i class="fas fa-train-tram icon text-orange-500"></i>Elaborados y aprobados por las <span class="actor-pill"><strong>EF</strong></span>: <span class="doc-pill"><strong>Libro de Normas del Maquinista</strong></span>, y <span class="doc-pill"><strong>Libro de Itinerarios del Maquinista</strong></span>.</p></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><p><i class="fas fa-sort-amount-down icon text-red-700"></i>En caso de <strong><u>discrepancia entre documentos</u></strong>, se seguirá el siguiente <strong><u>orden de prevalencia</u></strong>: <span class="actor-pill">AESF</span>, <span class="actor-pill">AI</span>, <span class="actor-pill">EF</span>.</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Card 3: Conceptos básicos de circulación -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-bg"><i class="fas fa-info-circle"></i></div>
+                <h2>Conceptos básicos de circulación</h2>
+            </div>
+            <div class="collapsible-trigger">
+                <i class="fas fa-chevron-right collapsible-icon"></i>
+                <span>Ver detalles</span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="collapsible-trigger">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-lightbulb icon text-yellow-500"></i>Señales</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-bullseye icon text-red-600"></i>Tienen por <strong><u>objeto transmitir órdenes o informaciones</u></strong> desde la <u>vía</u>, las <u>estaciones</u> o los <u>trenes</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-purple-600"></i>Las <strong><u>señales se clasifican</u></strong> en:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-map-pin icon text-orange-500"></i><span class="definition-pill"><strong>Señales fijas</strong></span> (instaladas en <u>puntos determinados de la vía o de las estaciones</u>), se dividen en:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li>
+                                                    <div class="collapsible-trigger">
+                                                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                                                        <p><i class="fas fa-star icon text-yellow-400"></i><strong><u>Fundamentales</u></strong> que regulan la <u>circulación de trenes y maniobras</u>.</p>
+                                                    </div>
+                                                    <div class="collapsible-content hidden">
+                                                        <ul class="even-deeper-nested-list">
+                                                            <li><p><i class="fas fa-angle-double-right icon text-gray-300"></i><strong><u>Señal de preavanzada</u></strong> (situada <u>delante de la señal de avanzada</u> en líneas con <u>bloqueo de liberación automática</u> en las que se circule a más de <span class="pill-blue">160 km/h</span>).</p></li>
+                                                            <li><p><i class="fas fa-angle-right icon text-gray-300"></i><strong><u>Señal de avanzada</u></strong> (situada <u>delante de una señal de entrada</u>, <u>señal de protección</u> o de una <u>estación</u>).</p></li>
+                                                            <li><p><i class="fas fa-sign-in-alt icon text-gray-300"></i><strong><u>Señal de entrada</u></strong> (situada a la <u>entrada de una estación, bifurcación, puesto de banalización, puesto de bloqueo o puesto de cantonamiento</u>, protegiendo <u>agujas de entrada</u>).</p></li>
+                                                            <li><p><i class="fas fa-sign-out-alt icon text-gray-300"></i><strong><u>Señal de salida</u></strong> (situada a la <u>salida de una estación</u>, protegiendo <u>agujas de salida</u>).</p></li>
+                                                            <li><p><i class="fas fa-door-closed icon text-gray-300"></i><strong><u>Señal interior</u></strong> (situada en el <u>interior de una estación</u> para regular los <u>movimientos de trenes o de maniobras</u>, incluye las señales de <u>retroceso</u>, <u>maniobras</u>, <u>entrada interior</u> y <u>salida interior</u>).</p></li>
+                                                            <li><p><i class="fas fa-shield-alt icon text-gray-300"></i><strong><u>Señal de protección</u></strong> (situada <u>delante de una aguja en plena vía</u> para protegerla).</p></li>
+                                                            <li><p><i class="fas fa-exchange-alt icon text-gray-300"></i><strong><u>Señal intermedia</u></strong> (situada, en <u>líneas con bloqueo automático</u>, entre la de <u>salida de una estación y la avanzada de la siguiente</u>).</p></li>
+                                                            <li><p><i class="fas fa-lock-open icon text-gray-300"></i><strong><u>Señal de liberación</u></strong> (la situada a <u>continuación de la señal de salida y relacionada con ella</u>, para <u>liberar la curva de control de velocidad</u> del equipo embarcado).</p></li>
+                                                            <li><p><i class="fas fa-traffic-light icon text-gray-300"></i><strong><u>Señal de paso a nivel</u></strong> (situada <u>delante de un PN</u> para indicar si tiene o no <u>protección</u>).</p></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li><p><i class="fas fa-info-circle icon text-blue-400"></i><strong><u>Indicadoras</u></strong> que <u>complementan las órdenes</u> de las señales fundamentales.</p></li>
+                                                <li><p><i class="fas fa-tachometer-alt icon text-red-400"></i><strong><u>De velocidad máxima</u></strong> que <u>regulan la velocidad</u> que el tren no debe exceder.</p></li>
+                                                <li><p><i class="fas fa-stopwatch icon text-orange-400"></i>Y de <strong><u>limitación temporal de velocidad máxima</u></strong> que imponen <u>restricciones temporales</u> en la velocidad máxima de los trenes.</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><p><i class="fas fa-mobile-alt icon text-green-500"></i><span class="definition-pill"><strong>Señales portátiles</strong></span> (las que puede <u>utilizar o hacer el personal</u> en cualquier momento o lugar).</p></li>
+                                    <li><p><i class="fas fa-train icon text-cyan-500"></i><span class="definition-pill"><strong>Señales de los trenes</strong></span> (las que llevan en <u>cabeza y cola</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-shield-alt icon text-indigo-700"></i>Instalaciones de seguridad</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Son <strong><u>componentes, equipos y sistemas</u></strong> instalados en <u>tierra y a bordo de los vehículos</u> con el fin de <strong><u>aumentar la seguridad de la circulación</u></strong>, que incluyen:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-lightbulb icon text-gray-500"></i><u>Señales</u> ferroviarias.</p></li>
+                                    <li><p><i class="fas fa-lock icon text-gray-500"></i><u>Enclavamientos</u>.</p></li>
+                                    <li><p><i class="fas fa-traffic-light icon text-gray-500"></i><u>Bloqueos</u>.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i><u>Sistemas de protección de trenes</u> (<span class="definition-pill">ERTMS</span>, <span class="definition-pill">LZB</span>, <span class="definition-pill">EBICAB</span>, <span class="definition-pill">ASFA</span>).</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><u>Dispositivos embarcados de vigilancia</u> (<span class="definition-pill">hombre muerto</span>), <u>información de velocidad</u>, y <u>detección de sobretemperatura en órganos de rodadura y freno</u>.</p></li>
+                                    <li><p><i class="fas fa-satellite-dish icon text-gray-500"></i><u>Sistemas auxiliares de detección en vía</u> (<u>detectores de cajas calientes y frenos agarrotados</u>, <u>detectores de caída de objetos a la vía</u>, <u>detectores de impacto en vía</u>, <u>detectores de viento lateral</u>).</p></li>
+                                    <li><p><i class="fas fa-road-barrier icon text-gray-500"></i>Y <u>sistemas de protección de Pasos a Nivel</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-exclamation-circle icon text-yellow-600"></i>Condiciones de marcha especiales</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Imponen al <span class="actor-pill">maquinista</span> la <strong><u>obligación de avanzar con prudencia</u></strong> para que pueda <u>detener el tren ante cualquier obstáculo visible</u> desde la cabina o ante una <u>señal de parada</u>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-purple-600"></i>Distinguiendo:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-eye icon text-gray-500"></i><span class="definition-pill"><strong>Marcha a la vista</strong></span> (de acuerdo con la <u>parte de vía que aparece por delante</u>).</p></li>
+                                    <li><p><i class="fas fa-cogs icon text-gray-500"></i><span class="definition-pill"><strong>Marcha de maniobras</strong></span> (sin exceder de <span class="pill-blue">30 km/h</span> si va <u>tirando</u>, o de <span class="pill-blue">20 km/h</span> si va <u>empujando</u>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-id-card icon text-cyan-700"></i>Identificación de los trenes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Los trenes se <strong><u>identifican mediante códigos numéricos</u></strong> de forma <u>única e inequívoca</u> para cada <u>sentido de circulación</u>.</p></li>
+                        <li><p><i class="fas fa-gavel icon text-amber-800"></i>De acuerdo con lo dispuesto en las <span class="doc-pill"><strong>ETIs de Explotación y Gestión del Tráfico</strong></span> y de <span class="doc-pill"><strong>Control- Mando y Señalización</strong></span>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-sort-numeric-down icon text-purple-600"></i>En función de la <strong><u>paridad definida</u></strong> en cada línea:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>Los designados con <strong><u>número par</u></strong> circulan siempre en un <u>mismo sentido</u>.</p></li>
+                                    <li><p><i class="fas fa-train icon text-gray-500"></i>Y los designados con <strong><u>número impar</u></strong> en el <u>contrario</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-user-cog icon text-indigo-600"></i>El <strong><u>código de identificación</u></strong> de cada tren será <strong><u>asignado por el <span class="actor-pill">AI</span></u></strong>.</p></li>
+                        <li><p><i class="fas fa-bullhorn icon text-green-600"></i>Y <strong><u>puesto en conocimiento</u></strong> de la <span class="actor-pill">EF</span> y del resto de los <span class="actor-pill">AI</span> afectados por la circulación del tren.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-hand-paper icon text-red-600"></i>Paradas de los trenes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i>Pueden estar <strong><u>prescritas en la marcha del tren</u></strong>, o realizarse de forma <strong><u>eventual</u></strong> por iniciativa del <span class="actor-pill">Responsable de Circulación</span> o por orden de las señales.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-purple-600"></i>Pudiendo ser:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-clock icon text-orange-500"></i>Considerando su <strong><u>duración o periodicidad</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-stopwatch icon text-gray-400"></i><span class="definition-pill"><strong>Momentánea</strong></span> (cuando el tren se detiene el <u>tiempo indispensable</u> para realizar operaciones).</p></li>
+                                                <li><p><i class="fas fa-calendar-day icon text-gray-400"></i>U <span class="definition-pill"><strong>ocasional</strong></span> (cuando se efectúa <u>únicamente los días o períodos de tiempo</u> indicados en la marcha).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="collapsible-trigger">
+                                            <i class="fas fa-chevron-right collapsible-icon"></i>
+                                            <p><i class="fas fa-cogs icon text-green-500"></i>Y considerando su <strong><u>función</u></strong>:</p>
+                                        </div>
+                                        <div class="collapsible-content hidden">
+                                            <ul class="deeper-nested-list">
+                                                <li><p><i class="fas fa-shopping-cart icon text-gray-400"></i><span class="definition-pill"><strong>Comercial</strong></span> (para <u>subida y bajada de viajeros</u>).</p></li>
+                                                <li><p><i class="fas fa-user-slash icon text-gray-400"></i><span class="definition-pill"><strong>Restringida</strong></span> (parada comercial en la que <u>no se admite la subida de viajeros</u>).</p></li>
+                                                <li><p><i class="fas fa-tools icon text-gray-400"></i>Y <span class="definition-pill"><strong>técnica</strong></span> (la que se efectúa por <u>cruce, adelantamiento de trenes</u> u otra causa de <u>índole técnica</u>).</p></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-stop-circle icon text-red-700"></i>Detención de los trenes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Tipos de detención:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-exclamation-triangle icon text-yellow-500"></i><span class="definition-pill"><strong>Detención accidental</strong></span> es la que efectúa el <span class="actor-pill">Maquinista</span> por <u>propia iniciativa en plena vía</u> o por <u>anormalidad en cualquier lugar</u>.</p></li>
+                                    <li><p><i class="fas fa-exclamation-circle icon text-red-500"></i>Y <span class="definition-pill"><strong>detención inmediata</strong></span> la que se realiza para <u>tratar de evitar un peligro inminente</u>, mediante la aplicación del <u>freno de emergencia</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-play icon text-green-600"></i>Orden de marcha</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-info-circle icon text-blue-600"></i><strong><u>Conjunto de indicaciones</u></strong> que se deben dar al maquinista para que su tren pueda <strong><u>salir o pasar por una estación</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tachometer-alt icon text-orange-600"></i>Velocidades</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Tipos de velocidades:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-rocket icon text-red-500"></i><span class="definition-pill"><strong>Velocidad máxima</strong></span> es la que el tren <strong><u>no debe exceder</u></strong> durante la marcha del tren.</p></li>
+                                    <li><p><i class="fas fa-stopwatch icon text-yellow-500"></i>Y <span class="definition-pill"><strong>limitación temporal de velocidad máxima</strong></span> es una <strong><u>reducción temporal</u></strong> de la velocidad máxima por cualquier causa.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-train-tram icon text-indigo-700"></i>Tipos de tren</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>A efectos de <u>composición, velocidad, régimen y frenado</u>, cada tren se <strong><u>clasifica mediante un código</u></strong> formado por un <u>número</u> y una <u>letra mayúscula</u>.</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-sort-numeric-up icon text-purple-500"></i>El <strong><u>primero representa la velocidad máxima</u></strong> en km/h a la que podría circular en las <u>condiciones más favorables</u> de trazado y clase de vía. Se expresa en <u>números múltiplos de 10</u>.</p></li>
+                                    <li><p><i class="fas fa-font icon text-orange-500"></i>La <strong><u>letra caracteriza el tipo de tren</u></strong>, en función de las <u>aceleraciones centrífugas máximas no compensadas</u> que admite en las curvas.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check-circle icon text-green-600"></i>Cuando el tren está representado por un solo número o con la letra N, es de <span class="definition-pill"><strong>tipo normal</strong></span>, y es el que admite <u>menores velocidades en curvas</u>.</p></li>
+                        <li><p><i class="fas fa-exchange-alt icon text-cyan-600"></i>El <strong><u>material móvil de un tipo superior</u></strong> puede circular en los trenes de <u>tipo inferior</u>, pero <strong><u>no al contrario</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-route icon text-blue-700"></i>Sentido de la circulación</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                         <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Tipos de vías según el sentido:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-retweet icon text-gray-500"></i><span class="definition-pill"><strong>Vía única</strong></span> (uso en <u>ambos sentidos</u>).</p></li>
+                                    <li><p><i class="fas fa-arrows-alt-h icon text-gray-500"></i><span class="definition-pill"><strong>Vía doble</strong></span> (salvo que se disponga la circulación a contravía, los <u>trenes pares</u> irán en el mismo sentido por la <u>vía par</u> y los <u>trenes impares</u> irán en el mismo sentido por la <u>vía impar</u>, en unas líneas se circula por la <u>derecha</u> y en otras por la <u>izquierda</u>).</p></li>
+                                    <li><p><i class="fas fa-random icon text-gray-500"></i><span class="definition-pill"><strong>Vía doble banalizada</strong></span> (los trenes circulan en <u>ambos sentidos</u>, por cada una de ellas).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-traffic-light icon text-red-700"></i>Bloqueo de los trenes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li><p><i class="fas fa-bullseye icon text-blue-600"></i>El <strong><u>objeto del bloqueo</u></strong> es <strong><u>garantizar la seguridad</u></strong> de la circulación de los trenes por la misma vía, <strong><u>manteniendo entre ellos la separación</u></strong>.</p></li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-cogs icon text-purple-600"></i>Se emplean <strong><u>sistemas</u></strong>:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-phone icon text-gray-500"></i><u>Telefónicos</u>.</p></li>
+                                    <li><p><i class="fas fa-lock-open icon text-gray-500"></i>De <u>liberación automática</u> de <u>vía única</u>, de <u>vía doble</u>, y de <u>vía doble banalizada</u>.</p></li>
+                                    <li><p><i class="fas fa-robot icon text-gray-500"></i><u>Automáticos</u> de <u>vía única</u>, de <u>vía doble</u>, de <u>vía doble banalizada</u>.</p></li>
+                                    <li><p><i class="fas fa-signal icon text-gray-500"></i>De <u>señalización lateral</u>.</p></li>
+                                    <li><p><i class="fas fa-shield-alt icon text-gray-500"></i>Y de <u>control automático</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><p><i class="fas fa-check icon text-green-600"></i>Se considera que un <span class="definition-pill"><strong>cantón está libre</strong></span> cuando <strong><u>no está establecida la entrega de vía bloqueada</u></strong>, y además el <strong><u>último tren lo ha liberado totalmente</u></strong>.</p></li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-user-cog icon text-indigo-700"></i>Tipos de conducción de los trenes</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Tipos de conducción:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-user icon text-gray-500"></i><span class="definition-pill"><strong>Conducción manual</strong></span>, la que desarrolla el <span class="actor-pill">maquinista</span> bajo su <u>responsabilidad de forma íntegra</u>, con o sin <span class="definition-pill">ASFA</span>.</p></li>
+                                    <li><p><i class="fas fa-assistive-listening-systems icon text-gray-500"></i><span class="definition-pill"><strong>Conducción asistida</strong></span>, la que desarrolla el <span class="actor-pill">maquinista</span> bajo la <u>tutela de un sistema de seguridad</u> (<span class="definition-pill">ERTMS</span>, <span class="definition-pill">LZB</span> o <span class="definition-pill">EBICAB</span>) que le <u>protege de posibles errores</u> en el cumplimiento de las órdenes que recibe, el sistema <u>evita que se rebasen las velocidades máximas</u> en cada momento, pero <u>no gestiona las paradas comerciales</u>.</p></li>
+                                    <li><p><i class="fas fa-robot icon text-gray-500"></i><span class="definition-pill"><strong>Conducción automática</strong></span>, la que realiza el <u>sistema sin intervención del maquinista</u>, manteniendo la <u>máxima velocidad permitida</u>, y efectuando, de forma <u>automática</u>, las <u>paradas comerciales programadas</u>.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-tools icon text-orange-700"></i>Sistemas de ejecución de trabajos en la vía</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-info-circle icon text-blue-600"></i>Tipos de sistemas:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-power-off icon text-red-500"></i><span class="definition-pill"><strong>Sistema de interrupción de la circulación</strong></span> (para realizar los trabajos se <u>suspende la circulación por las vías afectadas</u> por <u>intervalo de horario programado</u> o por <u>anormalidad accidental</u> por existir un peligro para la circulación).</p></li>
+                                    <li><p><i class="fas fa-clock icon text-green-500"></i>Y <span class="definition-pill"><strong>Sistema de liberación por tiempo</strong></span> (los trabajos son <u>compatibles con la circulación</u> por las vías afectadas, aprovechando un <u>intervalo libre de trenes</u> que garantiza el <span class="actor-pill">Responsable de Circulación</span>).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
+                    <i class="fas fa-chevron-right collapsible-icon"></i>
+                    <h3><i class="fas fa-hand-paper icon text-red-800"></i>Frenado</h3>
+                </div>
+                <div class="collapsible-content hidden">
+                    <ul>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-bullseye icon text-blue-600"></i>El <strong><u>objeto del frenado</u></strong> es:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-tachometer-alt icon text-gray-500"></i><strong><u>Regular la velocidad</u></strong> de los trenes.</p></li>
+                                    <li><p><i class="fas fa-stop-circle icon text-gray-500"></i><strong><u>Asegurar su detención</u></strong> en cualquier lugar.</p></li>
+                                    <li><p><i class="fas fa-lock icon text-gray-500"></i>E <strong><u>inmovilizar los vehículos</u></strong> en su estacionamiento.</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-trigger">
+                                <i class="fas fa-chevron-right collapsible-icon"></i>
+                                <p><i class="fas fa-stream icon text-purple-600"></i>Los <strong>frenos</strong> son:</p>
+                            </div>
+                            <div class="collapsible-content hidden">
+                                <ul class="nested-list">
+                                    <li><p><i class="fas fa-compress-alt icon text-gray-500"></i><span class="definition-pill"><strong>Automáticos</strong></span> (por <u>aire comprimido</u> para todos los trenes, salvo los <u>autopropulsados</u> con características definidas en sus <span class="doc-pill">Manuales de conducción</span>, para <u>detener los trenes en la distancia que exigen las señales</u> o <u>no exceder la velocidad permitida</u> durante la marcha).</p></li>
+                                    <li><p><i class="fas fa-parking icon text-gray-500"></i>De <span class="definition-pill"><strong>estacionamiento</strong></span> (para <u>mantener detenido el material</u> si se pierde el frenado automático).</p></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Script para la funcionalidad desplegable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos que servirán como disparadores
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+
+            // Itera sobre cada disparador para añadirle un detector de clics
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
+                    event.stopPropagation();
+                    
+                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
+                    const content = this.nextElementSibling;
+                    
+                    // Alterna la clase 'open' en el disparador (para rotar el icono)
+                    this.classList.toggle('open');
+                    
+                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    if (content && content.classList.contains('collapsible-content')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
