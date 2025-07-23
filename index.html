@@ -723,7 +723,7 @@
 
 				contentFrame.src = currentTopic.file;
                 // ✅ CORRECCIÓN: Ruta de audio corregida
-                const audioSrc = `audios/${currentTopic.file.replace(/_Desplegable\.html$/i, ".mp3")}`;
+                const audioSrc = `audio/${currentTopic.file.replace(/_Desplegable\.html$/i, ".mp3")}`;
                 console.log("Intentando cargar audio desde:", audioSrc);
 				topicAudio.src = audioSrc;
 
