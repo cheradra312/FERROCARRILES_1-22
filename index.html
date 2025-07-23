@@ -868,24 +868,22 @@
 			const formatTime=e=>isNaN(e)?"00:00":`${String(Math.floor(e/60)).padStart(2,"0")}:${String(Math.floor(e%60)).padStart(2,"0")}`;
 			topicAudio.addEventListener("loadedmetadata",()=>{totalDurationEl.textContent=formatTime(topicAudio.duration),timelineSlider.max=topicAudio.duration}),
             topicAudio.addEventListener("error", (e) => {
-            // Eliminado: Bloque de manejo de errores de audio que deshabilitaba el botón de reproducción
-            // topicAudio.addEventListener("error", (e) => {
-            //     console.error("Error al cargar el audio:", e);
-            //     console.error("Código de error de audio:", topicAudio.error.code);
-            //     console.error("Mensaje de error de audio:", topicAudio.error.message);
-            //     playPauseButton.disabled = true;
-            //     playPauseIcon.className = "fas fa-times";
-            //     totalDurationEl.textContent = "Error";
-            //     let errorMessage = "No se pudo cargar el audio. Esto puede deberse a:";
-            //     if (topicAudio.error.code === 4) {
-            //         errorMessage += "\n- El archivo de audio no se encontró en la ruta especificada o el navegador no puede acceder a él por restricciones de seguridad (por ejemplo, si abres el HTML directamente desde tu equipo, o por políticas de seguridad del sitio).";
-            //         errorMessage += "\n- El archivo de audio está dañado o en un formato no compatible.";
-            //         errorMessage += "\n\nAsegúrate de que el archivo MP3 está en la carpeta 'audio' al mismo nivel que 'index.html' y que estás ejecutando la aplicación desde un servidor web (como GitHub Pages) y no directamente desde tu disco duro.";
-            //     } else {
-            //         errorMessage += "\n- Un error desconocido al cargar el audio.";
-            //     }
-            //     alert(errorMessage);
-            // }),
+                console.error("Error al cargar el audio:", e);
+                console.error("Código de error de audio:", topicAudio.error.code);
+                console.error("Mensaje de error de audio:", topicAudio.error.message);
+                playPauseButton.disabled = true;
+                playPauseIcon.className = "fas fa-times";
+                totalDurationEl.textContent = "Error";
+                let errorMessage = "No se pudo cargar el audio. Esto puede deberse a:";
+                if (topicAudio.error.code === 4) {
+                    errorMessage += "\n- El archivo de audio no se encontró en la ruta especificada o el navegador no puede acceder a él por restricciones de seguridad (por ejemplo, si abres el HTML directamente desde tu equipo, o por políticas de seguridad del sitio).";
+                    errorMessage += "\n- El archivo de audio está dañado o en un formato no compatible.";
+                    errorMessage += "\n\nAsegúrate de que el archivo MP3 está en la carpeta 'audio' al mismo nivel que 'index.html' y que estás ejecutando la aplicación desde un servidor web (como GitHub Pages) y no directamente desde tu disco duro.";
+                } else {
+                    errorMessage += "\n- Un error desconocido al cargar el audio.";
+                }
+                alert(errorMessage);
+            }),
             topicAudio.addEventListener("ended",()=>{
                 if (x3LoopState.active) {
                     topicAudio.dispatchEvent(new Event('timeupdate'));
