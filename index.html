@@ -867,6 +867,9 @@
 			gridContainer.addEventListener("click",(e=>e.target.closest(".topic-button")&&showMapView(e.target.closest(".topic-button")))),backButton.addEventListener("click",showMainMenu);
 
 			const formatTime=e=>isNaN(e)?"00:00":`${String(Math.floor(e/60)).padStart(2,"0")}:${String(Math.floor(e%60)).padStart(2,"0")}`;
+			playPauseButton.addEventListener("click",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.paused?topicAudio.play():topicAudio.pause()}),
+			topicAudio.addEventListener("play",()=>playPauseIcon.classList.replace("fa-play","fa-pause")),
+			topicAudio.addEventListener("pause",()=>playPauseIcon.classList.replace("fa-pause","fa-play")),
 			topicAudio.addEventListener("loadedmetadata",()=>{totalDurationEl.textContent=formatTime(topicAudio.duration),timelineSlider.max=topicAudio.duration}),
             topicAudio.addEventListener("error", (e) => {
                 console.error("Error al cargar el audio:", e);
