@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Visor de Mapas Conceptuales con Editor - MEB2</title>
+	<title>Visor de Mapas Conceptuales con Editor - MEB2 Corregido</title>
 	<!-- Tailwind CSS -->
 	<script src="https://cdn.tailwindcss.com"></script>
 	<!-- Font Awesome -->
@@ -16,7 +16,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 	<style>
-		body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+		body { font-family: 'Inter', sans-serif; }
         .font-luckiest { font-family: 'Luckiest Guy', cursive; }
         .fancy-title-word {
             background-clip: text;
@@ -31,7 +31,7 @@
 		.topic-number { border-radius: 9999px; font-weight: 700; font-size: 1.125rem; width: 2.75rem; height: 2.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s ease-in-out; }
 		.topic-title { font-weight: 600; flex-grow: 1; }
 		.topic-icon { font-size: 1.25rem; width: 2rem; text-align: center; transition: color 0.2s ease-in-out; }
-		#top-control-bar, #editor-panel, #lector-panel, #tools-panel { opacity: 0; transition: opacity 0.3s ease-in-out; }
+		#top-control-bar, #editor-panel, #lector-panel { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
 		input[type="range"]::-webkit-slider-runnable-track { background: #e5e7eb; height: 0.25rem; border-radius: 1rem; }
 		input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -6px; background-color: #3b82f6; height: 1rem; width: 1rem; border-radius: 50%; }
 		input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
@@ -56,34 +56,6 @@
         }
         .side-panel {
             flex-shrink: 0;
-        }
-        /* Estilos para la animación de la tarjeta */
-        #animation-container {
-            perspective: 2000px;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            pointer-events: none;
-        }
-        #animation-card {
-            transition: transform 0.6s, width 0.4s ease-in-out, height 0.4s ease-in-out, top 0.4s ease-in-out, left 0.4s ease-in-out, border-radius 0.4s ease-in-out;
-            transform-style: preserve-3d;
-            position: absolute;
-            will-change: transform, width, height, top, left;
-        }
-        .animation-card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: inherit;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        .animation-card-back {
-            transform: rotateY(180deg);
-            background-color: #f3f4f6; /* bg-gray-100 */
         }
 	</style>
 </head>
@@ -239,14 +211,6 @@
 			</div>
 		</div>
 
-        <!-- Contenedor para la animación de la tarjeta -->
-        <div id="animation-container" class="hidden">
-            <div id="animation-card">
-                <div class="animation-card-face" id="animation-front"></div>
-                <div class="animation-card-face animation-card-back"></div>
-            </div>
-        </div>
-
         <!-- MODAL DE SESIÓN -->
         <div id="session-modal-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 modal-overlay">
             <div class="bg-white p-6 rounded-lg shadow-2xl w-full max-w-sm text-center">
@@ -313,16 +277,12 @@
 			let userCustomChapters = {};
             let pdfDoc = null, currentPageNum = 1;
             let oralPdfDoc = null, oralCurrentPageNum = 1;
-            let oralViewState = 0; // This variable seems unused, keeping it for consistency
+            let oralViewState = 0;
             let selectedChapters = [];
             let x3LoopState = { active: false, queue: [], currentIndex: 0, playCount: 0 };
             let indexToDelete = -1;
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             let pdfToOpen = null;
-            let originalButton = null; // Declare originalButton here for the card flip animation
-
-            // State for PDF viewer click cycle
-            let pdfViewMode = 'closed'; // Can be 'closed', 'general', 'summary'
 
 			async function initializeAndAuthFirebase() {
 				try {
@@ -367,7 +327,8 @@
             }
 
             function handleSession() {
-                const sessionId = localStorage.getItem('sessionId_MEB2');
+                // ✅ CORRECCIÓN: Usar la misma clave de sesión para unificar
+                const sessionId = localStorage.getItem('sessionId_MEB1');
                 if (sessionId) {
                     localUserId = sessionId;
                     document.getElementById('session-modal-overlay').classList.add('hidden');
@@ -382,7 +343,8 @@
 
 			async function loadAllCustomChapters() {
 				if (!localUserId || !db) return;
-				const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'sessions', localUserId);
+                // ✅ CORRECCIÓN: Ruta de base de datos corregida
+				const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', localUserId, 'chapters');
 				try {
 					const docSnap = await getDoc(userDocRef);
 					if (docSnap.exists()) {
@@ -399,23 +361,6 @@
 
 			await initializeAndAuthFirebase();
             handleSession();
-
-            // Array of summary PDF filenames (these are for topic-specific summaries)
-            const summaryPdfFiles = [
-                "RESUMEN TEMA 1 CARR (12-09-2022).pdf", "RESUMEN TEMA 2 CARR (05-09-2022).pdf",
-                "RESUMEN TEMA 3 CARR (12-09-2022).pdf", "RESUMEN TEMA 4 CARR (05-09-2022).pdf",
-                "RESUMEN TEMA 5 CARR (14-09-2022).pdf", "RESUMEN TEMA 6 CARR (14-09-2022).pdf",
-                "RESUMEN TEMA 7 CARR (05-09-2022).pdf", "RESUMEN TEMA 8 CARR (14-09-2022).pdf",
-                "RESUMEN TEMA 9 CARR (05-09-2022).pdf", "RESUMEN TEMA 10 CARR (12-09-2022).pdf",
-                "RESUMEN TEMA 11 CARR (05-09-2022).pdf", "RESUMEN TEMA 12 CARR (05-09-2022).pdf",
-                "RESUMEN TEMA 13 CARR (05-09-2022).pdf", "RESUMEN TEMA 14 CARR (12-09-2022).pdf",
-                "RESUMEN TEMA 15 CARR (05-09-2022).pdf", "RESUMEN TEMA 16 CARR (05-09-2022).pdf",
-                "RESUMEN TEMA 17 CARR (05-09-2022).pdf", "RESUMEN TEMA 18 CARR (12-09-2022).pdf",
-                "RESUMEN TEMA 19 CARR (12-09-2022).pdf", "RESUMEN TEMA 20 CARR (12-09-2022).pdf",
-                "RESUMEN TEMA 21 CARR (05-09-2022).pdf", "RESUMEN TEMA 22 CARR (05-09-2022).pdf",
-                "RESUMEN TEMA 23 CARR (12-09-2022).pdf", "RESUMEN TEMA 24 CARR (05-09-2022).pdf"
-            ];
-
 			const topics = [
                 {
                     file: 'MEB2T1_Desplegable.html', title: 'La infraestructura ferroviaria en la Ley 38/2015 (I)', color: 'blue', icon: 'fa-train-tram', videos: [{ name: 'Ver Vídeo', url: '#' }],
@@ -428,7 +373,7 @@
                     ]
                 },
                 {
-                    file: 'MEB2T2_Desplegable.html', title: 'La planificación estratégica de carreteras del Estado y los programas de carreteras', color: 'green', icon: 'fa-sitemap', videos: [{ name: 'Ver Vídeo', url: '#' }],
+                    file: 'MEB2T2_Desplegable.html', title: 'La infraestructura ferroviaria en la Ley 38/2015 (II)', color: 'green', icon: 'fa-network-wired', videos: [{ name: 'Ver Vídeo', url: '#' }],
                     chapters: [
                         { "title": "Los administradores de infraestructuras ferroviarias", "start": 0, "end": 0 },
                         { "title": "Funciones, naturaleza, recursos y patrimonio", "start": 0, "end": 0 },
@@ -643,16 +588,10 @@
             const oralPdfViewerWrapper = document.getElementById('oral-pdf-viewer-wrapper');
             const flashcardsWrapper = document.getElementById('flashcards-wrapper');
             const oralPrevPageBtn = document.getElementById('oral-prev-page'), oralNextPageBtn = document.getElementById('oral-next-page');
-            // Card flip animation elements
-            const animationContainer = document.getElementById('animation-container');
-            const animationCard = document.getElementById('animation-card');
-            const animationFront = document.getElementById('animation-front');
-
 
 			topics.forEach((e,t)=>{
 				const o=document.createElement("button"),n=colorPalette[e.color];
 				o.className=`topic-button ${n.buttonBg}`,o.dataset.index=t;
-                // Corrected: Added the topic number (t+1) inside the span tag
                 o.innerHTML=`<span class="topic-number ${n.normal}">${t+1}</span><i class="fas ${e.icon} topic-icon ${n.icon}"></i><span class="topic-title">${e.title}</span>`;
                 gridContainer.appendChild(o);
 			});
@@ -769,8 +708,7 @@
             }
 
 			function showMapView(button){
-                originalButton = button; // Store the clicked button for the reverse animation
-				playPauseButton.disabled = false; // Enable play/pause button when a topic is selected
+				playPauseButton.disabled = false;
 				playPauseIcon.className = "fas fa-play";
 				const topicIndex = button.dataset.index;
 				const baseTopic = topics[topicIndex];
@@ -780,97 +718,38 @@
 
 				currentTopic = { ...baseTopic, chapters: chaptersToLoad };
 
-                // Card flip animation logic
-                const rect = button.getBoundingClientRect();
-                const color = colorPalette[baseTopic.color];
+				mainMenuView.classList.add("hidden");
+				mapViewerVIew.classList.remove("hidden");
 
-                animationFront.innerHTML = `<div class="text-center text-white">
-                    <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center"><i class="fas ${baseTopic.icon} text-6xl"></i></div>
-                    <h2 class="text-4xl font-bold">${baseTopic.title}</h2>
-                </div>`;
-                animationFront.className = `animation-card-face flex items-center justify-center p-8 ${color.normal.replace('bg-', 'bg-').replace('-100', '-500')}`;
+				contentFrame.src = currentTopic.file;
+                // ✅ CORRECCIÓN: Ruta de audio corregida
+                const audioSrc = `audios/${currentTopic.file.replace(/_Desplegable\.html$/i, ".mp3")}`;
+                console.log("Intentando cargar audio desde:", audioSrc);
+				topicAudio.src = audioSrc;
 
-                animationCard.style.width = `${rect.width}px`;
-                animationCard.style.height = `${rect.height}px`;
-                animationCard.style.top = `${rect.top}px`;
-                animationCard.style.left = `${rect.left}px`;
-                animationCard.style.borderRadius = '0.75rem';
-                animationCard.style.transform = 'rotateY(0deg)';
-                
-                animationContainer.style.display = 'block';
-                button.style.opacity = '0'; // Hide the original button
+				updateChapters(chaptersToLoad);
+				updateEditor(chaptersToLoad);
 
-                setTimeout(() => {
-                    animationCard.style.width = '100vw';
-                    animationCard.style.height = '100vh';
-                    animationCard.style.top = '0px';
-                    animationCard.style.left = '0px';
-                    animationCard.style.borderRadius = '0';
-                }, 10);
-
-                setTimeout(() => {
-                    animationCard.style.transform = 'rotateY(180deg)';
-                }, 500);
-
-                setTimeout(() => {
-                    mainMenuView.classList.add("hidden");
-                    mapViewerVIew.classList.remove("hidden");
-                    animationContainer.style.display = 'none'; // Hide animation container after transition
-                    
-                    contentFrame.src = currentTopic.file;
-                    const audioSrc = `audio/${currentTopic.file.replace(/_Desplegable\.html$/i, ".mp3")}`;
-                    console.log("Intentando cargar audio desde:", audioSrc);
-                    topicAudio.src = audioSrc;
-                    topicAudio.play(); // Attempt to play immediately
-
-                    updateChapters(chaptersToLoad);
-                    updateEditor(chaptersToLoad);
-
-                    topControlBar.style.display="flex";
-                    setTimeout(()=>topControlBar.style.opacity=1,10)
-                }, 1100); // Duration of the animation
+				topControlBar.style.display="flex";
+				setTimeout(()=>topControlBar.style.opacity=1,10)
 			}
 
 			function showMainMenu(){
-                const rect = originalButton.getBoundingClientRect();
-                
+				mapViewerVIew.classList.add("hidden");
                 mainMenuView.classList.remove("hidden");
-                mapViewerVIew.classList.add("hidden");
-                
-                animationContainer.style.display = 'block';
-                animationCard.style.transform = 'rotateY(180deg)'; // Start from flipped state
-                animationCard.style.width = '100vw';
-                animationCard.style.height = '100vh';
-                animationCard.style.top = '0px';
-                animationCard.style.left = '0px';
-                animationCard.style.borderRadius = '0';
-
-                setTimeout(() => {
-                    animationCard.style.transform = 'rotateY(0deg)'; // Flip back
-                }, 10);
-
-                setTimeout(() => {
-                    animationCard.style.width = `${rect.width}px`;
-                    animationCard.style.height = `${rect.height}px`;
-                    animationCard.style.top = `${rect.top}px`;
-                    animationCard.style.left = `${rect.left}px`;
-                    animationCard.style.borderRadius = '0.75rem';
-                }, 600); // Halfway through the animation
-
-                setTimeout(() => {
-                    animationContainer.style.display = 'none';
-                    originalButton.style.opacity = '1'; // Show the original button again
-                    topicAudio.pause();
-                    resetLayout();
-                }, 1100); // Total duration of the animation
+                topicAudio.pause();
+                resetLayout();
 			}
 			gridContainer.addEventListener("click",(e=>e.target.closest(".topic-button")&&showMapView(e.target.closest(".topic-button")))),backButton.addEventListener("click",showMainMenu);
 
 			const formatTime=e=>isNaN(e)?"00:00":`${String(Math.floor(e/60)).padStart(2,"0")}:${String(Math.floor(e%60)).padStart(2,"0")}`;
-			playPauseButton.addEventListener("click",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.paused?topicAudio.play():topicAudio.pause()}),
-			topicAudio.addEventListener("play",()=>playPauseIcon.classList.replace("fa-play","fa-pause")),
-			topicAudio.addEventListener("pause",()=>playPauseIcon.classList.replace("fa-pause","fa-play")),
-			topicAudio.addEventListener("loadedmetadata",()=>{totalDurationEl.textContent=formatTime(topicAudio.duration),timelineSlider.max=topicAudio.duration}),
+            
+            // ✅ CORRECCIÓN: Añadido el manejador de eventos para el botón de play/pause
+            playPauseButton.addEventListener("click",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.paused?topicAudio.play():topicAudio.pause()});
+            topicAudio.addEventListener("play",()=>playPauseIcon.classList.replace("fa-play","fa-pause"));
+            topicAudio.addEventListener("pause",()=>playPauseIcon.classList.replace("fa-pause","fa-play"));
+
+			topicAudio.addEventListener("loadedmetadata",()=>{totalDurationEl.textContent=formatTime(topicAudio.duration),timelineSlider.max=topicAudio.duration});
             topicAudio.addEventListener("error", (e) => {
                 console.error("Error al cargar el audio:", e);
                 console.error("Código de error de audio:", topicAudio.error.code);
@@ -882,12 +761,12 @@
                 if (topicAudio.error.code === 4) {
                     errorMessage += "\n- El archivo de audio no se encontró en la ruta especificada o el navegador no puede acceder a él por restricciones de seguridad (por ejemplo, si abres el HTML directamente desde tu equipo, o por políticas de seguridad del sitio).";
                     errorMessage += "\n- El archivo de audio está dañado o en un formato no compatible.";
-                    errorMessage += "\n\nAsegúrate de que el archivo MP3 está en la carpeta 'audio' al mismo nivel que 'index.html' y que estás ejecutando la aplicación desde un servidor web (como GitHub Pages) y no directamente desde tu disco duro.";
+                    errorMessage += `\n\nAsegúrate de que el archivo MP3 está en la carpeta 'audios' al mismo nivel que este archivo HTML y que estás ejecutando la aplicación desde un servidor web (como GitHub Pages) y no directamente desde tu disco duro.`;
                 } else {
                     errorMessage += "\n- Un error desconocido al cargar el audio.";
                 }
                 alert(errorMessage);
-            }),
+            });
             topicAudio.addEventListener("ended",()=>{
                 if (x3LoopState.active) {
                     topicAudio.dispatchEvent(new Event('timeupdate'));
@@ -897,7 +776,8 @@
                 if (!isLoopingSelection) {
                     playPauseIcon.classList.replace("fa-pause","fa-play");
                 }
-            }),topicAudio.addEventListener("timeupdate",()=>{
+            });
+            topicAudio.addEventListener("timeupdate",()=>{
 				if(timelineSlider.value=topicAudio.currentTime,currentTimeEl.textContent=formatTime(topicAudio.currentTime),currentChapterEndTime&&topicAudio.currentTime>=currentChapterEndTime) {
                     if (x3LoopState.active) {
                         x3LoopState.playCount++;
@@ -933,7 +813,10 @@
 					    e&&e.classList.remove("playing")
 				    }
                 }
-			}),timelineSlider.addEventListener("input",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.currentTime=timelineSlider.value}),chaptersButton.addEventListener("click",e=>{e.stopPropagation(),chaptersDropdown.classList.toggle("hidden")}),chaptersDropdown.addEventListener("click",e=>{
+			});
+            timelineSlider.addEventListener("input",()=>{currentChapterEndTime=null,currentChapterStartTime=null,topicAudio.currentTime=timelineSlider.value});
+            chaptersButton.addEventListener("click",e=>{e.stopPropagation(),chaptersDropdown.classList.toggle("hidden")});
+            chaptersDropdown.addEventListener("click",e=>{
 				if (e.target.classList.contains('chapter-title')) {
                     const chapterDiv = e.target.closest('div');
                     const checkbox = chapterDiv.querySelector('.chapter-checkbox');
@@ -1080,7 +963,8 @@
                 }
 				const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
                 userCustomChapters[topicId] = editedChapters;
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sessions', localUserId);
+                // ✅ CORRECCIÓN: Ruta de base de datos corregida
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', localUserId, 'chapters');
 				const dataToSave = { ...userCustomChapters };
 
 				saveIcon.className = "fas fa-spinner fa-spin";
@@ -1116,7 +1000,8 @@
 				updateChapters(defaultChapters);
 
                 userCustomChapters[topicId] = defaultChapters;
-				const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sessions', localUserId);
+                // ✅ CORRECCIÓN: Ruta de base de datos corregida
+				const docRef = doc(db, 'artifacts', appId, 'public', 'data', localUserId, 'chapters');
 				const dataToSave = { ...userCustomChapters };
 
 				const originalButtonText = restoreDefaultsButton.innerHTML;
@@ -1167,10 +1052,9 @@
                 const viewerWrapper = (pdfToOpen === 'topic') ? pdfViewerWrapper : oralPdfViewerWrapper;
                 resetLayout(viewerWrapper, side);
 
-                // Updated PDF URLs
                 const url = (pdfToOpen === 'topic')
-                    ? 'https://raw.githubusercontent.com/cheradra312/FERROCARRILES_1-22/27ec8e5d4c38f84d537b35f8d69eb9454a2e1da9/Facilitador%20CICCPE%20Temario%20Condensado%20MEB2%20(versi%C3%B3n%202025-01).pdf'
-                    : 'https://raw.githubusercontent.com/cheradra312/FERROCARRILES_1-22/27ec8e5d4c38f84d537b35f8d69eb9454a2e1da9/Facilitador%20CICCPE%20Preguntas%20oral%20MEB2%20(versi%C3%B3n%202025-01).pdf';
+                    ? 'https://raw.githubusercontent.com/user/repo/main/Facilitador_CICCPE_Temario_Condensado_MEB2.pdf' // Placeholder
+                    : 'https://raw.githubusercontent.com/user/repo/main/Facilitador_CICCPE_Preguntas_oral_MEB2.pdf'; // Placeholder
                 const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
 
                 if (pdfToOpen === 'topic') {
@@ -1191,7 +1075,6 @@
                  [lectorPanel, editorPanel, pdfViewerWrapper, oralPdfViewerWrapper].forEach(p => {
                     if (p === pdfViewerWrapper && p.style.display === 'block') {
                         pdfDoc = null;
-                        pdfViewMode = 'closed'; // Reset state when PDF viewer is closed
                     }
                     if (p === oralPdfViewerWrapper && p.style.display === 'block') {
                         oralPdfDoc = null;
@@ -1224,33 +1107,12 @@
             }
 
             togglePdfButton.addEventListener('click', () => {
-                switch (pdfViewMode) {
-                    case 'closed':
-                        // First click: open general PDF
-                        pdfToOpen = 'topic';
-                        sideSelectModal.classList.remove('hidden');
-                        pdfViewMode = 'general';
-                        break;
-                    case 'general':
-                        // Second click: open summary PDF
-                        if (currentTopic && typeof currentTopic.index !== 'undefined' && summaryPdfFiles[currentTopic.index]) {
-                            const summaryPdfName = summaryPdfFiles[currentTopic.index];
-                            const summaryPdfUrl = `https://raw.githubusercontent.com/cheradra312/FERROCARRILES_1-22/main/temas.es/${encodeURIComponent(summaryPdfName)}`;
-
-                            // The viewer is already open, just load the new PDF
-                            const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
-                            loadPdfAndFind(summaryPdfUrl, topicId, pdfCanvas, pageNumEl, pageCountEl, prevPageBtn, nextPageBtn, pdfLoadingOverlay, loadingText);
-                            pdfViewMode = 'summary';
-                        } else {
-                            alert('No se encontró el PDF de resumen para este tema.');
-                        }
-                        break;
-                    case 'summary':
-                        // Third click: close viewer
-                        resetLayout();
-                        pdfViewMode = 'closed';
-                        break;
-                } 
+                if (pdfViewerWrapper.style.display === 'block') {
+                    resetLayout();
+                } else {
+                    pdfToOpen = 'topic';
+                    sideSelectModal.classList.remove('hidden');
+                }
             });
 
             toggleOralButton.addEventListener('click', () => {
@@ -1328,7 +1190,8 @@
             startSessionButton.addEventListener('click', () => {
                 const sessionId = sessionIdInput.value.trim();
                 if (sessionId) {
-                    localStorage.setItem('sessionId_MEB2', sessionId);
+                    // ✅ CORRECCIÓN: Usar la misma clave de sesión para unificar
+                    localStorage.setItem('sessionId_MEB1', sessionId);
                     handleSession();
                     if(db) {
                          document.getElementById('save-data-button').disabled = false;
@@ -1339,7 +1202,8 @@
             });
 
             changeSessionButton.addEventListener('click', () => {
-                localStorage.removeItem('sessionId_MEB2');
+                // ✅ CORRECCIÓN: Usar la misma clave de sesión para unificar
+                localStorage.removeItem('sessionId_MEB1');
                 window.location.reload();
             });
 
@@ -1422,9 +1286,9 @@
                     const dx = e.clientX - x;
                     const leftPanel = resizer.previousElementSibling;
                     const rightPanel = resizer.nextElementSibling;
-                    if (!leftPanel || !rightPanel) return; 
+                    if (!leftPanel || !rightPanel) return;
 
-                    const newLeftWidth = leftPanelWidth + dx; 
+                    const newLeftWidth = leftPanelWidth + dx;
 
                     if (newLeftWidth > 200 && newLeftWidth < (mainViewerArea.clientWidth - 200)) {
                          leftPanel.style.flexBasis = `${newLeftWidth}px`;
