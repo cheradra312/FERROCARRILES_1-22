@@ -770,7 +770,7 @@
 
 			function showMapView(button){
                 originalButton = button; // Store the clicked button for the reverse animation
-				playPauseButton.disabled = false;
+				playPauseButton.disabled = false; // Enable play/pause button when a topic is selected
 				playPauseIcon.className = "fas fa-play";
 				const topicIndex = button.dataset.index;
 				const baseTopic = topics[topicIndex];
@@ -1231,7 +1231,7 @@
                         // Second click: open summary PDF
                         if (currentTopic && typeof currentTopic.index !== 'undefined' && summaryPdfFiles[currentTopic.index]) {
                             const summaryPdfName = summaryPdfFiles[currentTopic.index];
-                            const summaryPdfUrl = `https://raw.githubusercontent.com/cheradra312/CARRETERAS-1-24/main/temas.es/${encodeURIComponent(summaryPdfName)}`;
+                            const summaryPdfUrl = `https://raw.githubusercontent.com/cheradra312/FERROCARRILES_1-22/main/temas.es/${encodeURIComponent(summaryPdfName)}`;
 
                             // The viewer is already open, just load the new PDF
                             const topicId = currentTopic.file.replace(/_Desplegable\.html$/i, '');
