@@ -821,6 +821,7 @@
                     const audioSrc = `audio/${currentTopic.file.replace(/_Desplegable\.html$/i, ".mp3")}`;
                     console.log("Intentando cargar audio desde:", audioSrc);
                     topicAudio.src = audioSrc;
+                    topicAudio.play(); // Attempt to play immediately
 
                     updateChapters(chaptersToLoad);
                     updateEditor(chaptersToLoad);
