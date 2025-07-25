@@ -14,6 +14,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f8;
+            scroll-behavior: smooth;
         }
 
         /* Estructura principal de las tarjetas */
@@ -93,7 +94,7 @@
             position: relative;
         }
         .nested-list > li::before {
-            content: '�';
+            content: '🔹';
             position: absolute;
             left: -1.75rem;
             top: 0.25rem;
@@ -155,6 +156,60 @@
         }
         .hidden {
             display: none;
+        }
+
+        /* --- Estilos para la Tabla Comparativa --- */
+        .main-collapsible-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+        .main-collapsible-trigger:hover {
+            background-color: #f0f0f0;
+        }
+        .main-collapsible-trigger.active .collapsible-icon {
+            transform: rotate(90deg);
+        }
+        .actor-pill-adif {
+            background-color: #e0f2fe; /* light blue */
+            color: #0c4a6e; /* dark blue */
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        .actor-pill-empresa {
+            background-color: #dcfce7; /* light green */
+            color: #166534; /* dark green */
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        td ul {
+            padding-left: 1rem;
+            text-align: left;
+        }
+        .table-collapsible-trigger {
+            color: #4f46e5; /* indigo-600 */
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .table-collapsible-trigger:hover {
+            text-decoration: underline;
+        }
+        .table-collapsible-icon {
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        .table-collapsible-trigger.active .table-collapsible-icon {
+            transform: rotate(180deg);
         }
     </style>
 </head>
@@ -232,7 +287,325 @@
                 <span>Ver detalles</span>
             </div>
             <div class="collapsible-content hidden">
-                <div class="collapsible-trigger">
+                
+                <!-- INICIO DE LA TABLA INSERTADA -->
+                <div class="container mx-auto my-6">
+                    <!-- Tabla Comparativa Trigger -->
+                    <div class="main-collapsible-trigger mt-4 border-t border-gray-200 pt-4">
+                        <i class="fas fa-chevron-right collapsible-icon"></i>
+                        <span><i class="fas fa-table icon text-indigo-600"></i>Ver tabla comparativa</span>
+                    </div>
+                    
+                    <!-- Contenido Desplegable de la Tabla -->
+                    <div class="main-collapsible-content hidden">
+                        <div class="overflow-x-auto bg-white rounded-lg shadow-lg mt-4">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-800 text-white">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider w-[15%]">Puesto/Cargo</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider w-[40%]">Funciones Principales (Literal)</th>
+                                        <th scope="col" class="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider w-[8%]">Habilitación/Licencia</th>
+                                        <th scope="col" class="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider w-[8%]">Entidad Emisora</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider w-[8%]">Requisitos y Validez</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider w-[10%]">Causas de Suspensión</th>
+                                        <th scope="col" class="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider w-[10%]">Causas de Revocación</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <!-- Categoría: Personal de Circulación -->
+                                    <tr class="bg-gray-100">
+                                        <th colspan="7" class="px-4 py-2 text-left text-sm font-bold text-gray-700">
+                                            <i class="fas fa-traffic-light icon text-blue-600"></i>Personal de Circulación
+                                        </th>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50" id="responsable-circulacion-row">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-user-tie icon text-gray-500"></i>Responsable de Circulación</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Dirigir la circulación de trenes y maniobras en estaciones con un sistema de control de tráfico centralizado.</li>
+                                                <li>Las que le asigne la normativa ferroviaria.</li>
+                                                <li>Tareas de auxiliar de circulación.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-left text-sm">Válida mientras se cumplan condiciones.</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <div class="table-collapsible-trigger" id="suspension-responsable-trigger">Ver detalles <i class="fas fa-chevron-down table-collapsible-icon"></i></div>
+                                            <div class="table-collapsible-content hidden mt-2">
+                                                <ul class="list-disc pl-4">
+                                                    <li>Niveles de alcohol superiores o indicios de estupefacientes (o negarse a control).</li>
+                                                    <li>No realizar cursos de actualización.</li>
+                                                    <li>Cometer una infracción administrativa.</li>
+                                                    <li>No renovar el certificado de aptitud psicofísica.</li>
+                                                    <li>Cometer infracción de seguridad o estar involucrado en accidente/incidente con indicios de infracción (Orden 679/2015).</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <div class="table-collapsible-trigger" id="revocacion-responsable-trigger">Ver detalles <i class="fas fa-chevron-down table-collapsible-icon"></i></div>
+                                            <div class="table-collapsible-content hidden mt-2">
+                                                <ul class="list-disc pl-4">
+                                                    <li>Pérdida sobrevenida de las condiciones.</li>
+                                                    <li>Cese de actividad en Adif.</li>
+                                                    <li>Procedimiento sancionador concluye en pérdida definitiva.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-user-cog icon text-gray-500"></i>Auxiliar de Circulación</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Accionamiento de agujas y de las barreras de los pasos a nivel.</li>
+                                                <li>Realización de maniobras y demás tareas complementarias, a las órdenes del responsable.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver Responsable</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver Responsable</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver Responsable</a></td>
+                                    </tr>
+            
+                                    <!-- Categoría: Personal de Infraestructura -->
+                                    <tr class="bg-gray-100">
+                                        <th colspan="7" class="px-4 py-2 text-left text-sm font-bold text-gray-700">
+                                            <i class="fas fa-road icon text-orange-700"></i>Personal de Infraestructura
+                                        </th>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-hard-hat icon text-gray-500"></i>Encargado de Trabajos</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Actuaciones en vía bloqueada.</li>
+                                                <li>Controlar los trabajos en la infraestructura ferroviaria o en sus proximidades.</li>
+                                                <li>Controlar a los pilotos de seguridad.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-user-shield icon text-gray-500"></i>Piloto de Seguridad</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Realizar la vigilancia de la infraestructura y protección de los trabajos en relación con la seguridad.</li>
+                                                <li>Vigilancia de los pasos a nivel.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-tractor icon text-gray-500"></i>Operador de Maquinaria</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Desplazamiento, manejo y guiado del material rodante auxiliar para realizar trabajos en la infraestructura.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+            
+                                    <!-- Categoría: Personal de Operaciones del Tren -->
+                                     <tr class="bg-gray-100">
+                                        <th colspan="7" class="px-4 py-2 text-left text-sm font-bold text-gray-700">
+                                            <i class="fas fa-train icon text-indigo-700"></i>Personal de Operaciones del Tren
+                                        </th>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-cogs icon text-gray-500"></i>Auxiliar de Operaciones</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Realizar labores de enganche, desenganche y acoplamiento de vehículos.</li>
+                                                <li>Colaborar en la realización de pruebas de frenado.</li>
+                                                <li>Efectuar la colocación y retirada de las señales de cola de los trenes.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-empresa">Empresa</span> o <span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-truck-loading icon text-gray-500"></i>Cargador</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Dirigir y realizar las operaciones de carga y descarga de las mercancías.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-empresa">Empresa</span> o <span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-car icon text-gray-500"></i>Operador de Vehículos de Maniobras</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Realizar dentro del límite de la zona de maniobras de las terminales de mercancías el desplazamiento y manejo de vehículos ferroviarios por sus vías.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-empresa">Empresa</span> o <span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-user-plus icon text-gray-500"></i>Auxiliar de Cabina</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Colaborar con el maquinista en el cumplimiento de las prescripciones de circulación.</li>
+                                                <li>Colaborar en la inmovilización del vehículo en caso de emergencia.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Habilitación</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-empresa">Empresa</span> o <span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="suspension-responsable-trigger">Ver P. Circulación</a></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><a href="javascript:void(0);" class="internal-link font-semibold text-indigo-600 hover:underline" data-target-id="responsable-circulacion-row" data-trigger-ids="revocacion-responsable-trigger">Ver P. Circulación</a></td>
+                                    </tr>
+            
+                                    <!-- Categoría: Personal de Conducción -->
+                                    <tr class="bg-gray-100">
+                                        <th colspan="7" class="px-4 py-2 text-left text-sm font-bold text-gray-700">
+                                            <i class="fas fa-user-astronaut icon text-red-700"></i>Personal de Conducción
+                                        </th>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium" rowspan="2"><i class="fas fa-user-astronaut icon text-gray-500"></i>Maquinista</td>
+                                        <td class="px-4 py-4 align-middle text-sm" rowspan="2">
+                                            <ul class="list-disc">
+                                                <li>Operar en la RFIG como maquinista perteneciente a una empresa ferroviaria o al adif.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Licencia</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-adif">AESF</span></td>
+                                        <td class="px-4 py-4 align-top text-left text-sm">
+                                            <ul class="list-disc">
+                                                <li>Documento personal.</li>
+                                                <li>Formación mínima 425h.</li>
+                                                <li>Validez 10 años (sujeta a psicofísico).</li>
+                                                <li>No ligada a empresa.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <div class="table-collapsible-trigger">Ver detalles <i class="fas fa-chevron-down table-collapsible-icon"></i></div>
+                                            <div class="table-collapsible-content hidden mt-2">
+                                                <ul class="list-disc pl-4">
+                                                    <li>No renovar cert. psicofísico.</li>
+                                                    <li>Cometer infracción LSF.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <div class="table-collapsible-trigger">Ver detalles <i class="fas fa-chevron-down table-collapsible-icon"></i></div>
+                                            <div class="table-collapsible-content hidden mt-2">
+                                                <ul class="list-disc pl-4">
+                                                    <li>Pérdida sobrevenida de condiciones.</li>
+                                                    <li>Derivada de proc. sancionador.</li>
+                                                    <li>Alcoholemia/drogas (o negativa) 2 veces en 5 años.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Certificado</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-empresa">Empresa</span> o <span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-top text-left text-sm">
+                                            <ul class="list-disc">
+                                                <li>Autoriza para infraestructuras y material concretos (Cat. A y B).</li>
+                                                <li>Validez sujeta a renovación por la entidad.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <div class="table-collapsible-trigger">Ver detalles <i class="fas fa-chevron-down table-collapsible-icon"></i></div>
+                                            <div class="table-collapsible-content hidden mt-2">
+                                                 <ul class="list-disc pl-4">
+                                                    <li>Alcoholemia/drogas o negativa.</li>
+                                                    <li>No realizar cursos de actualización.</li>
+                                                    <li>Cometer infracción LSF.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <div class="table-collapsible-trigger">Ver detalles <i class="fas fa-chevron-down table-collapsible-icon"></i></div>
+                                            <div class="table-collapsible-content hidden mt-2">
+                                                 <ul class="list-disc pl-4">
+                                                    <li>Derivada de proc. sancionador.</li>
+                                                    <li>Por alcoholemia/drogas (o negativa) 2 veces en 5 años.</li>
+                                                    <li>Baja laboral o suspensión/revocación de la licencia.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Categoría: Responsable de Seguridad -->
+                                    <tr class="bg-gray-100">
+                                        <th colspan="7" class="px-4 py-2 text-left text-sm font-bold text-gray-700">
+                                            <i class="fas fa-user-shield icon text-green-700"></i>Responsable de Seguridad
+                                        </th>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-user-shield icon text-gray-500"></i>Responsable de Seguridad</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Asumir la responsabilidad relacionada con la seguridad en la circulación.</li>
+                                                <li>Proponer el tipo y alcance de las habilitaciones y certificados del personal ferroviario.</li>
+                                                <li>Comprobar el cumplimiento para acceder a la formación para obtener los certificados y habilitaciones.</li>
+                                                <li>Determinar el contenido de los programas de formación.</li>
+                                                <li>Aprobar la propuesta de desarrollo del contenido de los programas de formación y las pruebas de evaluación que le formule el centro homologado de formación correspondiente.</li>
+                                                <li>Proponer el otorgamiento, la suspensión, o revocación de las correspondientes habilitaciones y certificados.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">N/A (Cargo)</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Designado por <span class="actor-pill-empresa">Empresa</span> o <span class="actor-pill-adif">Adif</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Título universitario y 4 años de experiencia.</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">No especificado.</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">No especificado.</td>
+                                    </tr>
+            
+                                    <!-- Categoría: Personal de Mantenimiento -->
+                                    <tr class="bg-gray-100">
+                                        <th colspan="7" class="px-4 py-2 text-left text-sm font-bold text-gray-700">
+                                            <i class="fas fa-tools icon text-cyan-700"></i>Personal de Mantenimiento
+                                        </th>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-4 align-middle text-center font-medium"><i class="fas fa-user-check icon text-gray-500"></i>Personal Relevante para la Seguridad</td>
+                                        <td class="px-4 py-4 align-top text-sm">
+                                            <ul class="list-disc">
+                                                <li>Contemplados en sistemas de gestión de competencias.</li>
+                                                <li>Capacidad para emitir la aptitud para el servicio de los vehículos, una vez realizadas las intervenciones.</li>
+                                            </ul>
+                                        </td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Certificación de competencia</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm"><span class="actor-pill-empresa">Entidad de Mantenimiento</span></td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">Definidas por el sistema de gestión de competencias.</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">No especificado.</td>
+                                        <td class="px-4 py-4 align-middle text-center text-sm">No especificado.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- FIN DE LA TABLA INSERTADA -->
+
+                <div class="collapsible-trigger mt-4 pt-4 border-t border-gray-200">
                     <i class="fas fa-chevron-right collapsible-icon"></i>
                     <h3><i class="fas fa-traffic-light icon text-blue-600"></i>Personal de circulación</h3>
                 </div>
@@ -530,7 +903,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="icon-bg"><i class="fas fa-building"></i></div>
-                <h2>4. Centros de formación y centros de reconocimiento médico</h2>
+                <h2>3. Centros de formación y centros de reconocimiento médico</h2>
             </div>
             <div class="collapsible-trigger">
                 <i class="fas fa-chevron-right collapsible-icon"></i>
@@ -593,7 +966,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="icon-bg"><i class="fas fa-book-open"></i></div>
-                <h2>5. ETI OPE en relación con el personal ferroviario</h2>
+                <h2>4. ETI OPE en relación con el personal ferroviario</h2>
             </div>
             <div class="collapsible-trigger">
                 <i class="fas fa-chevron-right collapsible-icon"></i>
@@ -656,24 +1029,71 @@
     <!-- Script para la funcionalidad desplegable -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Selecciona todos los elementos que servirán como disparadores
-            const triggers = document.querySelectorAll('.collapsible-trigger');
-
-            // Itera sobre cada disparador para añadirle un detector de clics
-            triggers.forEach(trigger => {
+            // Manejador genérico para todos los desplegables del documento original
+            const originalTriggers = document.querySelectorAll('.card .collapsible-trigger');
+            originalTriggers.forEach(trigger => {
                 trigger.addEventListener('click', function (event) {
-                    // Evita que el clic en un desplegable anidado afecte a su contenedor padre
                     event.stopPropagation();
-                    
-                    // Encuentra el elemento de contenido que sigue inmediatamente al disparador
-                    const content = this.nextElementSibling;
-                    
-                    // Alterna la clase 'open' en el disparador (para rotar el icono)
                     this.classList.toggle('open');
-                    
-                    // Verifica que el siguiente elemento sea un contenido desplegable y alterna la clase 'hidden'
+                    const content = this.nextElementSibling;
                     if (content && content.classList.contains('collapsible-content')) {
                         content.classList.toggle('hidden');
+                    }
+                });
+            });
+
+            // Manejador para el desplegable principal de la tabla
+            const mainTrigger = document.querySelector('.main-collapsible-trigger');
+            if (mainTrigger) {
+                mainTrigger.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('hidden');
+                });
+            }
+
+            // Manejador para todos los desplegables dentro de la tabla
+            const tableTriggers = document.querySelectorAll('.table-collapsible-trigger');
+            tableTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    this.classList.toggle('active');
+                    const icon = this.querySelector('.table-collapsible-icon');
+                    const content = this.nextElementSibling;
+                    
+                    content.classList.toggle('hidden');
+                    if (icon) {
+                        icon.classList.toggle('fa-chevron-down');
+                        icon.classList.toggle('fa-chevron-up');
+                    }
+                });
+            });
+
+            // Manejador para los enlaces internos de la tabla
+            const internalLinks = document.querySelectorAll('.internal-link');
+            internalLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = this.dataset.targetId;
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        const triggerIds = this.dataset.triggerIds ? this.dataset.triggerIds.split(',') : [];
+                        if (triggerIds.length > 0) {
+                            triggerIds.forEach(id => {
+                                const trigger = document.getElementById(id.trim());
+                                if (trigger && !trigger.classList.contains('active')) {
+                                    trigger.click();
+                                }
+                            });
+                        } else {
+                             const suspensionTrigger = document.getElementById('suspension-responsable-trigger');
+                             const revocacionTrigger = document.getElementById('revocacion-responsable-trigger');
+                             if (suspensionTrigger && !suspensionTrigger.classList.contains('active')) suspensionTrigger.click();
+                             if (revocacionTrigger && !revocacionTrigger.classList.contains('active')) revocacionTrigger.click();
+                        }
                     }
                 });
             });
